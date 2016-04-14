@@ -1,0 +1,19 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "target": "es5",
+        "noImplicitAny": true,
+        "sourceMap": true,
+        "outDir": "./build/js",
+        "rootDir": "."
+    },
+    "exclude": [
+        "node_modules",
+        "build"
+    ],
+    "filesGlob": [
+        "./src/**/*.ts",
+        "./test/**/*.ts",
+        "./typings/**/*.ts"
+    ]
+}
