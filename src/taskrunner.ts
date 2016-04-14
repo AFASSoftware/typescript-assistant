@@ -20,12 +20,15 @@ export interface TaskRunner {
   runTask(command: string, args: string[], config: TaskConfig): Task;
 };
 
-let trim = (data: string) => {
+let trimAndSplit = (data: string): string[] => {
   if (!data) {
-    return undefined;
+    return [];
   }
-  let matches = /^\s*(.*?)\s*$/.exec(data);
-  return matches ? matches[1] : undefined;
+  if (!data.split) {
+    // meaning data is a Buffer somehow...
+    data = data.toString();
+  }
+  return data.split('\n').map(line => /^\s*(.*?)\s*$/.exec(line)[1]).filter(line => line.length > 0);
 };
 
 export let createDefaultTaskRunner = (): TaskRunner => {
@@ -38,27 +41,27 @@ export let createDefaultTaskRunner = (): TaskRunner => {
       let task = spawn(command, args);
 
       task.stdout.on('data', (data: string) => {
-        data = trim(data);
-        if (!data || data.length === 0) { return; }
-        let handled = false;
-        if (config.handleOutput) {
-          handled = config.handleOutput(data);
-        }
-        if (!handled) {
-          logger.log(loggerCategory, data);
-        }
+        trimAndSplit(data).forEach((line) => {
+          let handled = false;
+          if (config.handleOutput) {
+            handled = config.handleOutput(line);
+          }
+          if (!handled) {
+            logger.log(loggerCategory, line);
+          }
+        });
       });
 
       task.stderr.on('data', (data: string) => {
-        data = trim(data);
-        if (!data) { return; }
-        let handled = false;
-        if (config.handleOutput) {
-          handled = config.handleOutput(data);
-        }
-        if (!handled) {
-          logger.error(loggerCategory, data);
-        }
+        trimAndSplit(data).forEach((line) => {
+          let handled = false;
+          if (config.handleOutput) {
+            handled = config.handleError(line);
+          }
+          if (!handled) {
+            logger.error(loggerCategory, line);
+          }
+        });
       });
 
       task.on('close', (code: number) => {
