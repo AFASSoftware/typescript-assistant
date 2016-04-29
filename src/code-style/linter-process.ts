@@ -13,11 +13,13 @@ let options = {
 };
 
 process.on('message', (msg: LinterCommand) => {
+  let success = true;
   msg.filesToLint.forEach((fileName) => {
     let contents = readFileSync(fileName, 'utf8');
     let linter = new Linter(fileName, contents, options);
     let results = linter.lint();
     results.failures.forEach((failure) => {
+      success = false;
       let response = {
         violation: {
           fileName,
@@ -29,7 +31,7 @@ process.on('message', (msg: LinterCommand) => {
       process.send(response);
     });
   });
-  process.send({ finished: { success: true } } as LinterResponse);
+  process.send({ finished: { success } } as LinterResponse);
 });
 
 let configurationFile = Linter.loadConfigurationFromPath(process.cwd() + '/tslint.json');

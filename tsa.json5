@@ -1,0 +1,5 @@
+{
+  // Compiled tests will be looked up under 'outDir'
+  // Default: 'test'
+  testDir: 'test'
+}

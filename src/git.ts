@@ -42,7 +42,7 @@ export let createGit = (config: { taskRunner: TaskRunner, logger: Logger }): Git
           logger,
           handleOutput: (line: string) => {
             lines.push(line);
-            return false;
+            return true;
           },
           handleClose: (code) => {
             if (code === 0) {

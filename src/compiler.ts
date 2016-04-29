@@ -27,11 +27,18 @@ export let createCompiler = (config: { taskRunner: TaskRunner, logger: Logger, b
       bus.signal(errors.length === 0 ? 'compile-compiled' : 'compile-errored');
       return true;
     } else {
-      let matches = /([^(]+)\((\d+),(\d+)\): error TS\d+: (.*)$/.exec(line);
+      let matches = /([^(]+)\((\d+),(\d+)\): (error TS\d+: )?(.*)$/.exec(line);
       if (matches) {
         errors.push(matches[0]);
-        logger.log('compiler', `${absolutePath(matches[1])}:${matches[2]}:${matches[3]} ${matches[4]}`);
+        logger.log('compiler', `${absolutePath(matches[1])}:${matches[2]}:${matches[3]} ${matches[5]}`);
         return true;
+      } else {
+        matches = /error TS\d+: (.+)$/.exec(line);
+        if (matches) {
+          errors.push(matches[1]);
+          logger.log('compiler', `${matches[1]}`);
+          return true;
+        }
       }
     }
     return false;

@@ -1,8 +1,8 @@
-import {Logger} from './logger';
-import {Bus, EventType} from './bus';
-import {TaskRunner} from './taskrunner';
-import {Git} from './git';
-import {absolutePath} from './util';
+import {Logger} from '../logger';
+import {Bus, EventType} from '../bus';
+import {TaskRunner} from '../taskrunner';
+import {Git} from '../git';
+import {absolutePath, isTypescriptFile} from '../util';
 
 import {fork, ChildProcess} from 'child_process';
 
@@ -41,6 +41,7 @@ export let createLinter = (config: { taskRunner: TaskRunner, logger: Logger, bus
     rescheduled = false;
     running = true;
     git.findChangedFiles().then((files) => {
+      files = files.filter(isTypescriptFile);
       logger.log('linter', `Linting ${files.length} files...`);
       let command: LinterCommand = {
         filesToLint: files

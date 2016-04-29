@@ -1,9 +1,10 @@
-import {Logger} from './logger';
-import {Bus, EventType} from './bus';
-import {Task} from './taskrunner';
+import {Logger} from '../logger';
+import {Bus, EventType} from '../bus';
+import {Task} from '../taskrunner';
+import {Git} from '../git';
+import {absolutePath, isTypescriptFile} from '../util';
+
 import {processFiles, Options} from 'typescript-formatter';
-import {Git} from './git';
-import {absolutePath} from './util';
 
 let replaceOptions: Options = {
   replace: true,
@@ -38,6 +39,7 @@ export let createFormatter = (config: { logger: Logger, git: Git, bus: Bus }): F
 
   let runFormatter = (options: Options) => {
     return git.findChangedFiles().then(files => {
+      files = files.filter(isTypescriptFile);
       logger.log('formatter', `checking ${files.length} files...`);
       return processFiles(files, options).then(resultMap => {
         let success = true;
