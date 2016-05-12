@@ -20,28 +20,27 @@ export let createCompiler = (config: { taskRunner: TaskRunner, logger: Logger, b
       logger.log('compiler', 'compiling...');
       errors = [];
       bus.signal('compile-started');
-      return true;
     } else if (/Compilation complete\. Watching for file changes.$/.test(line)) {
       busy = false;
       logger.log('compiler', `ready, found ${errors.length} errors`);
       bus.signal(errors.length === 0 ? 'compile-compiled' : 'compile-errored');
-      return true;
     } else {
       let matches = /([^(]+)\((\d+),(\d+)\): (error TS\d+: )?(.*)$/.exec(line);
       if (matches) {
         errors.push(matches[0]);
         logger.log('compiler', `${absolutePath(matches[1])}:${matches[2]}:${matches[3]} ${matches[5]}`);
-        return true;
       } else {
         matches = /error TS\d+: (.+)$/.exec(line);
         if (matches) {
           errors.push(matches[1]);
           logger.log('compiler', `${matches[1]}`);
-          return true;
+        } else {
+          // just echo the output
+          logger.log('compiler', line);
         }
       }
     }
-    return false;
+    return true;
   };
 
   let handleClose = (code: number) => {

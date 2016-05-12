@@ -2,6 +2,8 @@ import {MochaCommand, MochaResponse} from './mocha';
 
 import * as Mocha from 'mocha';
 
+require('source-map-support').install();
+
 let sendResponse = (response: MochaResponse) => {
   process.send(response);
 };
