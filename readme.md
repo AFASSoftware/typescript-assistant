@@ -9,7 +9,7 @@ A typescript project typically uses different tools, like:
 - tsfmt to format files
 - tslint to check for problems
 
-When developing software, it would be nice if the right things would happen automatically at the right time.
+When developing a project using Typescript, it would be nice if the right things would happen automatically at the right time.
 
 Right now typescript-assistant has the following 2 modes:
 

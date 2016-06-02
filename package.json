@@ -1,6 +1,6 @@
 {
   "name": "typescript-assistant",
-  "version": "1.0.0",
+  "version": "0.5.0",
   "description": "",
   "main": "build/js/src/index.js",
   "scripts": {
@@ -15,9 +15,12 @@
   ],
   "author": "johan@johangorter.com",
   "license": "MIT",
+  "dependencies": {
+    "glob": "7.0.3",
+    "inquirer": "1.0.3"
+  },
   "devDependencies": {
     "chai": "3.5.0",
-    "glob": "7.0.3",
     "mocha": "2.4.5",
     "sinon": "1.17.3",
     "ts-node": "0.7.1"

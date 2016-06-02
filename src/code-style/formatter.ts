@@ -1,6 +1,5 @@
 import {Logger} from '../logger';
 import {Bus, EventType} from '../bus';
-import {Task} from '../taskrunner';
 import {Git} from '../git';
 import {absolutePath, isTypescriptFile} from '../util';
 
@@ -75,15 +74,5 @@ export let createFormatter = (config: { logger: Logger, git: Git, bus: Bus }): F
     stopVerifying: () => {
       bus.unregister(verifyFormat);
     }
-  };
-};
-
-export let startFormatChecker = (config: { bus: Bus }): Task => {
-  let {bus} = config;
-  bus.register('lint-linted', () => {
-    // todo
-  });
-  return {
-    kill: () => undefined
   };
 };

@@ -3,6 +3,7 @@ import {Logger} from './logger';
 
 export interface Task {
   kill(): void;
+  result: Promise<void>;
 }
 
 export interface TaskConfig {
@@ -64,17 +65,25 @@ export let createDefaultTaskRunner = (): TaskRunner => {
         });
       });
 
-      task.on('close', (code: number) => {
-        let handled = false;
-        if (config.handleClose) {
-          handled = config.handleClose(code);
-        }
-        if (!handled) {
-          logger.quit(loggerCategory);
-        }
+      let result = new Promise<void>((resolve, reject) => {
+        task.on('close', (code: number) => {
+          let handled = false;
+          if (config.handleClose) {
+            handled = config.handleClose(code);
+            if (code === 0) {
+              resolve();
+            } else {
+              reject();
+            }
+          }
+          if (!handled) {
+            logger.quit(loggerCategory);
+          }
+        });
       });
 
       return {
+        result,
         kill: () => {
           task.kill();
         }
