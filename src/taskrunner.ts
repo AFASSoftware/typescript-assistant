@@ -55,7 +55,7 @@ export let createDefaultTaskRunner = (): TaskRunner => {
       task.stderr.on('data', (data: string) => {
         trimAndSplit(data).forEach((line) => {
           let handled = false;
-          if (config.handleOutput) {
+          if (config.handleError) {
             handled = config.handleError(line);
           }
           if (!handled) {
