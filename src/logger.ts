@@ -1,7 +1,6 @@
 export interface Logger {
   log(category: string, message: string): void;
   error(category: string, message: string): void;
-  quit(category: string): void;
 };
 
 export let createConsoleLogger = (): Logger => {
@@ -20,10 +19,6 @@ export let createConsoleLogger = (): Logger => {
     error: (category, message) => {
       setCategory(category);
       console.error('! ' + message);
-    },
-    quit: (category) => {
-      setCategory(category);
-      console.error('X');
     }
   };
 };

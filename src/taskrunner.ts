@@ -70,14 +70,11 @@ export let createDefaultTaskRunner = (): TaskRunner => {
           let handled = false;
           if (config.handleClose) {
             handled = config.handleClose(code);
-            if (code === 0) {
+            if (!code) {
               resolve();
             } else {
-              reject();
+              reject('Process exited with code ' + code);
             }
-          }
-          if (!handled) {
-            logger.quit(loggerCategory);
           }
         });
       });
