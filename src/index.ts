@@ -41,10 +41,15 @@ if (process.argv.length === 3) {
     commands.commit(toolbox);
   } else if (command === 'release') {
     argsOk = true;
-    commands.release(toolbox).catch((error) => {
-      console.error(error);
-      process.exit(1);
-    });
+    commands.release(toolbox).then(
+      () => {
+        console.log('Done');
+      },
+      (error) => {
+        console.error(error);
+        process.exit(1);
+      }
+    );
   }
 } else if (process.argv.length === 2) {
   // Normal operation: keep compiling+checking-format+linting
