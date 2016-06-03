@@ -4,7 +4,7 @@ import {Bus} from './bus';
 import {absolutePath} from './util';
 
 export interface Compiler {
-  start(): void;
+  start(): Promise<void>;
   stop(): void;
 }
 
@@ -43,11 +43,6 @@ export let createCompiler = (config: { taskRunner: TaskRunner, logger: Logger, b
     return true;
   };
 
-  let handleClose = (code: number) => {
-    logger.error('compiler', `tsc exited with code ${code}.`);
-    return true;
-  };
-
   let task: Task;
 
   return {
@@ -55,9 +50,9 @@ export let createCompiler = (config: { taskRunner: TaskRunner, logger: Logger, b
       task = taskRunner.runTask('./node_modules/.bin/tsc', ['--watch'], {
         name: 'tsc',
         logger,
-        handleOutput,
-        handleClose
+        handleOutput
       });
+      return task.result;
     },
     stop: () => {
       task.kill();

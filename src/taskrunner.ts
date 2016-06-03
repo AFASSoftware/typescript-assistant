@@ -11,7 +11,6 @@ export interface TaskConfig {
   logger: Logger;
   handleOutput?(line: string): boolean;
   handleError?(line: string): boolean;
-  handleClose?(code: number): boolean;
 }
 
 /**
@@ -67,14 +66,10 @@ export let createDefaultTaskRunner = (): TaskRunner => {
 
       let result = new Promise<void>((resolve, reject) => {
         task.on('close', (code: number) => {
-          let handled = false;
-          if (config.handleClose) {
-            handled = config.handleClose(code);
-            if (!code) {
-              resolve();
-            } else {
-              reject('Process exited with code ' + code);
-            }
+          if (!code) {
+            resolve();
+          } else {
+            reject('Process exited with code ' + code);
           }
         });
       });

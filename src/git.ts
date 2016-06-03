@@ -36,24 +36,15 @@ export let createGit = (config: { taskRunner: TaskRunner, logger: Logger }): Git
 
     execute: (args: string[]) => {
       let lines: string[] = [];
-      return new Promise((resolve, reject) => {
-        taskRunner.runTask('git', args, {
-          name: 'git',
-          logger,
-          handleOutput: (line: string) => {
-            lines.push(line);
-            return true;
-          },
-          handleClose: (code) => {
-            if (code === 0) {
-              resolve(lines);
-              return true;
-            } else {
-              reject();
-              return false;
-            }
-          }
-        });
+      return taskRunner.runTask('git', args, {
+        name: 'git',
+        logger,
+        handleOutput: (line: string) => {
+          lines.push(line);
+          return true;
+        }
+      }).result.then(() => {
+        return lines;
       });
     }
   };
