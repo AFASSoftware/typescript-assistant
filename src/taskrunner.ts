@@ -24,11 +24,11 @@ let trimAndSplit = (data: string): string[] => {
   if (!data) {
     return [];
   }
-  if (!data.split) {
+  if (typeof data !== 'string') {
     // meaning data is a Buffer somehow...
     data = data.toString();
   }
-  return data.split('\n').map(line => /^\s*(.*?)\s*$/.exec(line)[1]).filter(line => line.length > 0);
+  return data.split('\n').map(line => /^\s*(.*?)\s*$/m.exec(line)[1]).filter(line => line.length > 0);
 };
 
 export let createDefaultTaskRunner = (): TaskRunner => {

@@ -1,4 +1,4 @@
-import {TaskRunner} from './taskRunner';
+import {TaskRunner} from './taskrunner';
 import {Logger} from './logger';
 
 import * as glob from 'glob';

@@ -39,6 +39,9 @@ if (process.argv.length === 3) {
     // commit: format+compile+lint
     argsOk = true;
     commands.commit(toolbox);
+  } else if (command === 'clean') {
+    argsOk = true;
+    commands.clean(toolbox);
   } else if (command === 'release') {
     argsOk = true;
     commands.release(toolbox).then(
@@ -58,6 +61,6 @@ if (process.argv.length === 3) {
 }
 
 if (!argsOk) {
-  console.error('Usage: tsa || tsa c[ommit]');
+  console.error('Usage: tsa || tsa c[ommit] || tsa release || tsa clean');
   process.exit(1);
 }

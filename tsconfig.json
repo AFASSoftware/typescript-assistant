@@ -9,7 +9,9 @@
     },
     "exclude": [
         "node_modules",
-        "build"
+        "build",
+        ".c9",
+        ".vscode"
     ],
     "filesGlob": [
         "./src/**/*.ts",

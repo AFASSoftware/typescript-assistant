@@ -15,8 +15,8 @@ export let createConfiguration = () => {
   let tsaConfig = DEFAULT_CONFIG;
   // tsa will not run without a tsconfig.json file
   /* tslint:disable:no-require-imports */
-  let tsConfig = JSON.parse(readFileSync('./tsConfig.json', 'UTF-8'));
-  //let tsConfig = require('./tsconfig.json');
+  let tsConfig = JSON.parse(readFileSync('./tsconfig.json', 'UTF-8'));
+  // let tsConfig = require('./tsconfig.json');
 
   let compiledTestFolder = join(tsConfig.compilerOptions.outDir, tsaConfig.testDir);
   return {
