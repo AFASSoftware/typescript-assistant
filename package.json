@@ -24,7 +24,10 @@
     "chai": "3.5.0",
     "mocha": "2.4.5",
     "sinon": "1.17.3",
-    "ts-node": "0.7.1"
+    "ts-node": "0.7.1",
+    "tslint": "3.14.0",
+    "typescript": "1.8.10",
+    "typescript-formatter": "2.3.0"
   },
   "peerDependencies": {
     "typescript": ">=1.8.9",
