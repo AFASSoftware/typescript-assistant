@@ -1,16 +1,14 @@
-import {Logger} from '../logger';
-import {Bus, EventType} from '../bus';
-import {TaskRunner} from '../taskrunner';
-import {Git} from '../git';
-import {Configuration} from '../configuration';
-import {absolutePath, isTypescriptFile} from '../util';
-
-import {fork, ChildProcess} from 'child_process';
+import { Logger } from '../logger';
+import { Bus, EventType } from '../bus';
+import { TaskRunner } from '../taskrunner';
+import { Git } from '../git';
+import { Configuration } from '../configuration';
+import { fork, ChildProcess } from 'child_process';
 
 export interface Mocha {
   start(trigger: EventType): void;
   stop(): void;
-};
+}
 
 /**
  * The messages that are sent to mocha-process
