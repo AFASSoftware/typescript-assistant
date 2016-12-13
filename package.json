@@ -16,14 +16,14 @@
   "author": "johan@johangorter.com",
   "license": "MIT",
   "dependencies": {
-    "@types/glob": "5.0.30",
-    "@types/inquirer": "0.0.32",
     "glob": "7.1.1",
     "inquirer": "2.0.0",
     "source-map-support": "0.4.6"
   },
   "devDependencies": {
     "@types/chai": "3.4.34",
+    "@types/glob": "5.0.30",
+    "@types/inquirer": "0.0.32",
     "@types/mocha": "2.2.33",
     "@types/node": "0.0.3",
     "@types/sinon": "1.16.33",
