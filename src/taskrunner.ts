@@ -1,5 +1,5 @@
-import {spawn} from 'child_process';
-import {Logger} from './logger';
+import { spawn } from 'child_process';
+import { Logger } from './logger';
 
 export interface Task {
   kill(): void;

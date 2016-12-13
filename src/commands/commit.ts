@@ -1,6 +1,6 @@
-import {Toolbox} from '../toolbox';
+import { Toolbox } from '../toolbox';
 
-export let  commit = (tools: Toolbox) => {
+export let commit = (tools: Toolbox) => {
   let {formatter, linter, bus, compiler, git, logger} = tools;
   formatter.format().then(() => {
     formatter.startVerifying('compile-compiled');

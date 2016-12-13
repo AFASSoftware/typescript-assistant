@@ -1,6 +1,6 @@
-import {Toolbox} from '../toolbox';
-import {prompt} from 'inquirer';
-import {sep} from 'path';
+import { Toolbox } from '../toolbox';
+import { prompt } from 'inquirer';
+import { sep } from 'path';
 
 export let release = (toolbox: Toolbox) => {
   let {git, taskRunner, logger} = toolbox;
@@ -17,11 +17,11 @@ export let release = (toolbox: Toolbox) => {
       choices: ['patch', 'minor', 'major']
     }).then(answers => {
       let importance = answers['bump'] as string;
-      return taskRunner.runTask(npm, ['version', importance], {name: 'npm', logger}).result.then(() => {
+      return taskRunner.runTask(npm, ['version', importance], { name: 'npm', logger }).result.then(() => {
         // 'npm version' also does a 'git commit' and 'git tag'
         return git.execute(['push']).then(() => {
           return git.execute(['push', '--tags']).then(() => {
-            return taskRunner.runTask(npm, ['publish'], {name: 'npm', logger}).result;
+            return taskRunner.runTask(npm, ['publish'], { name: 'npm', logger }).result;
           });
         });
       });

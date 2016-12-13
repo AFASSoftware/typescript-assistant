@@ -1,9 +1,8 @@
-import {Bus, createBus} from '../src/bus';
+import { Bus, createBus } from '../src/bus';
 import * as sinon from 'sinon';
-import {expect} from 'chai';
+import { expect } from 'chai';
 
 describe('bus', () => {
-
   let bus: Bus;
 
   beforeEach(() => {
@@ -16,5 +15,4 @@ describe('bus', () => {
     bus.signal('compile-started');
     expect(callback.calledOnce).to.be.true;
   });
-
 });

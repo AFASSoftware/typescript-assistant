@@ -1,10 +1,10 @@
-import {Logger} from '../logger';
-import {Bus, EventType} from '../bus';
-import {TaskRunner} from '../taskrunner';
-import {Git} from '../git';
-import {absolutePath, isTypescriptFile} from '../util';
+import { Logger } from '../logger';
+import { Bus, EventType } from '../bus';
+import { TaskRunner } from '../taskrunner';
+import { Git } from '../git';
+import { absolutePath, isTypescriptFile } from '../util';
 
-import {fork, ChildProcess} from 'child_process';
+import { fork, ChildProcess } from 'child_process';
 
 export interface Linter {
   start(trigger: EventType): void;

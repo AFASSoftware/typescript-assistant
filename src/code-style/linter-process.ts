@@ -1,30 +1,31 @@
 /* Runs in a separate process and communicates using process.on('message', ...) */
 /* This is because tslint is implemented synchronously */
-
 import { LinterCommand, LinterResponse } from './linter';
 import { readFileSync } from 'fs';
-import { RuleFailure } from 'tslint';
+import { Linter, RuleFailure, ILinterOptions } from 'tslint';
 import { IConfigurationFile } from 'tslint/lib/configuration';
-const Linter = require('tslint');
-
-// let program = Linter.createProgram(process.cwd() + '/tslint.json');
 
 let configurationFile = Linter.loadConfigurationFromPath(process.cwd() + '/tslint.json');
 
-let options: IConfigurationFile = {
-  jsRules: configurationFile.jsRules,
-  // configuration: { rules: configurationFile.rules },
-  // formatter: 'prose',
-  // formattersDirectory: undefined as string,
+let configuration: IConfigurationFile = {
+  rules: configurationFile.rules,
   rulesDirectory: configurationFile.rulesDirectory
+};
+
+let options: ILinterOptions = {
+  fix: false,
+  formatter: 'prose'
 };
 
 process.on('message', (msg: LinterCommand) => {
   let success = true;
+  let linter = new Linter(options);
+
   msg.filesToLint.forEach((fileName) => {
     let contents = readFileSync(fileName, 'utf8');
-    let linter = new Linter(fileName, contents, options);
-    let results = linter.lint();
+    linter.lint(fileName, contents, configuration);
+
+    let results = linter.getResult();
     results.failures.forEach((failure: RuleFailure) => {
       success = false;
       let response = {
