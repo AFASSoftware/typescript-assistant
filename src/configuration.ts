@@ -1,6 +1,6 @@
 import * as glob from 'glob';
-import {join} from 'path';
-import {readFileSync} from 'fs';
+import { join } from 'path';
+import { readFileSync } from 'fs';
 
 const DEFAULT_CONFIG = {
   testDir: 'test'
@@ -17,7 +17,7 @@ export let createConfiguration = () => {
   /* tslint:disable:no-require-imports */
   let tsConfig = JSON.parse(readFileSync(join(process.cwd(), './tsconfig.json'), 'UTF-8'));
   // let tsConfig = require('./tsconfig.json');
-  
+
   if (!tsConfig.compilerOptions.outDir) {
     throw new Error('No outdir found in tsconfig.json, please add "outDir": "./build/js" to the compilerOptions');
   }

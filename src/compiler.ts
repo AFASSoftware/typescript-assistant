@@ -1,7 +1,7 @@
-import {Logger} from './logger';
-import {TaskRunner, Task} from './taskrunner';
-import {Bus} from './bus';
-import {absolutePath} from './util';
+import { Logger } from './logger';
+import { TaskRunner, Task } from './taskrunner';
+import { Bus } from './bus';
+import { absolutePath } from './util';
 
 export interface Compiler {
   start(): Promise<void>;

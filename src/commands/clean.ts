@@ -1,4 +1,4 @@
-import {Toolbox} from '../toolbox';
+import { Toolbox } from '../toolbox';
 import * as fs from 'fs';
 import * as glob from 'glob';
 

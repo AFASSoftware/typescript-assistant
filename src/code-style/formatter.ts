@@ -1,9 +1,9 @@
-import {Logger} from '../logger';
-import {Bus, EventType} from '../bus';
-import {Git} from '../git';
-import {absolutePath, isTypescriptFile} from '../util';
+import { Logger } from '../logger';
+import { Bus, EventType } from '../bus';
+import { Git } from '../git';
+import { absolutePath, isTypescriptFile } from '../util';
 
-import {processFiles, Options} from 'typescript-formatter';
+import { processFiles, Options } from 'typescript-formatter';
 
 let replaceOptions: Options = {
   replace: true,

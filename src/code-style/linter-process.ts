@@ -1,24 +1,32 @@
 /* Runs in a separate process and communicates using process.on('message', ...) */
 /* This is because tslint is implemented synchronously */
+import { LinterCommand, LinterResponse } from './linter';
+import { readFileSync } from 'fs';
+import { Linter, RuleFailure, ILinterOptions } from 'tslint';
+import { IConfigurationFile } from 'tslint/lib/configuration';
 
-import * as Linter from 'tslint';
-import {LinterCommand, LinterResponse} from './linter';
-import {readFileSync} from 'fs';
+let configurationFile = Linter.loadConfigurationFromPath(process.cwd() + '/tslint.json');
 
-let options = {
-  configuration: undefined as any,
-  formatter: 'prose',
-  formattersDirectory: undefined as string,
-  rulesDirectory: undefined as string | string[]
+let configuration: IConfigurationFile = {
+  rules: configurationFile.rules,
+  rulesDirectory: configurationFile.rulesDirectory
+};
+
+let options: ILinterOptions = {
+  fix: false,
+  formatter: 'prose'
 };
 
 process.on('message', (msg: LinterCommand) => {
   let success = true;
+  let linter = new Linter(options);
+
   msg.filesToLint.forEach((fileName) => {
     let contents = readFileSync(fileName, 'utf8');
-    let linter = new Linter(fileName, contents, options);
-    let results = linter.lint();
-    results.failures.forEach((failure) => {
+    linter.lint(fileName, contents, configuration);
+
+    let results = linter.getResult();
+    results.failures.forEach((failure: RuleFailure) => {
       success = false;
       let response = {
         violation: {
@@ -33,8 +41,3 @@ process.on('message', (msg: LinterCommand) => {
   });
   process.send({ finished: { success } } as LinterResponse);
 });
-
-let configurationFile = Linter.loadConfigurationFromPath(process.cwd() + '/tslint.json');
-
-options.configuration = { rules: configurationFile.rules };
-options.rulesDirectory = configurationFile.rulesDirectory;

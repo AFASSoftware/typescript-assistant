@@ -1,18 +1,18 @@
 #!/usr/bin/env node
 
-import {createConsoleLogger} from './logger';
-import {createDefaultTaskRunner, createWindowsTaskRunner} from './taskrunner';
-import {createCompiler} from './compiler';
-import {createFormatter} from './code-style/formatter';
-import {createLinter} from './code-style/linter';
-import {createMocha} from './testing/mocha';
-import {createBus} from './bus';
-import {createGit} from './git';
-import {createConfiguration} from './configuration';
-import {commands} from './commands/index';
-import {Toolbox} from './toolbox';
+import { createConsoleLogger } from './logger';
+import { createDefaultTaskRunner, createWindowsTaskRunner } from './taskrunner';
+import { createCompiler } from './compiler';
+import { createFormatter } from './code-style/formatter';
+import { createLinter } from './code-style/linter';
+import { createMocha } from './testing/mocha';
+import { createBus } from './bus';
+import { createGit } from './git';
+import { createConfiguration } from './configuration';
+import { commands } from './commands/index';
+import { Toolbox } from './toolbox';
 
-import {sep} from 'path';
+import { sep } from 'path';
 
 let logger = createConsoleLogger();
 

@@ -1,4 +1,4 @@
-import {MochaCommand, MochaResponse} from './mocha';
+import { MochaCommand, MochaResponse } from './mocha';
 
 import * as Mocha from 'mocha';
 
@@ -8,43 +8,34 @@ let sendResponse = (response: MochaResponse) => {
   process.send(response);
 };
 
-let reporter = (runner: any) => {
-  runner.on('fail', function(test: { title: string, file: string }, err: { message: string, stack: string }) {
-    sendResponse({ testResult: { fileName: test.file, title: test.title, error: err.message, stack: err.stack } });
-  });
+class CustomReporter {
+  constructor(runner: any) {
+    runner.on('fail', function(
+      test: { title: string, file: string },
+      err: { message: string, stack: string }
+    ) {
+      sendResponse({
+        testResult: {
+          fileName: test.file,
+          title: test.title,
+          error: err.message,
+          stack: err.stack
+        }
+      });
+    });
 
-  runner.on('pass', function(test: any) {
-    sendResponse({ testResult: { fileName: test.file, title: test.title } });
-  });
+    runner.on('pass', function(test: any) {
+      sendResponse({
+        testResult: {
+          fileName: test.file,
+          title: test.title
+        }
+      });
+    });
+  }
+}
 
-  // runner.on('start', function() {
-  //   console.log('start');
-  // });
-
-  // runner.on('suite', function() {
-  //   console.log('suite');
-  // });
-
-  // runner.on('test end', function() {
-  //   console.log('test end');
-  // });
-
-  // runner.on('pending', function() {
-  //   console.log('pending');
-  // });
-
-  // runner.on('end', function() {
-  //   console.log('end');
-  // });
-
-  return {
-    // epilogue: () => {
-    //   console.log('done');
-    // }
-  };
-};
-
-let mocha = new Mocha({ reporter: reporter } as any);
+let mocha = new Mocha({ reporter: CustomReporter } as any);
 
 process.on('message', (msg: MochaCommand) => {
   msg.testFiles.forEach(testFile => {

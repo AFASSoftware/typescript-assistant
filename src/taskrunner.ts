@@ -1,5 +1,5 @@
-import {spawn} from 'child_process';
-import {Logger} from './logger';
+import { spawn } from 'child_process';
+import { Logger } from './logger';
 
 export interface Task {
   kill(): void;
@@ -18,13 +18,13 @@ export interface TaskConfig {
  */
 export interface TaskRunner {
   runTask(command: string, args: string[], config: TaskConfig): Task;
-};
+}
 
-let trimAndSplit = (data: string): string[] => {
+let trimAndSplit = (data: string | Buffer): string[] => {
   if (!data) {
     return [];
   }
-  if (typeof data !== 'string') {
+  if (data instanceof Buffer) {
     // meaning data is a Buffer somehow...
     data = data.toString();
   }

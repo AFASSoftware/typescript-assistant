@@ -1,4 +1,4 @@
-import {Toolbox} from '../toolbox';
+import { Toolbox } from '../toolbox';
 
 export let assist = (toolbox: Toolbox) => {
   toolbox.formatter.startVerifying('compile-started');
