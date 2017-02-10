@@ -1,6 +1,6 @@
 {
   "name": "typescript-assistant",
-  "version": "0.8.1",
+  "version": "0.8.2",
   "description": "",
   "main": "build/js/src/index.js",
   "bin": {
@@ -14,7 +14,10 @@
   "files": [
     "src",
     "build/js/src",
-    "tools"
+    "tools",
+    "tsconfig.json",
+    "tsfmt.json",
+    "tslint.json"
   ],
   "author": "johan@johangorter.com",
   "license": "MIT",
