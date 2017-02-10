@@ -10,10 +10,10 @@ let sendResponse = (response: MochaResponse) => {
 
 class CustomReporter {
   constructor(runner: any) {
-    runner.on('fail', function(
+    runner.on('fail', (
       test: { title: string, file: string },
       err: { message: string, stack: string }
-    ) {
+    ) => {
       sendResponse({
         testResult: {
           fileName: test.file,
@@ -24,7 +24,7 @@ class CustomReporter {
       });
     });
 
-    runner.on('pass', function(test: any) {
+    runner.on('pass', (test: any) => {
       sendResponse({
         testResult: {
           fileName: test.file,

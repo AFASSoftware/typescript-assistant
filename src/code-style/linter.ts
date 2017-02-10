@@ -9,7 +9,7 @@ import { fork, ChildProcess } from 'child_process';
 export interface Linter {
   start(trigger: EventType): void;
   stop(): void;
-};
+}
 
 /**
  * The messages that are sent to the linter-process

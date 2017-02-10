@@ -31,7 +31,7 @@ export interface Formatter {
   format(): Promise<boolean>;
   startVerifying(trigger: EventType): void;
   stopVerifying(): void;
-};
+}
 
 export let createFormatter = (config: { logger: Logger, git: Git, bus: Bus }): Formatter => {
   let {logger, bus, git} = config;

@@ -1,7 +1,7 @@
 export interface Logger {
   log(category: string, message: string): void;
   error(category: string, message: string): void;
-};
+}
 
 export let createConsoleLogger = (): Logger => {
   let currentCategory: string;

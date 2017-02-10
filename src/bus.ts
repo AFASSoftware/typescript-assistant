@@ -7,7 +7,7 @@ export type EventType =
   'format-verified' |
   'format-errored';
 
-export type Callback = () => void
+export type Callback = () => void;
 
 export interface Bus {
   signal(eventType: EventType): void;

@@ -8,7 +8,7 @@ const DEFAULT_CONFIG = {
 
 export interface Configuration {
   findCompiledTestFiles: () => Promise<string[]>;
-};
+}
 
 export let createConfiguration = () => {
   // todo load and parse tsa.json5 file if it exists
