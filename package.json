@@ -9,6 +9,10 @@
   "bin": {
     "tsa": "./build/js/src/index.js"
   },
+  "scripts": {
+    "postcheckout": "ts-node --fast tools/githooks/postcheckout",
+    "postmerge": "ts-node --fast tools/githooks/postmerge"
+  },
   "files": [
     "src",
     "build/js/src"
@@ -17,26 +21,27 @@
   "license": "MIT",
   "dependencies": {
     "glob": "7.1.1",
-    "inquirer": "2.0.0",
+    "inquirer": "3.0.1",
     "source-map-support": "0.4.6"
   },
   "devDependencies": {
     "@types/chai": "3.4.34",
     "@types/glob": "5.0.30",
     "@types/inquirer": "0.0.32",
-    "@types/mocha": "2.2.33",
-    "@types/node": "0.0.3",
+    "@types/mocha": "2.2.39",
+    "@types/node": "7.0.5",
     "@types/sinon": "1.16.33",
     "chai": "3.5.0",
+    "husky": "0.13.1",
     "mocha": "3.2.0",
-    "sinon": "1.17.6",
-    "ts-node": "1.7.2",
-    "tslint": "4.0.2",
-    "typescript": "2.1.4",
-    "typescript-formatter": "4.0.1"
+    "sinon": "1.17.7",
+    "ts-node": "2.1.0",
+    "tslint": "4.4.2",
+    "typescript": "2.1.6",
+    "typescript-formatter": "4.1.1"
   },
   "peerDependencies": {
-    "typescript": ">=1.8.9",
+    "typescript": ">=2.1.0",
     "typescript-formatter": ">=2.1.0",
     "tslint": ">=4.0.0"
   }

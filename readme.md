@@ -22,7 +22,7 @@ If it finds problems with any of these things, it outputs the line with the prob
 ## Commit
 
 When running `tsa commit` in a terminal, the changed files (detected from git) will be formatted, the compiler will compile them
-and the linter will find problemns. As long as there are still compile or linting problems, typescript-assistant will keep watching
+and the linter will find problems. As long as there are still compile or linting problems, typescript-assistant will keep watching
 the `.ts` files until they are resolved. All changes are then added to a commit and a commit-message dialog will appear.
 
 This utility is still under development. Future plans:
