@@ -3,13 +3,11 @@
   "version": "0.7.2",
   "description": "",
   "main": "build/js/src/index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "bin": {
     "tsa": "./build/js/src/index.js"
   },
   "scripts": {
+    "start": "ts-node --fast src/index.ts",
     "postcheckout": "ts-node --fast tools/githooks/postcheckout",
     "postmerge": "ts-node --fast tools/githooks/postmerge"
   },
