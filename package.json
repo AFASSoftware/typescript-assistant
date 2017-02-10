@@ -1,6 +1,6 @@
 {
   "name": "typescript-assistant",
-  "version": "0.8.3",
+  "version": "0.8.4",
   "description": "",
   "main": "build/js/src/index.js",
   "bin": {
@@ -14,6 +14,7 @@
   "files": [
     "src",
     "build/js/src",
+    "build/js/tools",
     "tools",
     "tsconfig.json",
     "tsfmt.json",
