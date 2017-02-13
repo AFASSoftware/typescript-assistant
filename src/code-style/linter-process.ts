@@ -12,7 +12,7 @@ let configuration: IConfigurationFile = {
   rulesDirectory: configurationFile.rulesDirectory
 };
 
-let options: ILinterOptions = {
+const options: ILinterOptions = {
   fix: false,
   formatter: 'prose'
 };
