@@ -33,6 +33,7 @@ let toolbox: Toolbox = {
   compiler, git, formatter, linter, mocha, configuration, bus, logger, taskRunner
 };
 
+/* tslint:disable:no-console */
 if (process.argv.length === 3) {
   let command = process.argv[2];
   if (command === 'commit' || command === 'c') {
@@ -64,3 +65,4 @@ if (!argsOk) {
   console.error('Usage: tsa || tsa c[ommit] || tsa release || tsa clean');
   process.exit(1);
 }
+/* tslint:enable:no-console */

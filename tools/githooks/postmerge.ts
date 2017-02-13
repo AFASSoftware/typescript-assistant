@@ -1,5 +1,7 @@
 import { npmInstall, packageJsonChanged } from '../helpers/helpers';
 
+/* tslint:disable:no-console */
+
 console.log('postmerge git hook running');
 
 if (packageJsonChanged('ORIG_HEAD', 'HEAD')) {

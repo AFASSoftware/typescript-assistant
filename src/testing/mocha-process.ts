@@ -2,6 +2,7 @@ import { MochaCommand, MochaResponse } from './mocha';
 
 import * as Mocha from 'mocha';
 
+/* tslint:disable:no-var-requires no-require-imports */
 require('source-map-support').install();
 
 let sendResponse = (response: MochaResponse) => {

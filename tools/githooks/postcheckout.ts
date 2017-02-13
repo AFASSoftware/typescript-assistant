@@ -1,6 +1,8 @@
 import { npmInstall } from '../helpers/helpers';
 import { packageJsonChanged } from '../helpers/helpers';
 
+/* tslint:disable:no-console */
+
 console.log('postcheckout git hook running');
 
 let gitParams = process.env.GIT_PARAMS;
