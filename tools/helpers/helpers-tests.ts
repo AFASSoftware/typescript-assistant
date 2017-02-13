@@ -1,5 +1,5 @@
 import * as childProcess from 'child_process';
-import {SinonStub, stub} from 'sinon';
+import { SinonStub, stub } from 'sinon';
 import { findChangedFiles, packageJsonChanged } from './helpers';
 import { expect } from 'chai';
 

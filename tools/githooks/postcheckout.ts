@@ -7,7 +7,7 @@ console.log('postcheckout git hook running');
 
 let gitParams = process.env.GIT_PARAMS;
 
-let [ previousHead ] = gitParams.split(' ');
+let [previousHead] = gitParams.split(' ');
 if (previousHead === '%1') {
   previousHead = 'ORIG_HEAD';
 }
