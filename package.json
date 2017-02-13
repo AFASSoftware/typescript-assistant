@@ -11,7 +11,8 @@
     "format": "ts-node --fast src/index format",
     "postcheckout": "ts-node --fast tools/githooks/post-checkout",
     "postmerge": "ts-node --fast tools/githooks/post-merge",
-    "precommit": "ts-node --fast tools/githooks/pre-commit"
+    "precommit": "ts-node --fast tools/githooks/pre-commit",
+    "prepush": "ts-node --fast tools/githooks/pre-push"
   },
   "files": [
     "src",
@@ -25,6 +26,50 @@
   ],
   "author": "johan@johangorter.com",
   "license": "MIT",
+  "nyc": {
+    "include": [
+      "src/**/*.ts"
+    ],
+    "extension": [
+      ".ts"
+    ],
+    "require": [
+      "ts-node/register"
+    ],
+    "reporter": [
+      "json",
+      "html",
+      "text-summary"
+    ],
+    "cache": true,
+    "temp-directory": "./build/nyc/cache",
+    "all": true,
+    "check-coverage": false,
+    "report-dir": "./build/coverage",
+    "es-module": false,
+    "lines": 100,
+    "statements": 100,
+    "functions": 100,
+    "branches": 100,
+    "watermarks": {
+      "lines": [
+        75,
+        100
+      ],
+      "functions": [
+        75,
+        100
+      ],
+      "branches": [
+        75,
+        100
+      ],
+      "statements": [
+        75,
+        100
+      ]
+    }
+  },
   "dependencies": {
     "glob": "7.1.1",
     "inquirer": "3.0.1",
@@ -41,6 +86,7 @@
     "chai": "3.5.0",
     "husky": "0.13.1",
     "mocha": "3.2.0",
+    "nyc": "10.1.2",
     "sinon": "1.17.7",
     "ts-node": "2.1.0",
     "tslint": "4.4.2",
