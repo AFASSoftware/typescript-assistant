@@ -1,6 +1,6 @@
 {
   "name": "typescript-assistant",
-  "version": "0.8.8",
+  "version": "0.8.9",
   "description": "",
   "main": "build/js/src/index.js",
   "bin": {
@@ -28,6 +28,7 @@
   "dependencies": {
     "glob": "7.1.1",
     "inquirer": "3.0.1",
+    "tslint-microsoft-contrib": "4.0.0",
     "source-map-support": "0.4.6"
   },
   "devDependencies": {
@@ -43,7 +44,6 @@
     "sinon": "1.17.7",
     "ts-node": "2.1.0",
     "tslint": "4.4.2",
-    "tslint-microsoft-contrib": "4.0.0",
     "typescript": "2.1.6",
     "typescript-formatter": "4.1.1"
   },
