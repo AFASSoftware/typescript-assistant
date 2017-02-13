@@ -36,7 +36,10 @@ let toolbox: Toolbox = {
 /* tslint:disable:no-console */
 if (process.argv.length === 3) {
   let command = process.argv[2];
-  if (command === 'commit' || command === 'c') {
+  if (command === 'format' || command === 'f') {
+    argsOk = true;
+    commands.format(toolbox);
+  } else if (command === 'commit' || command === 'c') {
     // commit: format+compile+lint
     argsOk = true;
     commands.commit(toolbox);
@@ -62,7 +65,7 @@ if (process.argv.length === 3) {
 }
 
 if (!argsOk) {
-  console.error('Usage: tsa || tsa c[ommit] || tsa release || tsa clean');
+  console.error('Usage: tsa || tsa f[ormat] || tsa c[ommit] || tsa release || tsa clean');
   process.exit(1);
 }
 /* tslint:enable:no-console */

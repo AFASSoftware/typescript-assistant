@@ -8,8 +8,9 @@
   },
   "scripts": {
     "start": "ts-node --fast src/index.ts",
-    "postcheckout": "ts-node --fast tools/githooks/postcheckout",
-    "postmerge": "ts-node --fast tools/githooks/postmerge"
+    "postcheckout": "ts-node --fast tools/githooks/post-checkout",
+    "postmerge": "ts-node --fast tools/githooks/post-merge",
+    "precommit": "ts-node --fast tools/githooks/pre-commit"
   },
   "files": [
     "src",

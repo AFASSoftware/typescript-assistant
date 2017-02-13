@@ -25,7 +25,7 @@ export let createGit = (config: { taskRunner: TaskRunner, logger: Logger }): Git
           });
         });
       };
-      let args = sinceLastPush ? ['diff', '--name-only', '--diff-filter=ACM', 'origin/HEAD', 'HEAD'] : ['diff', '--name-only', '--diff-filter=ACM', 'HEAD'];
+      let args = sinceLastPush ? ['diff', '--name-only', '--diff-filter=ACMR', 'origin/HEAD', 'HEAD'] : ['diff', '--name-only', '--diff-filter=ACMR', 'HEAD'];
       return git.execute(args).then(
         (files) => {
           return files;

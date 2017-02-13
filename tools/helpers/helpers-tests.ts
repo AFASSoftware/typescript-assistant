@@ -17,9 +17,9 @@ describe('git-helper', () => {
 
   it('can tell which files have changed', () => {
     execSync.returns(`package.json
-tools/githooks/postcheckout.ts
-tools/githooks/postmerge.ts`);
-    expect(findChangedFiles('ORIG_HEAD', 'HEAD')).to.deep.equal(['package.json', 'tools/githooks/postcheckout.ts', 'tools/githooks/postmerge.ts']);
+tools/githooks/post-checkout.ts
+tools/githooks/post-merge.ts`);
+    expect(findChangedFiles('ORIG_HEAD', 'HEAD')).to.deep.equal(['package.json', 'tools/githooks/post-checkout.ts', 'tools/githooks/post-merge.ts']);
   });
 
   it('can tell if package.json has changed', () => {

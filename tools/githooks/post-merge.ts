@@ -1,3 +1,5 @@
+// post-checkout and post-merge are used to run 'npm install' if needed
+
 import { npmInstall, packageJsonChanged } from '../helpers/helpers';
 
 /* tslint:disable:no-console */

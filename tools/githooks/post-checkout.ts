@@ -1,3 +1,5 @@
+// post-checkout and post-merge are used to run 'npm install' if needed
+
 import { npmInstall } from '../helpers/helpers';
 import { packageJsonChanged } from '../helpers/helpers';
 
