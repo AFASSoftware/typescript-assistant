@@ -1,27 +1,6 @@
 {
+  // This file is used to check the typescript-assistant code itself
   "extends": [
-    "./tools/tslint/tslint.latest.json",
-    "./tools/tslint/tslint.microsoft.json"
-  ],
-  "rulesDirectory": ["./build/js/tools/tslint/custom-rules/"],
-  "rules": {
-    // Custom rules.
-    "custom-no-unused-variable": true,
-
-    // Should be enabled after code fixes...
-    // Remove entry here when fixed.
-    "variable-name": false,
-    "no-null-keyword": false,
-
-    // Microsoft rules.
-    // Should be enabled after code fixes...
-    // Remove entry here when fixed.
-    "insecure-random": false,
-    "mocha-no-side-effect-code": false,
-    "no-constant-condition": false,
-    "no-empty-line-after-opening-brace": false,
-    "no-suspicious-comment": false,
-    "prefer-array-literal": false,
-    "prefer-type-cast": false
-  }
+    "./tslint.tsa.json"
+  ]
 }

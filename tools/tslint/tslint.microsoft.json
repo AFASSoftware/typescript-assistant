@@ -33,10 +33,10 @@
     "no-var-self": true,
     "no-with-statement": true,
     "prefer-array-literal": true,
-    "prefer-type-cast": true,
     "valid-typeof": true,
 
     // Explicitly disabled rules.
+    "prefer-type-cast": false, // in function calls we prefer 'as', but in return statements and assignments, we prefer <>
     "no-empty-interfaces": false,
     "no-empty-line-after-opening-brace": false,
     "no-function-expression": false, // See TSLint: only-arrow-functions
