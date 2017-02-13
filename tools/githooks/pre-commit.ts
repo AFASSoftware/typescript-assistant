@@ -73,4 +73,7 @@ tsfmt.processFiles(files, {
     console.error(`The following files were not formatted:\r\n  ${unformattedFiles.join('\r\n  ')}`);
     process.exit(1);
   }
+}).catch((err) => {
+  console.error(err);
+  process.exit(1);
 });

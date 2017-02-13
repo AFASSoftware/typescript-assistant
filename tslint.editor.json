@@ -2,7 +2,6 @@
   "extends" : "./tslint.json",
   "rules": {
     "no-trailing-whitespace": false,
-    "mocha-avoid-only": false,
-    "no-null-keyword": true
+    "mocha-avoid-only": false
   }
 }
