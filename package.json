@@ -11,8 +11,7 @@
     "format": "ts-node --fast src/index format",
     "postcheckout": "ts-node --fast tools/githooks/post-checkout",
     "postmerge": "ts-node --fast tools/githooks/post-merge",
-    "precommit": "ts-node --fast tools/githooks/pre-commit",
-    "prepush": "ts-node --fast tools/githooks/pre-push"
+    "precommit": "ts-node --fast tools/githooks/pre-commit"
   },
   "files": [
     "src",
