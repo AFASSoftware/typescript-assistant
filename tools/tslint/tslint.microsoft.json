@@ -1,5 +1,5 @@
 {
-  "rulesDirectory": ["../../node_modules/tslint-microsoft-contrib"],
+  "extends": "tslint-microsoft-contrib",
   "rules": {
     // See: https://github.com/Microsoft/tslint-microsoft-contrib#supported-rules
     "function-name": true,
@@ -35,8 +35,20 @@
     "prefer-array-literal": true,
     "valid-typeof": true,
 
+    // Disabled due to 'requires type checking'
+    "no-for-in-array": false,
+    "restrict-plus-operands": false,
+
+    // Disabled because of deprecation
+    "no-unused-variable": false,
+
     // Explicitly disabled rules.
     "prefer-type-cast": false, // in function calls we prefer 'as', but in return statements and assignments, we prefer <>
+    "missing-jsdoc": false,
+    "no-string-literal": false,
+    "interface-name": false,
+    "export-name": false,
+    "chai-vague-errors": false,
     "no-empty-interfaces": false,
     "no-empty-line-after-opening-brace": false,
     "no-function-expression": false, // See TSLint: only-arrow-functions

@@ -1,8 +1,8 @@
 {
   // This file is published in the npm package, so projects using typescript-assistant can extend their rules from it.
   "extends": [
-    "./tools/tslint/tslint.latest.json",
-    "./tools/tslint/tslint.microsoft.json"
+    "./tools/tslint/tslint.microsoft.json",
+    "./tools/tslint/tslint.latest.json"
   ],
   "rulesDirectory": ["./build/js/tools/tslint/custom-rules/"],
   "rules": {

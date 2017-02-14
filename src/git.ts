@@ -1,5 +1,5 @@
-import { TaskRunner } from './taskrunner';
 import { Logger } from './logger';
+import { TaskRunner } from './taskrunner';
 
 import * as glob from 'glob';
 

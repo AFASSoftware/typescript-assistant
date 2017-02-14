@@ -1,6 +1,6 @@
+import { readFileSync } from 'fs';
 import * as glob from 'glob';
 import { join } from 'path';
-import { readFileSync } from 'fs';
 
 const DEFAULT_CONFIG = {
   testDir: 'test'

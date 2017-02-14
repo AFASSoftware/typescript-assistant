@@ -1,6 +1,6 @@
-import { Toolbox } from '../toolbox';
 import { prompt } from 'inquirer';
 import { sep } from 'path';
+import { Toolbox } from '../toolbox';
 
 export let release = (toolbox: Toolbox) => {
   let {git, taskRunner, logger} = toolbox;

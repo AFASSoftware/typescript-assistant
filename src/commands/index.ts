@@ -1,8 +1,8 @@
-import { release } from './release';
-import { commit } from './commit';
 import { assist } from './assist';
 import { clean } from './clean';
+import { commit } from './commit';
 import { format } from './format';
+import { release } from './release';
 
 export let commands = {
   assist,

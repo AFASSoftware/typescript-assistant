@@ -16,7 +16,7 @@ export let commit = (tools: Toolbox) => {
             process.exit(0);
           });
         },
-        (error: any) => logger.error('commit', error)
+        (error: Object) => logger.error('commit', error.toString())
       );
     });
     compiler.start();

@@ -1,6 +1,6 @@
-import { Logger } from './logger';
-import { TaskRunner, Task } from './taskrunner';
 import { Bus } from './bus';
+import { Logger } from './logger';
+import { Task, TaskRunner } from './taskrunner';
 import { absolutePath } from './util';
 
 export interface Compiler {

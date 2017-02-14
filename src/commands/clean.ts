@@ -1,6 +1,6 @@
-import { Toolbox } from '../toolbox';
 import * as fs from 'fs';
 import * as glob from 'glob';
+import { Toolbox } from '../toolbox';
 
 let deleteFolderRecursive = (path: string) => {
   if (fs.existsSync(path)) {

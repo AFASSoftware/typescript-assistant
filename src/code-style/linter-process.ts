@@ -1,9 +1,9 @@
 /* Runs in a separate process and communicates using process.on('message', ...) */
 /* This is because tslint is implemented synchronously */
-import { LinterCommand, LinterResponse } from './linter';
 import { readFileSync } from 'fs';
-import { Linter, RuleFailure, ILinterOptions } from 'tslint';
+import { ILinterOptions, Linter, RuleFailure } from 'tslint';
 import { IConfigurationFile } from 'tslint/lib/configuration';
+import { LinterCommand, LinterResponse } from './linter';
 
 let configurationFile = Linter.loadConfigurationFromPath(process.cwd() + '/tslint.json');
 

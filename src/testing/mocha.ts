@@ -1,9 +1,9 @@
-import { Logger } from '../logger';
+import { ChildProcess, fork } from 'child_process';
 import { Bus, EventType } from '../bus';
-import { TaskRunner } from '../taskrunner';
-import { Git } from '../git';
 import { Configuration } from '../configuration';
-import { fork, ChildProcess } from 'child_process';
+import { Git } from '../git';
+import { Logger } from '../logger';
+import { TaskRunner } from '../taskrunner';
 
 export interface Mocha {
   start(trigger: EventType): void;
