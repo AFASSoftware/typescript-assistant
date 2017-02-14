@@ -1,9 +1,4 @@
-// pre-commit makes sure the changed code is formatted and linted.
-//
-// Rationale:
-// - Fixing formatting and linting errors are always fast and easy to fix.
-// - This prevents over-complicated merge conflicts
-// - This prevents small formatting/linting fix commits
+// THIS WAS AN EXPERIMENT, BUT IT FAILED, BECAUSE THE COVERAGE IS NOT GETTING REPORTED (0% everywhere)
 
 /* tslint:disable:no-var-requires no-require-imports */
 let NYC: any = require('nyc');
@@ -17,7 +12,7 @@ import * as Mocha from 'mocha';
 let packageJson = JSON.parse(readFileSync(join(process.cwd(), 'package.json'), 'UTF-8'));
 
 let runTests = () => {
-  let mocha = new Mocha({} as any);
+  let mocha = new Mocha({});
 
   glob.sync('test/**/*.ts').forEach(file => mocha.addFile(file));
 
@@ -37,12 +32,16 @@ let handleError = (err: any) => {
   process.exit(1);
 };
 
+process.env.TS_NODE_FAST = 'true';
+require('ts-node').register({ fast: true });
+
 if (packageJson.nyc) {
   let config = packageJson.nyc;
-  process.env.TS_NODE_FAST = 'true';
+  config.instrumenter = './lib/instrumenters/istanbul';
   let nyc = new NYC(packageJson.nyc);
   nyc.addAllFiles();
   runTests().then(() => {
+    nyc.report();
     nyc.checkCoverage({
       lines: config.lines,
       functions: config.functions,

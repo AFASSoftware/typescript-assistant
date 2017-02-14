@@ -11,7 +11,8 @@
     "format": "ts-node --fast src/index format",
     "postcheckout": "ts-node --fast tools/githooks/post-checkout",
     "postmerge": "ts-node --fast tools/githooks/post-merge",
-    "precommit": "ts-node --fast tools/githooks/pre-commit"
+    "precommit": "ts-node --fast tools/githooks/pre-commit",
+    "prepush": "cross-env TS_NODE_FAST=true nyc --check-coverage -- mocha --compilers ts:ts-node/register --reporter dot --recursive"
   },
   "files": [
     "src",
@@ -46,10 +47,10 @@
     "check-coverage": false,
     "report-dir": "./build/coverage",
     "es-module": false,
-    "lines": 100,
-    "statements": 100,
-    "functions": 100,
-    "branches": 100,
+    "lines": 1,
+    "statements": 1,
+    "functions": 1,
+    "branches": 1,
     "watermarks": {
       "lines": [
         75,
@@ -83,6 +84,7 @@
     "@types/node": "7.0.5",
     "@types/sinon": "1.16.33",
     "chai": "3.5.0",
+    "cross-env": "3.1.4",
     "husky": "0.13.1",
     "mocha": "3.2.0",
     "nyc": "10.1.2",
