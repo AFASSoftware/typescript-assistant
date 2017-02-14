@@ -47,7 +47,9 @@
     "missing-jsdoc": false,
     "no-string-literal": false,
     "interface-name": false,
+    "import-name": false, // complains about should be named 'sinon-chai' but found 'sinonChai'
     "export-name": false,
+    "no-multiline-string": false, // caused false positives
     "chai-vague-errors": false,
     "no-empty-interfaces": false,
     "no-empty-line-after-opening-brace": false,
