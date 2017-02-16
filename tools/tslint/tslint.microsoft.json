@@ -43,6 +43,8 @@
     "no-unused-variable": false,
 
     // Explicitly disabled rules.
+    "max-func-body-length": false,
+    "no-suspicious-comment": false,
     "prefer-type-cast": false, // in function calls we prefer 'as', but in return statements and assignments, we prefer <>
     "missing-jsdoc": false,
     "no-string-literal": false,
