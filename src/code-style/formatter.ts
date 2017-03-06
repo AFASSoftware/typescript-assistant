@@ -33,8 +33,8 @@ export interface Formatter {
   stopVerifying(): void;
 }
 
-export let createFormatter = (config: { logger: Logger, git: Git, bus: Bus }): Formatter => {
-  let {logger, bus, git} = config;
+export let createFormatter = (dependencies: { logger: Logger, git: Git, bus: Bus }): Formatter => {
+  let {logger, bus, git} = dependencies;
 
   let runFormatter = (options: Options) => {
     return git.findChangedFiles().then(files => {
@@ -60,7 +60,7 @@ export let createFormatter = (config: { logger: Logger, git: Git, bus: Bus }): F
     // needs re-entrant fix
     return runFormatter(verifyOptions).then((success) => {
       logger.log('formatter', success ? 'all files formatted' : 'unformatted files found');
-      bus.signal(success ? 'format-verified' : 'format-errored');
+      bus.signal(success ? 'createFormatCommand-verified' : 'createFormatCommand-errored');
     });
   };
 

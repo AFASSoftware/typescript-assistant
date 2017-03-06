@@ -18,4 +18,5 @@ export interface Dependencies {
   git: Git;
   logger: Logger;
   mocha: Mocha;
+  inject: <T>(createFunction: (dependencies: Partial<Dependencies>) => T) => T;
 }

@@ -1,6 +1,5 @@
 import * as fs from 'fs';
 import * as glob from 'glob';
-import { Dependencies } from '../dependencies';
 
 let deleteFolderRecursive = (path: string) => {
   if (fs.existsSync(path)) {
@@ -16,8 +15,12 @@ let deleteFolderRecursive = (path: string) => {
   }
 };
 
-export let clean = (tools: Dependencies) => {
-  deleteFolderRecursive('./build');
-  let rogueFiles = glob.sync('{src,test}/**/*.js{,.map}', {});
-  rogueFiles.forEach((file) => fs.unlinkSync(file));
+export let createCleanCommand = () => {
+  return {
+    execute: () => {
+      deleteFolderRecursive('./build');
+      let rogueFiles = glob.sync('{src,test}/**/*.js{,.map}', {});
+      rogueFiles.forEach((file) => fs.unlinkSync(file));
+    }
+  };
 };

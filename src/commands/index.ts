@@ -1,13 +1,13 @@
 import { assist } from './assist';
-import { clean } from './clean';
-import { commit } from './commit';
-import { format } from './format';
+import { createCleanCommand } from './clean';
+import { createCommitCommand } from './commit';
+import { createFormatCommand } from './format';
 import { release } from './release';
 
 export let commands = {
   assist,
-  commit,
+  createCommitCommand,
   release,
-  clean,
-  format
+  createCleanCommand,
+  createFormatCommand
 };

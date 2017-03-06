@@ -1,24 +1,23 @@
 import { Dependencies } from '../dependencies';
+import { createVerifyCommitCommand } from './verify-commit';
 
-export let commit = (tools: Dependencies) => {
-  let {formatter, linter, bus, compiler, git, logger} = tools;
-  formatter.format().then(() => {
-    formatter.startVerifying('compile-compiled');
-    linter.start('format-verified');
-    bus.register('lint-linted', () => {
-      compiler.stop();
-      formatter.stopVerifying();
-      linter.stop();
-      git.execute(['add', '.']).then(
-        () => {
-          git.execute(['commit', '--no-verify']).then(() => {
-            logger.log('commit', 'committed');
-            process.exit(0);
-          });
-        },
-        (error: Object) => logger.error('commit', error.toString())
-      );
-    });
-    compiler.start();
-  });
+export let createCommitCommand = (deps: Dependencies) => {
+  let {git, logger, inject} = deps;
+
+  return {
+    execute: async () => {
+      let canCommit = await inject(createVerifyCommitCommand).execute();
+      if (canCommit) {
+        git.execute(['add', '.']).then(
+          () => {
+            git.execute(['commit', '--no-verify']).then(() => {
+              logger.log('commit', 'committed');
+              process.exit(0);
+            });
+          },
+          (error: Object) => logger.error('commit', error.toString())
+        );
+      }
+    }
+  };
 };

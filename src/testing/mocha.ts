@@ -39,8 +39,8 @@ let relevantStackPart = (stack: string) => {
   return stack;
 };
 
-export let createMocha = (config: { taskRunner: TaskRunner, logger: Logger, bus: Bus, git: Git, configuration: Configuration }) => {
-  let {logger, bus, configuration} = config;
+export let createMocha = (dependencies: { taskRunner: TaskRunner, logger: Logger, bus: Bus, git: Git, configuration: Configuration }) => {
+  let {logger, bus, configuration} = dependencies;
 
   let startMochaProcess = (): ChildProcess => {
     let mochaProcess = fork(__dirname + '/mocha-process', [], {});

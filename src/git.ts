@@ -8,8 +8,8 @@ export interface Git {
   execute(args: string[]): Promise<string[]>;
 }
 
-export let createGit = (config: { taskRunner: TaskRunner, logger: Logger }): Git => {
-  let {taskRunner, logger} = config;
+export let createGit = (dependencies: { taskRunner: TaskRunner, logger: Logger }): Git => {
+  let {taskRunner, logger} = dependencies;
 
   let git: Git = {
     findChangedFiles: (sinceLastPush): Promise<string[]> => {

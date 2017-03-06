@@ -14,6 +14,9 @@ import { Dependencies } from './dependencies';
 
 import { sep } from 'path';
 import { createInjector } from './injector';
+import { createFormatCommand } from './commands/format';
+import { createCleanCommand } from './commands/clean';
+import { createCommitCommand } from './commands/commit';
 
 let argsOk = false;
 
@@ -25,28 +28,28 @@ let configuration = createConfiguration();
 let dependencies: Partial<Dependencies> = {
   configuration, bus, logger, taskRunner
 };
-let injector = createInjector(dependencies);
+let { inject } = createInjector(dependencies);
 
-// TODO: Use injector.inject
-let compiler = createCompiler({ taskRunner, logger, bus });
-let git = createGit({ taskRunner, logger });
-let formatter = createFormatter({ git, logger, bus });
-let linter = createLinter({ taskRunner, git, logger, bus });
-let mocha = createMocha({ configuration, taskRunner, logger, bus, git });
+dependencies.inject = inject;
+dependencies.compiler = inject(createCompiler);
+dependencies.git = inject(createGit);
+dependencies.formatter = inject(createFormatter);
+dependencies.linter = inject(createLinter);
+dependencies.mocha = inject(createMocha);
 
 /* tslint:disable:no-console */
 if (process.argv.length === 3) {
   let command = process.argv[2];
   if (command === 'format' || command === 'f') {
     argsOk = true;
-    commands.format(dependencies);
-  } else if (command === 'commit' || command === 'c') {
-    // commit: format+compile+lint
+    inject(createFormatCommand).execute();
+  } else if (command === 'createCommitCommand' || command === 'c') {
+    // createCommitCommand: createFormatCommand+compile+lint
     argsOk = true;
-    commands.commit(dependencies);
-  } else if (command === 'clean') {
+    inject(createCommitCommand);
+  } else if (command === 'createCleanCommand') {
     argsOk = true;
-    commands.clean(dependencies);
+    inject(createCleanCommand).execute();
   } else if (command === 'release') {
     argsOk = true;
     commands.release(dependencies).then(
@@ -60,13 +63,13 @@ if (process.argv.length === 3) {
     );
   }
 } else if (process.argv.length === 2) {
-  // Normal operation: keep compiling+checking-format+linting
+  // Normal operation: keep compiling+checking-createFormatCommand+linting
   argsOk = true;
   commands.assist(dependencies);
 }
 
 if (!argsOk) {
-  console.error('Usage: tsa || tsa f[ormat] || tsa c[ommit] || tsa release || tsa clean');
+  console.error('Usage: tsa || tsa f[ormat] || tsa c[ommit] || tsa release || tsa createCleanCommand');
   process.exit(1);
 }
 /* tslint:enable:no-console */

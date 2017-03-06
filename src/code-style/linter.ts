@@ -30,8 +30,8 @@ export interface LinterResponse {
   };
 }
 
-export let createLinter = (config: { taskRunner: TaskRunner, logger: Logger, bus: Bus, git: Git }) => {
-  let {logger, bus, git} = config;
+export let createLinter = (dependencies: { taskRunner: TaskRunner, logger: Logger, bus: Bus, git: Git }) => {
+  let {logger, bus, git} = dependencies;
   let lintProcess: ChildProcess;
 
   let running = false;

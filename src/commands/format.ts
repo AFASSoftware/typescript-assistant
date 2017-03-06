@@ -1,5 +1,11 @@
-import { Dependencies } from '../dependencies';
+import { Formatter } from '../code-style/formatter';
 
-export let format = (toolbox: Dependencies) => {
-  return toolbox.formatter.format();
+export interface FormatCommandDependencies {
+  formatter: Formatter;
+}
+
+export let createFormatCommand = (deps: FormatCommandDependencies) => {
+  return {
+    execute: deps.formatter.format
+  };
 };
