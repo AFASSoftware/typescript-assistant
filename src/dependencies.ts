@@ -8,7 +8,7 @@ import { Logger } from './logger';
 import { TaskRunner } from './taskrunner';
 import { Mocha } from './testing/mocha';
 
-export interface Toolbox {
+export interface Dependencies {
   taskRunner: TaskRunner;
   configuration: Configuration;
   linter: Linter;

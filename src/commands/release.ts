@@ -1,8 +1,8 @@
 import { prompt } from 'inquirer';
 import { sep } from 'path';
-import { Toolbox } from '../toolbox';
+import { Dependencies } from '../dependencies';
 
-export let release = (toolbox: Toolbox) => {
+export let release = (toolbox: Dependencies) => {
   let {git, taskRunner, logger} = toolbox;
 
   return git.execute(['status', '--porcelain']).then(modifiedFiles => {

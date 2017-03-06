@@ -10,45 +10,46 @@ import { createGit } from './git';
 import { createConsoleLogger } from './logger';
 import { createDefaultTaskRunner, createWindowsTaskRunner } from './taskrunner';
 import { createMocha } from './testing/mocha';
-import { Toolbox } from './toolbox';
+import { Dependencies } from './dependencies';
 
 import { sep } from 'path';
-
-let logger = createConsoleLogger();
-
-let taskRunner = sep === '\\' ? createWindowsTaskRunner() : createDefaultTaskRunner();
-
-let bus = createBus();
+import { createInjector } from './injector';
 
 let argsOk = false;
 
+let logger = createConsoleLogger();
+let taskRunner = sep === '\\' ? createWindowsTaskRunner() : createDefaultTaskRunner();
+let bus = createBus();
 let configuration = createConfiguration();
+
+let dependencies: Partial<Dependencies> = {
+  configuration, bus, logger, taskRunner
+};
+let injector = createInjector(dependencies);
+
+// TODO: Use injector.inject
 let compiler = createCompiler({ taskRunner, logger, bus });
 let git = createGit({ taskRunner, logger });
 let formatter = createFormatter({ git, logger, bus });
 let linter = createLinter({ taskRunner, git, logger, bus });
 let mocha = createMocha({ configuration, taskRunner, logger, bus, git });
 
-let toolbox: Toolbox = {
-  compiler, git, formatter, linter, mocha, configuration, bus, logger, taskRunner
-};
-
 /* tslint:disable:no-console */
 if (process.argv.length === 3) {
   let command = process.argv[2];
   if (command === 'format' || command === 'f') {
     argsOk = true;
-    commands.format(toolbox);
+    commands.format(dependencies);
   } else if (command === 'commit' || command === 'c') {
     // commit: format+compile+lint
     argsOk = true;
-    commands.commit(toolbox);
+    commands.commit(dependencies);
   } else if (command === 'clean') {
     argsOk = true;
-    commands.clean(toolbox);
+    commands.clean(dependencies);
   } else if (command === 'release') {
     argsOk = true;
-    commands.release(toolbox).then(
+    commands.release(dependencies).then(
       () => {
         console.log('Done');
       },
@@ -61,7 +62,7 @@ if (process.argv.length === 3) {
 } else if (process.argv.length === 2) {
   // Normal operation: keep compiling+checking-format+linting
   argsOk = true;
-  commands.assist(toolbox);
+  commands.assist(dependencies);
 }
 
 if (!argsOk) {

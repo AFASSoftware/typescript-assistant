@@ -1,5 +1,5 @@
-import { Toolbox } from '../toolbox';
+import { Dependencies } from '../dependencies';
 
-export let format = (toolbox: Toolbox) => {
+export let format = (toolbox: Dependencies) => {
   return toolbox.formatter.format();
 };
