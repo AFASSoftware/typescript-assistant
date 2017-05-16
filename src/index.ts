@@ -18,6 +18,7 @@ import { createCleanCommand } from './commands/clean';
 import { createCommitCommand } from './commands/commit';
 import { createReleaseCommand } from './commands/release';
 import { createAssistCommand } from './commands/assist';
+import { createNyc } from './testing/nyc';
 
 let argsOk = false;
 
@@ -37,6 +38,7 @@ dependencies.git = inject(createGit);
 dependencies.formatter = inject(createFormatter);
 dependencies.linter = inject(createLinter);
 dependencies.mocha = inject(createMocha);
+dependencies.nyc = inject(createNyc);
 
 /* tslint:disable:no-console */
 if (process.argv.length === 3) {

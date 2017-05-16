@@ -7,12 +7,13 @@
     "tsa": "./build/js/src/index.js"
   },
   "scripts": {
-    "start": "ts-node --fast src/index.ts",
+    "assist": "ts-node --fast src/index.ts",
     "format": "ts-node --fast src/index format",
     "postcheckout": "ts-node --fast tools/githooks/post-checkout",
     "postmerge": "ts-node --fast tools/githooks/post-merge",
     "precommit": "ts-node --fast tools/githooks/pre-commit",
-    "prepush": "cross-env TS_NODE_FAST=true nyc --check-coverage -- mocha --compilers ts:ts-node/register --reporter dot --recursive"
+    "prepush": "cross-env TS_NODE_FAST=true nyc --check-coverage -- mocha --compilers ts:ts-node/register --reporter dot --recursive",
+    "clean": "rimraf ./build"
   },
   "files": [
     "src",
@@ -88,6 +89,7 @@
     "husky": "0.13.1",
     "mocha": "3.2.0",
     "nyc": "10.1.2",
+    "rimraf": "2.6.1",
     "sinon": "1.17.7",
     "ts-node": "2.1.0",
     "tslint": "4.4.2",

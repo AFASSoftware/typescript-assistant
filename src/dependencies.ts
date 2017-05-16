@@ -7,6 +7,7 @@ import { Git } from './git';
 import { Logger } from './logger';
 import { TaskRunner } from './taskrunner';
 import { Mocha } from './testing/mocha';
+import { NYC } from './testing/nyc';
 
 export interface Dependencies {
   taskRunner: TaskRunner;
@@ -18,5 +19,6 @@ export interface Dependencies {
   git: Git;
   logger: Logger;
   mocha: Mocha;
+  nyc: NYC;
   inject: <T>(createFunction: (dependencies: Partial<Dependencies>) => T) => T;
 }
