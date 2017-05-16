@@ -1,13 +1,17 @@
 import { Dependencies } from '../dependencies';
-import { createVerifyCommitCommand } from './verify-commit';
 
 export let createCommitCommand = (deps: Dependencies) => {
-  let {git, logger, inject} = deps;
+  let {git, logger, formatter, linter, bus, compiler} = deps;
 
   return {
     execute: async () => {
-      let canCommit = await inject(createVerifyCommitCommand).execute();
-      if (canCommit) {
+      await formatter.format();
+      formatter.startVerifying('compile-compiled');
+      linter.start('format-verified');
+      bus.register('lint-linted', () => {
+        compiler.stop();
+        formatter.stopVerifying();
+        linter.stop();
         git.execute(['add', '.']).then(
           () => {
             git.execute(['commit', '--no-verify']).then(() => {
@@ -17,7 +21,7 @@ export let createCommitCommand = (deps: Dependencies) => {
           },
           (error: Object) => logger.error('commit', error.toString())
         );
-      }
+      });
     }
   };
 };

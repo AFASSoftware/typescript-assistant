@@ -60,7 +60,7 @@ export let createFormatter = (dependencies: { logger: Logger, git: Git, bus: Bus
     // needs re-entrant fix
     return runFormatter(verifyOptions).then((success) => {
       logger.log('formatter', success ? 'all files formatted' : 'unformatted files found');
-      bus.signal(success ? 'createFormatCommand-verified' : 'createFormatCommand-errored');
+      bus.signal(success ? 'format-verified' : 'format-errored');
     });
   };
 

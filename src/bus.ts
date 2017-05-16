@@ -4,8 +4,8 @@ export type EventType =
   'compile-errored' |
   'lint-linted' |
   'lint-errored' |
-  'createFormatCommand-verified' |
-  'createFormatCommand-errored';
+  'format-verified' |
+  'format-errored';
 
 export type Callback = () => void;
 

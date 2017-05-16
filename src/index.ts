@@ -3,7 +3,6 @@
 import { createBus } from './bus';
 import { createFormatter } from './code-style/formatter';
 import { createLinter } from './code-style/linter';
-import { commands } from './commands/index';
 import { createCompiler } from './compiler';
 import { createConfiguration } from './configuration';
 import { createGit } from './git';
@@ -17,6 +16,8 @@ import { createInjector } from './injector';
 import { createFormatCommand } from './commands/format';
 import { createCleanCommand } from './commands/clean';
 import { createCommitCommand } from './commands/commit';
+import { createReleaseCommand } from './commands/release';
+import { createAssistCommand } from './commands/assist';
 
 let argsOk = false;
 
@@ -43,16 +44,16 @@ if (process.argv.length === 3) {
   if (command === 'format' || command === 'f') {
     argsOk = true;
     inject(createFormatCommand).execute();
-  } else if (command === 'createCommitCommand' || command === 'c') {
+  } else if (command === 'commit' || command === 'c') {
     // createCommitCommand: createFormatCommand+compile+lint
     argsOk = true;
-    inject(createCommitCommand);
-  } else if (command === 'createCleanCommand') {
+    inject(createCommitCommand).execute();
+  } else if (command === 'clean') {
     argsOk = true;
     inject(createCleanCommand).execute();
   } else if (command === 'release') {
     argsOk = true;
-    commands.release(dependencies).then(
+    inject(createReleaseCommand).execute().then(
       () => {
         console.log('Done');
       },
@@ -65,7 +66,7 @@ if (process.argv.length === 3) {
 } else if (process.argv.length === 2) {
   // Normal operation: keep compiling+checking-createFormatCommand+linting
   argsOk = true;
-  commands.assist(dependencies);
+  inject(createAssistCommand).execute();
 }
 
 if (!argsOk) {
