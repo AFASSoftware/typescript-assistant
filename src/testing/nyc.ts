@@ -1,6 +1,7 @@
 import { Task, TaskRunner } from '../taskrunner';
 import { Logger } from '../logger';
 import { Bus } from '../bus';
+import { absolutePath } from '../util';
 
 export interface NYC {
   start(): void;
@@ -15,13 +16,20 @@ export let createNyc = (dependencies: { taskRunner: TaskRunner, logger: Logger, 
     if (runningTask) {
       runningTask.kill();
     }
+    let lastNotAtLine = '';
     let handleOutput = (line: string) => {
       if (task === runningTask) {
         let notOk = /not ok \d+ (.*)/.exec(line);
+        let contextIt = /^\s*at Context.it \(([^)]+)\)/.exec(line);
         if (notOk) {
-          logger.error('nyc', 'Test failed: ' + notOk[1]);
+          logger.log('nyc', 'FAILED: ' + notOk[1]);
+        } else if (contextIt) {
+          logger.log('nyc', absolutePath(contextIt[1]) + ' ' + lastNotAtLine);
         } else {
-          logger.error('nyc', 'Unknown: ' + line);
+          // logger.error('nyc', 'Unknown: ' + line);
+          if (!/^\s*at.*$/.test(line)) {
+            lastNotAtLine = line;
+          }
         }
       }
       return true;
