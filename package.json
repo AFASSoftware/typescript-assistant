@@ -8,6 +8,7 @@
   },
   "scripts": {
     "assist": "ts-node --fast src/index.ts",
+    "release": "ts-node --fast src/index.ts release",
     "format": "ts-node --fast src/index format",
     "postcheckout": "ts-node --fast tools/githooks/post-checkout",
     "postmerge": "ts-node --fast tools/githooks/post-merge",
