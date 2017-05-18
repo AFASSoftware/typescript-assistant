@@ -16,20 +16,24 @@ export let createNyc = (dependencies: { taskRunner: TaskRunner, logger: Logger, 
     if (runningTask) {
       runningTask.kill();
     }
-    let lastNotAtLine = '';
+    let errorLine = '';
+    let lastLineWasNotOk = false;
     let handleOutput = (line: string) => {
       if (task === runningTask) {
-        let notOk = /not ok \d+ (.*)/.exec(line);
-        let contextIt = /^\s*at Context.it \(([^)]+)\)/.exec(line);
+        if (lastLineWasNotOk) {
+          errorLine = line;
+          lastLineWasNotOk = false;
+        }
+        // For extra debug info:
+        // if (!/^ok \d+ (.*)/.exec(line)) { logger.log('nyc', '  [ ' + line); }
+        let notOk = /^not ok \d+ (.*)/.exec(line);
+        let contextIt = /^(} )?at Context\.\S+ \(([^)]+)\)/.exec(line);
         if (notOk) {
+          lastLineWasNotOk = true;
           logger.log('nyc', 'FAILED: ' + notOk[1]);
         } else if (contextIt) {
-          logger.log('nyc', absolutePath(contextIt[1]) + ' ' + lastNotAtLine);
-        } else {
-          // logger.error('nyc', 'Unknown: ' + line);
-          if (!/^\s*at.*$/.test(line)) {
-            lastNotAtLine = line;
-          }
+          logger.log('nyc', absolutePath(contextIt[2]) + ' ' + errorLine);
+          errorLine = '';
         }
       }
       return true;

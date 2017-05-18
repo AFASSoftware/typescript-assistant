@@ -3,7 +3,7 @@ import { Git } from '../git';
 import { Logger } from '../logger';
 import { absolutePath, isTypescriptFile } from '../util';
 
-import { Options, processFiles } from 'typescript-formatter';
+import { Options, processFiles, ResultMap } from 'typescript-formatter';
 
 let replaceOptions: Options = {
   replace: true,
@@ -13,7 +13,11 @@ let replaceOptions: Options = {
   tslint: true,
   tsfmt: true,
   verify: false,
-  tsconfig: undefined
+  tsconfig: undefined,
+  tsconfigFile: undefined,
+  tslintFile: undefined,
+  tsfmtFile: undefined,
+  vscode: false
 };
 
 let verifyOptions: Options = {
@@ -24,7 +28,11 @@ let verifyOptions: Options = {
   tslint: true,
   tsfmt: true,
   verify: true,
-  tsconfig: undefined
+  tsconfig: undefined,
+  tsconfigFile: undefined,
+  tslintFile: undefined,
+  tsfmtFile: undefined,
+  vscode: false
 };
 
 export interface Formatter {
@@ -37,12 +45,12 @@ export let createFormatter = (dependencies: { logger: Logger, git: Git, bus: Bus
   let {logger, bus, git} = dependencies;
 
   let runFormatter = (options: Options) => {
-    return git.findChangedFiles().then(files => {
+    return git.findChangedFiles().then((files: string[]) => {
       files = files.filter(isTypescriptFile);
       logger.log('formatter', `checking ${files.length} files...`);
-      return processFiles(files, options).then(resultMap => {
+      return processFiles(files, options).then((resultMap: ResultMap) => {
         let success = true;
-        Object.keys(resultMap).forEach(fileName => {
+        Object.keys(resultMap).forEach((fileName: string) => {
           let result = resultMap[fileName];
           if (result.error) {
             success = false;
@@ -70,6 +78,7 @@ export let createFormatter = (dependencies: { logger: Logger, git: Git, bus: Bus
     },
     startVerifying: (trigger: EventType) => {
       bus.register(trigger, verifyFormat);
+      verifyFormat();
     },
     stopVerifying: () => {
       bus.unregister(verifyFormat);

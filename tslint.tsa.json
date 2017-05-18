@@ -4,9 +4,14 @@
     "./tools/tslint/tslint.microsoft.json",
     "./tools/tslint/tslint.latest.json"
   ],
-  "rulesDirectory": ["./build/js/tools/tslint/custom-rules/"],
+  "rulesDirectory": ["./build/js/tools/tslint/custom-rules/"], // nothing in here anymore, may change in the future
   "rules": {
-    // Custom rules
-    "custom-no-unused-variable": true
+    // Re-enable after TypeScript fixes.
+    // https://github.com/palantir/tslint/issues/2470
+    "no-unused-variable": false,
+
+    // Re-enable after Rule is fixed.
+    // https://github.com/Microsoft/tslint-microsoft-contrib/issues/355
+    "no-string-based-set-timeout": false
   }
 }

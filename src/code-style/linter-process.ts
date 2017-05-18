@@ -5,11 +5,17 @@ import { ILinterOptions, Linter, RuleFailure } from 'tslint';
 import { IConfigurationFile } from 'tslint/lib/configuration';
 import { LinterCommand, LinterResponse } from './linter';
 
-let configurationFile = Linter.loadConfigurationFromPath(process.cwd() + '/tslint.json');
+let configurationFile = Linter.loadConfigurationFromPath(`${process.cwd()}/tslint.json`);
 
 let configuration: IConfigurationFile = {
   rules: configurationFile.rules,
-  rulesDirectory: configurationFile.rulesDirectory
+  rulesDirectory: configurationFile.rulesDirectory,
+  jsRules: undefined,
+  defaultSeverity: 'error',
+  extends: [],
+  linterOptions: {
+    typeCheck: true
+  }
 };
 
 const options: ILinterOptions = {

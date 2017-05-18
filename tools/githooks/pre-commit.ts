@@ -7,6 +7,7 @@
 
 import { filterTsFiles, findChangedFiles } from '../helpers/helpers';
 import * as tsfmt from 'typescript-formatter';
+import { ResultMap } from 'typescript-formatter';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 import * as glob from 'glob';
@@ -32,7 +33,13 @@ let lintFiles = () => {
   let configurationFile = Linter.loadConfigurationFromPath(process.cwd() + '/tslint.json');
   let configuration: IConfigurationFile = {
     rules: configurationFile.rules,
-    rulesDirectory: configurationFile.rulesDirectory
+    rulesDirectory: configurationFile.rulesDirectory,
+    jsRules: undefined,
+    defaultSeverity: 'error',
+    extends: [],
+    linterOptions: {
+      typeCheck: true
+    }
   };
   let success = true;
   files.forEach((fileName) => {
@@ -51,8 +58,9 @@ let lintFiles = () => {
 };
 
 tsfmt.processFiles(files, {
-  verify: true, replace: false, verbose: false, baseDir: process.cwd(), editorconfig: true, tslint: true, tsfmt: true, tsconfig: true
-}).then((resultList) => {
+  verify: true, replace: false, verbose: false, baseDir: process.cwd(), editorconfig: true, tslint: true, tsfmt: true, tsconfig: true,
+  tsconfigFile: undefined, tslintFile: undefined, tsfmtFile: undefined, vscode: false
+}).then((resultList: ResultMap) => {
   let unformattedFiles: string[] = [];
   Object.keys(resultList).forEach((key) => {
     let result = resultList[key];

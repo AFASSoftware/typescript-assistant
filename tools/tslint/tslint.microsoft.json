@@ -1,5 +1,7 @@
 {
-  "extends": "tslint-microsoft-contrib",
+  // We pick the rules we want ourselves
+  // "extends": "tslint-microsoft-contrib",
+  "rulesDirectory": ["../../node_modules/tslint-microsoft-contrib"],
   "rules": {
     // See: https://github.com/Microsoft/tslint-microsoft-contrib#supported-rules
     "function-name": true,
@@ -33,27 +35,10 @@
     "no-var-self": true,
     "no-with-statement": true,
     "prefer-array-literal": true,
+    "prefer-type-cast": false,
     "valid-typeof": true,
 
-    // Disabled due to 'requires type checking'
-    "no-for-in-array": false,
-    "restrict-plus-operands": false,
-
-    // Disabled because of deprecation
-    "no-unused-variable": false,
-
     // Explicitly disabled rules.
-    "max-func-body-length": false,
-    "no-suspicious-comment": false,
-    "prefer-type-cast": false, // in function calls we prefer 'as', but in return statements and assignments, we prefer <>
-    "missing-jsdoc": false,
-    "no-string-literal": false,
-    "interface-name": false,
-    "import-name": false, // complains about should be named 'sinon-chai' but found 'sinonChai'
-    "export-name": false,
-    "no-multiline-string": false, // caused false positives
-    "chai-vague-errors": false,
-    "no-empty-interfaces": false,
     "no-empty-line-after-opening-brace": false,
     "no-function-expression": false, // See TSLint: only-arrow-functions
     "no-increment-decrement": false,
@@ -63,7 +48,9 @@
     "no-sparse-arrays": false,
     "no-unnecessary-local-variable": false,
     "prefer-const": false,
-    // Does not work as expected, the WebStorm inspection however does work as expected
+    "missing-jsdoc": false,
+    "newline-before-return": false,
+    // Does not work as expected, the webstorm inspection does work as expected
     "promise-must-complete": false
   }
 }
