@@ -5,11 +5,11 @@ import { ILinterOptions, Linter, RuleFailure } from 'tslint';
 import { IConfigurationFile } from 'tslint/lib/configuration';
 import { LinterCommand, LinterResponse } from './linter';
 
-let configurationFile = Linter.loadConfigurationFromPath(`${process.cwd()}/tslint.json`);
+let { rules, rulesDirectory } = Linter.loadConfigurationFromPath(`${process.cwd()}/tslint.json`);
 
 let configuration: IConfigurationFile = {
-  rules: configurationFile.rules,
-  rulesDirectory: configurationFile.rulesDirectory,
+  rules: rules,
+  rulesDirectory: rulesDirectory,
   jsRules: undefined,
   defaultSeverity: 'error',
   extends: [],
@@ -25,7 +25,8 @@ const options: ILinterOptions = {
 
 process.on('message', (msg: LinterCommand) => {
   let success = true;
-  let linter = new Linter(options);
+  let program = Linter.createProgram(`${process.cwd()}/tslint.json`);
+  let linter = new Linter(options, program);
 
   msg.filesToLint.forEach((fileName) => {
     let contents = readFileSync(fileName, 'utf8');

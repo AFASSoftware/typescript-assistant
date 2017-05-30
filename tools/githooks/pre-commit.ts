@@ -29,8 +29,9 @@ let changed = findChangedFiles();
 let files = changed.length === 0 ? allTsFiles() : filterTsFiles(changed);
 
 let lintFiles = () => {
-  let linter = new Linter({ fix: false, formatter: 'prose' });
-  let configurationFile = Linter.loadConfigurationFromPath(process.cwd() + '/tslint.json');
+  let program = Linter.createProgram(`${process.cwd()}/tslint.json`);
+  let linter = new Linter({ fix: false, formatter: 'prose' }, program);
+  let configurationFile = Linter.loadConfigurationFromPath(`${process.cwd()}/tslint.json`);
   let configuration: IConfigurationFile = {
     rules: configurationFile.rules,
     rulesDirectory: configurationFile.rulesDirectory,
