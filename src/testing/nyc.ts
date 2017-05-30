@@ -46,7 +46,8 @@ export let createNyc = (dependencies: { taskRunner: TaskRunner, logger: Logger, 
     };
     let task = runningTask = taskRunner.runTask(
       './node_modules/.bin/cross-env',
-      'TS_NODE_FAST=true nyc --check-coverage -- mocha --compilers ts:ts-node/register --reporter tap --recursive'.split(' '),
+      ('TS_NODE_FAST=true ./node_modules/.bin/nyc --check-coverage -- ' +
+        './node_modules/.bin/mocha --compilers ts:ts-node/register --reporter tap --recursive').split(' '),
       {
         name: 'nyc',
         logger,
