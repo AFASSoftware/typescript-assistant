@@ -1,7 +1,7 @@
 {
   // We pick the rules we want ourselves
   // "extends": "tslint-microsoft-contrib",
-  "rulesDirectory": ["../../node_modules/tslint-microsoft-contrib"],
+  "rulesDirectory": ["tslint-microsoft-contrib/"],
   "rules": {
     // See: https://github.com/Microsoft/tslint-microsoft-contrib#supported-rules
     "function-name": true,
