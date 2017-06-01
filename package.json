@@ -73,8 +73,11 @@
     }
   },
   "dependencies": {
+    "cross-env": "5.0.0",
     "glob": "7.1.2",
     "inquirer": "3.0.6",
+    "mocha": "3.4.2",
+    "nyc": "10.3.2",
     "source-map-support": "0.4.15",
     "tslint-microsoft-contrib": "5.0.0",
     "tsutils": "1.6.0"
@@ -87,10 +90,7 @@
     "@types/node": "7.0.22",
     "@types/sinon": "2.2.2",
     "chai": "3.5.0",
-    "cross-env": "5.0.0",
     "husky": "0.13.4",
-    "mocha": "3.4.2",
-    "nyc": "10.3.2",
     "rimraf": "2.6.1",
     "sinon": "2.3.2",
     "ts-node": "3.0.4",
