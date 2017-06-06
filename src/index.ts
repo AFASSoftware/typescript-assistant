@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 
-import { createBus } from './bus';
 import { createFormatter } from './code-style/formatter';
 import { createLinter } from './code-style/linter';
 import { createCompiler } from './compiler';
@@ -19,6 +18,7 @@ import { createCommitCommand } from './commands/commit';
 import { createReleaseCommand } from './commands/release';
 import { createAssistCommand } from './commands/assist';
 import { createNyc } from './testing/nyc';
+import { createBus } from './bus';
 
 let argsOk = false;
 
