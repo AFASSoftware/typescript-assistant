@@ -1,6 +1,6 @@
 /* Runs in a separate process and communicates using process.on('message', ...) */
 /* This is because tslint is implemented synchronously */
-import { readFileSync } from 'fs';
+import { readFileSync, writeFileSync } from 'fs';
 import { ILinterOptions, Linter, RuleFailure } from 'tslint';
 import { IConfigurationFile } from 'tslint/lib/configuration';
 import { LinterCommand, LinterResponse } from './linter';
@@ -23,26 +23,31 @@ const options: ILinterOptions = {
   formatter: 'prose'
 };
 
+const fixOptions: ILinterOptions = {
+  fix: true,
+  formatter: 'prose'
+};
+
 process.on('message', (msg: LinterCommand) => {
   let success = true;
   let program = Linter.createProgram(`${process.cwd()}/tslint.json`);
-  let linter = new Linter(options, program);
 
   msg.filesToLint.forEach((fileName) => {
+    let linter = new Linter(msg.fix ? fixOptions : options, program);
     let contents = readFileSync(fileName, 'utf8');
     linter.lint(fileName, contents, configuration);
-
     let results = linter.getResult();
     results.failures.forEach((failure: RuleFailure) => {
       success = false;
-      let response = {
+      let response: LinterResponse = {
         violation: {
           fileName,
           line: failure.getStartPosition().getLineAndCharacter().line + 1,
           column: failure.getStartPosition().getLineAndCharacter().character,
-          message: failure.getFailure()
+          message: failure.getFailure(),
+          hasFix: failure.hasFix()
         }
-      } as LinterResponse;
+      };
       process.send(response);
     });
   });

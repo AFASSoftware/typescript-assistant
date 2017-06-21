@@ -9,11 +9,16 @@ import { filterTsFiles, findChangedFiles } from '../helpers/helpers';
 import * as tsfmt from 'typescript-formatter';
 import { ResultMap } from 'typescript-formatter';
 import { readFileSync } from 'fs';
-import { join } from 'path';
+import { join, sep } from 'path';
 import * as glob from 'glob';
 import { Linter, RuleFailure } from 'tslint';
 import { IConfigurationFile } from 'tslint/lib/configuration';
 import { absolutePath } from '../../src/util';
+import { createBus } from '../../src/bus';
+import { createLinter } from '../../src/code-style/linter';
+import { createDefaultTaskRunner, createWindowsTaskRunner } from '../../src/taskrunner';
+import { createConsoleLogger } from '../../src/logger';
+import { createGit } from '../../src/git';
 
 /* tslint:disable:no-console */
 
@@ -29,39 +34,20 @@ let changed = findChangedFiles();
 let files = changed.length === 0 ? allTsFiles() : filterTsFiles(changed);
 
 let lintFiles = () => {
-  let program = Linter.createProgram(`${process.cwd()}/tslint.json`);
-  let linter = new Linter({ fix: false, formatter: 'prose' }, program);
-  let configurationFile = Linter.loadConfigurationFromPath(`${process.cwd()}/tslint.json`);
-  let configuration: IConfigurationFile = {
-    rules: configurationFile.rules,
-    rulesDirectory: configurationFile.rulesDirectory,
-    jsRules: undefined,
-    defaultSeverity: 'error',
-    extends: [],
-    linterOptions: {
-      typeCheck: true
-    }
-  };
-  let success = true;
-  files.forEach((fileName) => {
-    let contents = readFileSync(fileName, 'utf8');
-    linter.lint(fileName, contents, configuration);
-
-    let results = linter.getResult();
-    results.failures.forEach((failure: RuleFailure) => {
-      success = false;
-      let line = failure.getStartPosition().getLineAndCharacter().line + 1;
-      let column = failure.getStartPosition().getLineAndCharacter().character;
-      console.log(`${absolutePath(fileName)}:${line}:${column} ${failure.getFailure()}`);
-    });
+  let logger = createConsoleLogger();
+  let taskRunner = sep === '\\' ? createWindowsTaskRunner() : createDefaultTaskRunner();
+  let bus = createBus();
+  let git = createGit({ taskRunner, logger });
+  let linter = createLinter({
+    taskRunner, logger, bus, git
   });
-  return success;
+  return linter.lintOnce(false);
 };
 
 tsfmt.processFiles(files, {
   verify: true, replace: false, verbose: false, baseDir: process.cwd(), editorconfig: true, tslint: true, tsfmt: true, tsconfig: true,
   tsconfigFile: undefined, tslintFile: undefined, tsfmtFile: undefined, vscode: false
-}).then((resultList: ResultMap) => {
+}).then(async (resultList: ResultMap) => {
   let unformattedFiles: string[] = [];
   Object.keys(resultList).forEach((key) => {
     let result = resultList[key];
@@ -71,7 +57,7 @@ tsfmt.processFiles(files, {
   });
   if (unformattedFiles.length === 0) {
     console.log(`All ${files.length} files were formatted`);
-    if (lintFiles()) {
+    if (await lintFiles()) {
       console.log(`All ${files.length} files were linted`);
       process.exit(0);
     } else {

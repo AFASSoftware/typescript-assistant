@@ -12,7 +12,7 @@ import { Dependencies } from './dependencies';
 
 import { sep } from 'path';
 import { createInjector } from './injector';
-import { createFormatCommand } from './commands/format';
+import { createFixCommand } from './commands/format';
 import { createCleanCommand } from './commands/clean';
 import { createCommitCommand } from './commands/commit';
 import { createReleaseCommand } from './commands/release';
@@ -41,38 +41,39 @@ dependencies.mocha = inject(createMocha);
 dependencies.nyc = inject(createNyc);
 
 /* tslint:disable:no-console */
+let success = () => {
+  process.exit(0);
+};
+
+let failure = (error: any) => {
+  console.error(error);
+  process.exit(1);
+};
+
 if (process.argv.length === 3) {
   let command = process.argv[2];
-  if (command === 'format' || command === 'f') {
+  if (command === 'format' || command === 'fix' || command === 'f') {
     argsOk = true;
-    inject(createFormatCommand).execute();
+    inject(createFixCommand).execute().then(success, failure);
   } else if (command === 'commit' || command === 'c') {
-    // createCommitCommand: createFormatCommand+compile+lint
+    // createCommitCommand: createFixCommand+compile+lint
     argsOk = true;
-    inject(createCommitCommand).execute();
+    inject(createCommitCommand).execute().then(success, failure);
   } else if (command === 'clean') {
     argsOk = true;
     inject(createCleanCommand).execute();
   } else if (command === 'release') {
     argsOk = true;
-    inject(createReleaseCommand).execute().then(
-      () => {
-        console.log('Done');
-      },
-      (error) => {
-        console.error(error);
-        process.exit(1);
-      }
-    );
+    inject(createReleaseCommand).execute().then(success, failure);
   }
 } else if (process.argv.length === 2) {
-  // Normal operation: keep compiling+checking-createFormatCommand+linting
+  // Normal operation: keep compiling+checking-createFixCommand+linting
   argsOk = true;
   inject(createAssistCommand).execute();
 }
 
 if (!argsOk) {
-  console.error('Usage: tsa || tsa f[ormat] || tsa c[ommit] || tsa release || tsa createCleanCommand');
+  console.error('Usage: tsa || tsa f[ix] || tsa c[ommit] || tsa release || tsa clean');
   process.exit(1);
 }
 /* tslint:enable:no-console */

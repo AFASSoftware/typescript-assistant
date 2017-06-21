@@ -9,12 +9,14 @@ import { ChildProcess, fork } from 'child_process';
 export interface Linter {
   start(trigger: EventType): void;
   stop(): void;
+  lintOnce(fix: boolean): Promise<boolean>;
 }
 
 /**
  * The messages that are sent to the linter-process
  */
 export interface LinterCommand {
+  fix: boolean;
   filesToLint: string[];
 }
 
@@ -24,6 +26,7 @@ export interface LinterResponse {
     message: string;
     line: number;
     column: number;
+    hasFix: boolean;
   };
   finished?: {
     success: boolean;
@@ -36,6 +39,9 @@ export let createLinter = (dependencies: { taskRunner: TaskRunner, logger: Logge
 
   let running = false;
   let rescheduled = false;
+  let fix = false;
+  let errors = 0;
+  let fixable = 0;
 
   let startLint = () => {
     rescheduled = false;
@@ -43,7 +49,10 @@ export let createLinter = (dependencies: { taskRunner: TaskRunner, logger: Logge
     git.findChangedFiles().then((files) => {
       files = files.filter(isTypescriptFile);
       logger.log('linter', `Linting ${files.length} files...`);
+      errors = 0;
+      fixable = 0;
       let command: LinterCommand = {
+        fix: fix,
         filesToLint: files
       };
       lintProcess.send(command);
@@ -60,32 +69,71 @@ export let createLinter = (dependencies: { taskRunner: TaskRunner, logger: Logge
     }
   };
 
+  let startProcess = () => {
+    lintProcess = fork(__dirname + '/linter-process', [], {});
+    lintProcess.on('close', (code: number) => {
+      logger.log('linter', `linting process exited with code ${code}`);
+    });
+    lintProcess.on('message', (response: LinterResponse) => {
+      if (response.violation) {
+        let {fileName, line, column, message, hasFix} = response.violation;
+        errors++;
+        if (hasFix) {
+          fixable++;
+        }
+        logger.log('linter', `${absolutePath(fileName)}:${line}:${column} ${message}`);
+      }
+      if (response.finished) {
+        running = false;
+        logger.log('linter', response.finished.success
+          ? 'All files are ok'
+          : `${errors} Linting problems found, ${fixable} ${fix ? 'fixed' : 'fixable'}`);
+        bus.signal(response.finished.success ? 'lint-linted' : 'lint-errored');
+        if (rescheduled) {
+          startLint();
+        }
+      }
+    });
+  };
+
   return {
     start: (trigger: EventType) => {
-      lintProcess = fork(__dirname + '/linter-process', [], {});
-      lintProcess.on('close', (code: number) => {
-        logger.log('linter', 'linting process exited with code ' + code);
-      });
-      lintProcess.on('message', (response: LinterResponse) => {
-        if (response.violation) {
-          let {fileName, line, column, message} = response.violation;
-          logger.log('linter', `${absolutePath(fileName)}:${line}:${column} ${message}`);
-        }
-        if (response.finished) {
-          running = false;
-          logger.log('linter', response.finished.success ? 'All files are ok' : 'Linting problems found');
-          bus.signal(response.finished.success ? 'lint-linted' : 'lint-errored');
-          if (rescheduled) {
-            startLint();
-          }
-        }
-      });
+      startProcess();
       bus.register(trigger, lint);
     },
     stop: () => {
       bus.unregister(lint);
       lintProcess.kill();
       lintProcess = undefined;
+    },
+    lintOnce: (fixOnce: boolean) => {
+      fix = fixOnce;
+      let isRunning = lintProcess !== undefined;
+      if (!isRunning) {
+        startProcess();
+      }
+      return new Promise((resolve) => {
+        let ready = () => {
+          bus.unregister(linted);
+          bus.unregister(errored);
+          fix = false;
+          if (!isRunning) {
+            lintProcess.kill();
+            lintProcess = undefined;
+          }
+        };
+        let linted = () => {
+          ready();
+          resolve(true);
+        };
+        let errored = () => {
+          ready();
+          resolve(false);
+        };
+        bus.register('lint-linted', linted);
+        bus.register('lint-errored', errored);
+        lint();
+      });
     }
   };
 };
