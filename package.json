@@ -9,7 +9,7 @@
   "scripts": {
     "assist": "ts-node --fast src/index.ts",
     "release": "ts-node --fast src/index.ts release",
-    "format": "ts-node --fast src/index format",
+    "fix": "ts-node --fast src/index fix",
     "postcheckout": "ts-node --fast tools/githooks/post-checkout",
     "postmerge": "ts-node --fast tools/githooks/post-merge",
     "precommit": "ts-node --fast tools/githooks/pre-commit",
