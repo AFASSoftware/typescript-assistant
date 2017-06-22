@@ -79,7 +79,7 @@
     "mocha": "3.4.2",
     "nyc": "10.3.2",
     "source-map-support": "0.4.15",
-    "ts-node": "3.0.6",
+    "ts-node": "3.1.0",
     "tslint": "5.3.2",
     "tslint-microsoft-contrib": "5.0.0",
     "tsutils": "1.6.0"
@@ -95,7 +95,7 @@
     "husky": "0.13.4",
     "rimraf": "2.6.1",
     "sinon": "2.3.2",
-    "typescript": "2.1.6",
+    "typescript": "2.3.4",
     "typescript-formatter": "5.2.0"
   },
   "peerDependencies": {
