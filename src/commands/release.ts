@@ -3,7 +3,7 @@ import { sep } from 'path';
 import { Dependencies } from '../dependencies';
 
 export let createReleaseCommand = (deps: Dependencies) => {
-  let {git, taskRunner, logger} = deps;
+  let { git, taskRunner, logger } = deps;
 
   return {
     execute: () => {
@@ -20,7 +20,7 @@ export let createReleaseCommand = (deps: Dependencies) => {
         }).then(answers => {
           let importance = answers['bump'] as string;
           return taskRunner.runTask(npm, ['version', importance], { name: 'npm', logger }).result.then(() => {
-            // 'npm version' also does a 'git createCommitCommand' and 'git tag'
+            // 'npm version' also does a 'git commit' and 'git tag'
             return git.execute(['push']).then(() => {
               return git.execute(['push', '--tags']).then(() => {
                 return taskRunner.runTask(npm, ['publish'], { name: 'npm', logger }).result;
