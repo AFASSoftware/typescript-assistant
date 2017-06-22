@@ -14,11 +14,13 @@ import { sep } from 'path';
 import { createInjector } from './injector';
 import { createFixCommand } from './commands/format';
 import { createCleanCommand } from './commands/clean';
-import { createCommitCommand } from './commands/commit';
 import { createReleaseCommand } from './commands/release';
 import { createAssistCommand } from './commands/assist';
 import { createNyc } from './testing/nyc';
 import { createBus } from './bus';
+import { createPostCheckoutCommand } from './commands/post-checkout';
+import { createPostMergeCommand } from './commands/post-merge';
+import { createPreCommitCommand } from './commands/pre-commit';
 
 let argsOk = false;
 
@@ -55,10 +57,15 @@ if (process.argv.length === 3) {
   if (command === 'format' || command === 'fix' || command === 'f') {
     argsOk = true;
     inject(createFixCommand).execute().then(success, failure);
-  } else if (command === 'commit' || command === 'c') {
-    // createCommitCommand: createFixCommand+compile+lint
+  } else if (command === 'pre-commit') {
     argsOk = true;
-    inject(createCommitCommand).execute().then(success, failure);
+    inject(createPreCommitCommand).execute().then(success, failure);
+  } else if (command === 'post-checkout') {
+    argsOk = true;
+    inject(createPostCheckoutCommand).execute();
+  } else if (command === 'post-merge') {
+    argsOk = true;
+    inject(createPostMergeCommand).execute();
   } else if (command === 'clean') {
     argsOk = true;
     inject(createCleanCommand).execute();
@@ -67,13 +74,14 @@ if (process.argv.length === 3) {
     inject(createReleaseCommand).execute().then(success, failure);
   }
 } else if (process.argv.length === 2) {
-  // Normal operation: keep compiling+checking-createFixCommand+linting
+  // Normal operation: keep compiling+testing+linting
   argsOk = true;
   inject(createAssistCommand).execute();
 }
 
 if (!argsOk) {
-  console.error('Usage: tsa || tsa f[ix] || tsa c[ommit] || tsa release || tsa clean');
+  console.error('Usage: tsa || tsa f[ix] || tsa release || tsa clean ');
+  console.error('  || tsa pre-commit || tsa post-checkout || tsa post-merge');
   process.exit(1);
 }
 /* tslint:enable:no-console */

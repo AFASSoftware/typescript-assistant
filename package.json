@@ -11,9 +11,9 @@
     "assist": "ts-node --fast src/index.ts",
     "release": "ts-node --fast src/index.ts release",
     "fix": "ts-node --fast src/index fix",
-    "postcheckout": "ts-node --fast tools/githooks/post-checkout",
-    "postmerge": "ts-node --fast tools/githooks/post-merge",
-    "precommit": "ts-node --fast tools/githooks/pre-commit",
+    "postcheckout": "ts-node --fast src/index post-checkout",
+    "postmerge": "ts-node --fast src/index post-merge",
+    "precommit": "ts-node --fast src/index pre-commit",
     "prepush": "cross-env TS_NODE_FAST=true nyc --check-coverage -- mocha --compilers ts:ts-node/register --reporter dot --recursive",
     "clean": "rimraf ./build"
   },

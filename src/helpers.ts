@@ -13,11 +13,7 @@ export let findChangedFiles = (refA?: string, refB?: string) => {
 };
 
 export let npmInstall = () => {
-  try {
-    execSync('npm install', { encoding: 'UTF-8', stdio: [0, 1, 2] });
-  } catch (err) {
-    console.error('npm install was not successful, ignoring', err);
-  }
+  execSync('npm install', { encoding: 'UTF-8', stdio: [0, 1, 2] });
 };
 
 export let packageJsonChanged = (refA: string, refB: string) => findChangedFiles(refA, refB).filter(f => f.indexOf('package.json') !== -1).length >= 1;

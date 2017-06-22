@@ -1,6 +1,6 @@
 import * as childProcess from 'child_process';
 import { SinonStub, stub } from 'sinon';
-import { findChangedFiles, packageJsonChanged } from './helpers';
+import { findChangedFiles, packageJsonChanged } from '../src/helpers';
 import { expect } from 'chai';
 
 describe('git-helper', () => {
