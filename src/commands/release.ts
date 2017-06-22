@@ -21,8 +21,8 @@ export let createReleaseCommand = (deps: Dependencies) => {
           let importance = answers['bump'] as string;
           return taskRunner.runTask(npm, ['version', importance], { name: 'npm', logger }).result.then(() => {
             // 'npm version' also does a 'git commit' and 'git tag'
-            return git.execute(['push']).then(() => {
-              return git.execute(['push', '--tags']).then(() => {
+            return git.execute(['push', '--no-verify']).then(() => {
+              return git.execute(['push', '--tags', '--no-verify']).then(() => {
                 return taskRunner.runTask(npm, ['publish'], { name: 'npm', logger }).result;
               });
             });

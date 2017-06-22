@@ -1,0 +1,7 @@
+/**/*
+!/build/js/**/*
+!/tools/**/*
+!/readme.md
+!/tslint.tsa.json
+!/tsfmt.json
+!/.editorconfig
