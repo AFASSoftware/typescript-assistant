@@ -10,7 +10,7 @@ export interface Configuration {
   findCompiledTestFiles: () => Promise<string[]>;
 }
 
-export let createConfiguration = () => {
+export let createConfiguration = (): Configuration => {
   // todo load and parse tsa.json5 file if it exists
   let tsaConfig = DEFAULT_CONFIG;
   // tsa will not run without a tsconfig.json file

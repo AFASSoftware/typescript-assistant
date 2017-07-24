@@ -42,7 +42,7 @@ export interface Formatter {
 }
 
 export let createFormatter = (dependencies: { logger: Logger, git: Git, bus: Bus }): Formatter => {
-  let {logger, bus, git} = dependencies;
+  let { logger, bus, git } = dependencies;
 
   let runFormatter = (options: Options) => {
     return git.findChangedFiles().then((files: string[]) => {

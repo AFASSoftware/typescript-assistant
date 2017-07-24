@@ -40,18 +40,18 @@ let relevantStackPart = (stack: string) => {
 };
 
 export let createMocha = (dependencies: { taskRunner: TaskRunner, logger: Logger, bus: Bus, git: Git, configuration: Configuration }) => {
-  let {logger, bus, configuration} = dependencies;
+  let { logger, bus, configuration } = dependencies;
 
   let startMochaProcess = (): ChildProcess => {
     let mochaProcess = fork(__dirname + '/mocha-process', [], {});
     mochaProcess.on('close', (code: number) => {
       if (code) {
-        logger.log('mocha', 'mocha process exited with code ' + code);
+        logger.log('mocha', `mocha process exited with code ${code}`);
       }
     });
     mochaProcess.on('message', (response: MochaResponse) => {
       if (response.testResult) {
-        let {fileName, title, error, stack} = response.testResult;
+        let { fileName, title, error, stack } = response.testResult;
         if (error) {
           logger.log('mocha', `Test failed: ${fileName} ${title}`);
           logger.log('mocha', relevantStackPart(stack));

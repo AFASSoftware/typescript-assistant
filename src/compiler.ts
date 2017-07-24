@@ -9,7 +9,7 @@ export interface Compiler {
 }
 
 export let createCompiler = (dependencies: { taskRunner: TaskRunner, logger: Logger, bus: Bus }): Compiler => {
-  let {taskRunner, logger, bus} = dependencies;
+  let { taskRunner, logger, bus } = dependencies;
 
   let busy = true;
   let errors: string[] = [];
