@@ -29,6 +29,10 @@
   ],
   "author": "johan@johangorter.com",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AFASResearch/typescript-assistant"
+  },
   "nyc": {
     "include": [
       "src/**/*.ts"
