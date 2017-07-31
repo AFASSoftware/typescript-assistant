@@ -3,11 +3,9 @@
 import { createFormatter } from './code-style/formatter';
 import { createLinter } from './code-style/linter';
 import { createCompiler } from './compiler';
-import { createConfiguration } from './configuration';
 import { createGit } from './git';
 import { createConsoleLogger } from './logger';
 import { createDefaultTaskRunner, createWindowsTaskRunner } from './taskrunner';
-import { createMocha } from './testing/mocha';
 import { Dependencies } from './dependencies';
 
 import { sep } from 'path';
@@ -21,16 +19,16 @@ import { createBus } from './bus';
 import { createPostCheckoutCommand } from './commands/post-checkout';
 import { createPostMergeCommand } from './commands/post-merge';
 import { createPreCommitCommand } from './commands/pre-commit';
+import { createWatcher } from './watcher';
 
 let argsOk = false;
 
 let logger = createConsoleLogger();
 let taskRunner = sep === '\\' ? createWindowsTaskRunner() : createDefaultTaskRunner();
 let bus = createBus();
-let configuration = createConfiguration();
 
 let dependencies: Partial<Dependencies> = {
-  configuration, bus, logger, taskRunner
+  bus, logger, taskRunner
 };
 let { inject } = createInjector(dependencies);
 
@@ -39,8 +37,8 @@ dependencies.compiler = inject(createCompiler);
 dependencies.git = inject(createGit);
 dependencies.formatter = inject(createFormatter);
 dependencies.linter = inject(createLinter);
-dependencies.mocha = inject(createMocha);
 dependencies.nyc = inject(createNyc);
+dependencies.watcher = inject(createWatcher);
 
 /* tslint:disable:no-console */
 let success = () => {
