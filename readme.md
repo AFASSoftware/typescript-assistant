@@ -23,3 +23,7 @@ TODO: explain git hooks
 When running `tsa` in a terminal, typescript-assistant will monitor changes to `.ts` files and compile these automatically.
 It will also report formatting and linting violations and it will run tests and reports the failing ones.
 If it finds problems with any of these things, it outputs the line with the problem in a way that IDE's can create clickable links.
+
+## NOTE:
+
+When typescript-assistant cannot find some of its dependencies, it may be required to run `npm dedupe` which makes sure all required dependencies will be located directly under `node_modules` of your project
