@@ -19,6 +19,7 @@ export let createCleanCommand = () => {
   return {
     execute: () => {
       deleteFolderRecursive('./build');
+      deleteFolderRecursive('./dest');
       let rogueFiles = glob.sync('{src,test}/**/*.js{,.map}', {});
       rogueFiles.forEach((file) => fs.unlinkSync(file));
     }

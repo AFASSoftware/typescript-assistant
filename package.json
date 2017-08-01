@@ -11,11 +11,11 @@
     "assist": "ts-node --fast src/index.ts",
     "release": "ts-node --fast src/index.ts release",
     "fix": "ts-node --fast src/index fix",
+    "clean": "ts-node --fast src/index clean",
     "postcheckout": "ts-node --fast src/index post-checkout",
     "postmerge": "ts-node --fast src/index post-merge",
     "precommit": "ts-node --fast src/index pre-commit",
-    "prepush": "cross-env TS_NODE_FAST=true nyc --check-coverage -- mocha --compilers ts:ts-node/register --reporter dot --recursive",
-    "clean": "rimraf ./build"
+    "prepush": "cross-env TS_NODE_FAST=true nyc --check-coverage -- mocha --compilers ts:ts-node/register --reporter dot --recursive"
   },
   "files": [
     "src",
@@ -40,9 +40,6 @@
     "extension": [
       ".ts"
     ],
-    "require": [
-      "ts-node/register"
-    ],
     "reporter": [
       "json",
       "html",
@@ -57,7 +54,7 @@
     "lines": 1,
     "statements": 1,
     "functions": 1,
-    "branches": 1,
+    "branches": 0.5,
     "watermarks": {
       "lines": [
         75,
@@ -78,6 +75,10 @@
     }
   },
   "dependencies": {
+    "@types/chai": "4.0.1",
+    "@types/mocha": "2.2.41",
+    "@types/node": "8.0.17",
+    "chai": "4.1.0",
     "cross-env": "5.0.1",
     "glob": "7.1.2",
     "husky": "0.14.3",
@@ -94,16 +95,11 @@
     "typescript-formatter": "5.2.0"
   },
   "devDependencies": {
-    "@types/chai": "4.0.1",
     "@types/chokidar": "1.7.1",
     "@types/glob": "5.0.30",
     "@types/inquirer": "0.0.35",
-    "@types/mocha": "2.2.41",
-    "@types/node": "8.0.17",
     "@types/sinon": "2.3.3",
-    "chai": "4.1.0",
     "chokidar": "1.7.0",
-    "rimraf": "2.6.1",
     "sinon": "2.4.1"
   }
 }
