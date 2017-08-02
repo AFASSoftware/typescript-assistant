@@ -3,7 +3,6 @@ import { Git } from '../git';
 import { Logger } from '../logger';
 import { TaskRunner } from '../taskrunner';
 import { absolutePath, isTypescriptFile } from '../util';
-
 import { ChildProcess, fork } from 'child_process';
 
 export interface Linter {
@@ -33,8 +32,8 @@ export interface LinterResponse {
   };
 }
 
-export let createLinter = (dependencies: { taskRunner: TaskRunner, logger: Logger, bus: Bus, git: Git }) => {
-  let {logger, bus, git} = dependencies;
+export let createLinter = (dependencies: { taskRunner: TaskRunner, logger: Logger, bus: Bus, git: Git }): Linter => {
+  let { logger, bus, git } = dependencies;
   let lintProcess: ChildProcess;
 
   let running = false;
@@ -76,7 +75,7 @@ export let createLinter = (dependencies: { taskRunner: TaskRunner, logger: Logge
     });
     lintProcess.on('message', (response: LinterResponse) => {
       if (response.violation) {
-        let {fileName, line, column, message, hasFix} = response.violation;
+        let { fileName, line, column, message, hasFix } = response.violation;
         errors++;
         if (hasFix) {
           fixable++;

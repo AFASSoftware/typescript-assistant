@@ -5,19 +5,21 @@ export type EventType =
   'lint-linted' |
   'lint-errored' |
   'format-verified' |
-  'format-errored';
+  'format-errored' |
+  'test-files-changed';
 
 export type Callback = () => void;
 
 export interface Bus {
   signal(eventType: EventType): void;
   register(type: EventType, callback: Callback): void;
+  registerAll(types: EventType[], callback: Callback): void;
   unregister(callback: Callback): void;
 }
 
 export let createBus = (): Bus => {
   let allSubscribers: { [index: string]: Callback[] } = {};
-  return {
+  let bus: Bus = {
     signal: (eventType) => {
       let subscribers = allSubscribers[eventType];
       if (subscribers) {
@@ -31,6 +33,9 @@ export let createBus = (): Bus => {
       }
       subscribers.push(callback);
     },
+    registerAll: (types: EventType[], callback) => {
+      types.forEach(type => bus.register(type, callback));
+    },
     unregister: (callback) => {
       Object.keys(allSubscribers).forEach(eventType => {
         let subscribers = allSubscribers[eventType];
@@ -41,4 +46,5 @@ export let createBus = (): Bus => {
       });
     }
   };
+  return bus;
 };

@@ -37,12 +37,12 @@ let verifyOptions: Options = {
 
 export interface Formatter {
   format(): Promise<boolean>;
-  startVerifying(trigger: EventType): void;
+  startVerifying(triggers: EventType[]): void;
   stopVerifying(): void;
 }
 
 export let createFormatter = (dependencies: { logger: Logger, git: Git, bus: Bus }): Formatter => {
-  let {logger, bus, git} = dependencies;
+  let { logger, bus, git } = dependencies;
 
   let runFormatter = (options: Options) => {
     return git.findChangedFiles().then((files: string[]) => {
@@ -76,8 +76,8 @@ export let createFormatter = (dependencies: { logger: Logger, git: Git, bus: Bus
     format: () => {
       return runFormatter(replaceOptions);
     },
-    startVerifying: (trigger: EventType) => {
-      bus.register(trigger, verifyFormat);
+    startVerifying: (triggers: EventType[]) => {
+      bus.registerAll(triggers, verifyFormat);
       verifyFormat();
     },
     stopVerifying: () => {

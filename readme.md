@@ -1,33 +1,29 @@
-Work in progress
+# Work in progress!
 
-The idea behind typescript-assistant is as follows:
+At *AFAS Software* we do our frontend coding in Typescript. We want our code to be of high quality, so we normalize/format our code, do
+static linting, unit testing and code coverage. We also want code to be normalized/formatted and linted on each commit and we want
+all tests to pass and code coverage thresholds met on every push.
 
-A typescript project typically uses different tools, like:
+Installing and configuring the tools for this on every project and keeping them up-to-date is cumbersome, so we created typescript-assistant.
 
-- The Typescript compiler
-- Mocha to run unit tests
-- tsfmt to format files
-- tslint to check for problems
+Typescript assistant serves 3 purposes:
 
-When developing a project using Typescript, it would be nice if the right things would happen automatically at the right time.
+### A: A suite of tools for creating quality Typescript code
 
-Right now typescript-assistant has the following 2 modes:
+At *AFAS Software* we are use Typescript along with tslint and tsfmt for code style and mocha and nyc for unit-testing and code-coverage.
+Typescript assistant has up-to-date dependencies on these tools, so all you need is one devDependency on typescript-assistant and these
+tools are at your disposal.
 
-## Assist
+### B: Verifying that code that is committed and pushed conforms to quality norms
+
+TODO: explain git hooks
+
+### C: A tool that reports violations on every file-save
 
 When running `tsa` in a terminal, typescript-assistant will monitor changes to `.ts` files and compile these automatically.
 It will also report formatting and linting violations and it will run tests and reports the failing ones.
 If it finds problems with any of these things, it outputs the line with the problem in a way that IDE's can create clickable links.
 
-## Commit
+## NOTE:
 
-When running `tsa commit` in a terminal, the changed files (detected from git) will be formatted, the compiler will compile them
-and the linter will find problems. As long as there are still compile or linting problems, typescript-assistant will keep watching
-the `.ts` files until they are resolved. All changes are then added to a commit and a commit-message dialog will appear.
-
-This utility is still under development. Future plans:
-
-- Measuring coverage
-- Running webpack-dev-server if a webpack config file is found
-- adding a 'Push' mode which does more checks, like making sure all tests pass
-- hosting a webserver which shows a graphical representation of problems, incoming commits, a 'format' button, etc...
+When typescript-assistant cannot find some of its dependencies, it may be required to run `npm dedupe` which makes sure all required dependencies will be located directly under `node_modules` of your project

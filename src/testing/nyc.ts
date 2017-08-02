@@ -9,7 +9,7 @@ export interface NYC {
 }
 
 export let createNyc = (dependencies: { taskRunner: TaskRunner, logger: Logger, bus: Bus }): NYC => {
-  let {taskRunner, logger, bus} = dependencies;
+  let { taskRunner, logger, bus } = dependencies;
   let runningTask: Task | undefined;
 
   let startNyc = () => {
@@ -67,7 +67,7 @@ export let createNyc = (dependencies: { taskRunner: TaskRunner, logger: Logger, 
 
   return {
     start: () => {
-      bus.register('compile-started', startNyc);
+      bus.registerAll(['compile-started', 'test-files-changed'], startNyc);
       startNyc();
     },
     stop: () => {

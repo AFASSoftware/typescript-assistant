@@ -1,6 +1,5 @@
 import { Logger } from './logger';
 import { TaskRunner } from './taskrunner';
-
 import * as glob from 'glob';
 
 export interface Git {
@@ -9,11 +8,11 @@ export interface Git {
 }
 
 export let createGit = (dependencies: { taskRunner: TaskRunner, logger: Logger }): Git => {
-  let {taskRunner, logger} = dependencies;
+  let { taskRunner, logger } = dependencies;
 
   let git: Git = {
     findChangedFiles: (sinceLastPush): Promise<string[]> => {
-      let fallback = () => {
+      let fallback = (): Promise<string[]> => {
         // If not inside a git repository or no changed files found:
         return new Promise((resolve, reject) => {
           glob('**/*.ts', { ignore: ['node_modules/**', 'typings/**'] }, (error, matches) => {
