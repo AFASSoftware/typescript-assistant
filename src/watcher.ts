@@ -10,7 +10,7 @@ export let createWatcher = (dependencies: { bus: Bus }): Watcher => {
   return {
     watchTestFileChanged: () => {
       let timeout: any;
-      chokidar.watch('./test/**/*.ts').on('all', (evt, path) => {
+      chokidar.watch('./test/**/*.ts', { ignoreInitial: true }).on('all', (evt, path) => {
         // batch events for a short amount of time to catch an IDE doing a save-all
         if (timeout === undefined) {
           timeout = setTimeout(() => {
