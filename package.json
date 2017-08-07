@@ -2,12 +2,12 @@
   "name": "typescript-assistant",
   "version": "0.13.4",
   "description": "",
-  "main": "build/js/src/index.js",
+  "main": "dist/index.js",
   "bin": {
-    "tsa": "./build/js/src/index.js"
+    "tsa": "./dist/index.js"
   },
   "scripts": {
-    "prepublishOnly": "tsc",
+    "prepublishOnly": "tsc -d --rootDir ./src --outDir ./dist",
     "assist": "ts-node --fast src/index.ts",
     "release": "ts-node --fast src/index.ts release",
     "fix": "ts-node --fast src/index fix",
