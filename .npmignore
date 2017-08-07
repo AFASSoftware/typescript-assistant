@@ -1,7 +1,7 @@
 /**/*
+!/dist/**/*
 !/tools/**/*
 !/readme.md
 !/tslint.tsa.json
 !/tsfmt.json
 !/.editorconfig
-!/dist/**/*
