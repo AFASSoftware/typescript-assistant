@@ -5,7 +5,7 @@ export interface CIOptions {
 }
 
 export let createCICommand = (deps: Dependencies) => {
-  let { formatter, linter, compiler, nyc, git } = deps;
+  let { formatter, linter, compiler, nyc, git, logger } = deps;
 
   return {
     execute: async (options: CIOptions = {}): Promise<boolean> => {
@@ -16,7 +16,12 @@ export let createCICommand = (deps: Dependencies) => {
         linter.lintOnce(false, allTypescriptFiles),
         nyc.run()
       ]);
-      return !results.some(r => r === false);
+      let toolErrors = results.filter(result => result === false).length;
+      if (toolErrors !== 0) {
+        logger.error('ci', `${toolErrors} tool${toolErrors === 1 ? '' : 's'} reported errors`);
+        return false;
+      }
+      return true;
     }
   };
 };

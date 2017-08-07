@@ -21,8 +21,7 @@ import { createPostMergeCommand } from './commands/post-merge';
 import { createPreCommitCommand } from './commands/pre-commit';
 import { createWatcher } from './watcher';
 import { createCICommand } from './commands/ci';
-
-let argsOk = false;
+import * as yargsModule from 'yargs';
 
 let logger = createConsoleLogger();
 let taskRunner = sep === '\\' ? createWindowsTaskRunner() : createDefaultTaskRunner();
@@ -51,39 +50,52 @@ let failure = (error: any) => {
   process.exit(1);
 };
 
-if (process.argv.length === 3) {
-  let command = process.argv[2];
-  if (command === 'format' || command === 'fix' || command === 'f') {
-    argsOk = true;
-    inject(createFixCommand).execute().then(success, failure);
-  } else if (command === 'pre-commit') {
-    argsOk = true;
-    inject(createPreCommitCommand).execute().then(success, failure);
-  } else if (command === 'post-checkout') {
-    argsOk = true;
-    inject(createPostCheckoutCommand).execute();
-  } else if (command === 'post-merge') {
-    argsOk = true;
-    inject(createPostMergeCommand).execute();
-  } else if (command === 'clean') {
-    argsOk = true;
-    inject(createCleanCommand).execute();
-  } else if (command === 'release') {
-    argsOk = true;
-    inject(createReleaseCommand).execute().then(success, failure);
-  } else if (command === 'ci') {
-    argsOk = true;
-    inject(createCICommand).execute().then(success, failure);
+yargsModule.command(['assist', '*'], 'Watches for file changes and outputs current errors and violations', {}, (yargs) => {
+  if (yargs._.length === 0 || yargs._.length === 1 && yargs._[0] === 'assist') {
+    inject(createAssistCommand).execute();
+  } else {
+    console.error('Unknown command');
+    process.exit(1);
   }
-} else if (process.argv.length === 2) {
-  // Normal operation: keep compiling+testing+linting
-  argsOk = true;
-  inject(createAssistCommand).execute();
-}
+});
 
-if (!argsOk) {
-  console.error('Usage: tsa || tsa f[ix] || tsa release || tsa clean || tsa ci');
-  console.error('  || tsa pre-commit || tsa post-checkout || tsa post-merge');
-  process.exit(1);
-}
+yargsModule.command(['fix', 'f'], 'Formats changed files and applies tslint fixes', {}, (yargs) => {
+  inject(createFixCommand).execute().then(success, failure);
+});
+
+yargsModule.command(['clean', 'c'], 'Deletes all output files and intermediate files', {}, (yargs) => {
+  inject(createCleanCommand).execute();
+});
+
+yargsModule.command(['release'], 'Interactively makes a new version number, tags, pushes and publishes to npm', {}, (yargs) => {
+  inject(createReleaseCommand).execute();
+});
+
+yargsModule.command(['ci'], 'Runs all tools in parallel to find errors', {
+  '--': { describe: 'Arguments to be passed to tsc' }
+}, (yargs) => {
+  let tscArgs = yargs._.slice(1);
+  inject(createCICommand).execute({ tscArgs });
+});
+
+yargsModule.command('pre-commit', 'Pre-commit git hook for husky', {}, (yargs) => {
+  inject(createPreCommitCommand).execute().then(success, failure);
+});
+
+yargsModule.command('post-checkout', 'Post-checkout git hook for husky', {}, (yargs) => {
+  inject(createPostCheckoutCommand).execute();
+});
+
+yargsModule.command('post-merge', 'Post-merge git hook for husky', {}, (yargs) => {
+  inject(createPostMergeCommand).execute();
+});
+
+// if (!argsOk) {
+//   console.error('Usage: tsa || tsa f[ix] || tsa release || tsa clean || tsa ci');
+//   console.error('  || tsa pre-commit || tsa post-checkout || tsa post-merge');
+//   process.exit(1);
+// }
+
+yargsModule.help().strict().argv;
+
 /* tslint:enable:no-console */

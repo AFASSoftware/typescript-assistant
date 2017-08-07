@@ -69,7 +69,7 @@ export let createDefaultTaskRunner = (): TaskRunner => {
           if (!code) {
             resolve();
           } else {
-            reject('Process exited with code ' + code);
+            reject(`Process exited with code ${code}`);
           }
         });
       });

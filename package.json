@@ -15,7 +15,7 @@
     "postcheckout": "ts-node --fast src/index post-checkout",
     "postmerge": "ts-node --fast src/index post-merge",
     "precommit": "ts-node --fast src/index pre-commit",
-    "ci": "ts-node --fast src/index ci",
+    "ci": "ts-node --fast src/index ci -- -d --rootDir ./src --outDir ./dist",
     "prepush": "cross-env TS_NODE_FAST=true nyc --check-coverage -- mocha --compilers ts:ts-node/register --reporter dot --recursive"
   },
   "files": [
@@ -101,6 +101,8 @@
     "@types/glob": "5.0.30",
     "@types/inquirer": "0.0.35",
     "@types/sinon": "2.3.3",
-    "sinon": "2.4.1"
+    "@types/yargs": "8.0.2",
+    "sinon": "2.4.1",
+    "yargs": "8.0.2"
   }
 }
