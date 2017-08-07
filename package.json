@@ -18,16 +18,6 @@
     "ci": "ts-node --fast src/index ci -- -d --rootDir ./src --outDir ./dist",
     "prepush": "cross-env TS_NODE_FAST=true nyc --check-coverage -- mocha --compilers ts:ts-node/register --reporter dot --recursive"
   },
-  "files": [
-    "src",
-    "build/js/src",
-    "build/js/tools",
-    "tools",
-    "tsconfig.json",
-    "tsfmt.json",
-    "tslint.tsa.json",
-    "tslint.json"
-  ],
   "author": "johan@johangorter.com",
   "license": "MIT",
   "repository": {
