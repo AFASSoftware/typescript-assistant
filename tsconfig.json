@@ -5,7 +5,8 @@
     "noImplicitAny": true,
     "sourceMap": true,
     "outDir": "./build/js",
-    "rootDir": "."
+    "rootDir": ".",
+    "declaration": true
   },
   "exclude": [
     "node_modules",

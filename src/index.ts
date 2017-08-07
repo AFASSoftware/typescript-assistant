@@ -20,6 +20,7 @@ import { createPostCheckoutCommand } from './commands/post-checkout';
 import { createPostMergeCommand } from './commands/post-merge';
 import { createPreCommitCommand } from './commands/pre-commit';
 import { createWatcher } from './watcher';
+import { createCICommand } from './commands/ci';
 
 let argsOk = false;
 
@@ -70,6 +71,9 @@ if (process.argv.length === 3) {
   } else if (command === 'release') {
     argsOk = true;
     inject(createReleaseCommand).execute().then(success, failure);
+  } else if (command === 'ci') {
+    argsOk = true;
+    inject(createCICommand).execute().then(success, failure);
   }
 } else if (process.argv.length === 2) {
   // Normal operation: keep compiling+testing+linting
@@ -78,7 +82,7 @@ if (process.argv.length === 3) {
 }
 
 if (!argsOk) {
-  console.error('Usage: tsa || tsa f[ix] || tsa release || tsa clean ');
+  console.error('Usage: tsa || tsa f[ix] || tsa release || tsa clean || tsa ci');
   console.error('  || tsa pre-commit || tsa post-checkout || tsa post-merge');
   process.exit(1);
 }

@@ -14,30 +14,25 @@ import * as glob from 'glob';
 import { Bus } from '../bus';
 import { Linter } from '../code-style/linter';
 import { Logger } from '../logger';
+import { isTypescriptFile } from '../util';
+import { Git } from '../git';
 
 export interface PostCheckoutDependencies {
   logger: Logger;
   bus: Bus;
   linter: Linter;
+  git: Git;
 }
 
 export let createPreCommitCommand = (deps: PostCheckoutDependencies) => {
-  let { logger, linter } = deps;
+  let { logger, linter, git } = deps;
   return {
-    execute: () => {
-      let allTsFiles = () => {
-        let tsConfig = JSON.parse(readFileSync(join(process.cwd(), 'tsconfig.json'), 'UTF-8'));
-        let globs: string[] = tsConfig && tsConfig.include ? tsConfig.include : ['src/**/*.ts', 'test/**/*.ts'];
-        let files: string[] = [];
-        globs.forEach(g => glob.sync(g).forEach(file => files.push(file)));
-        return files;
-      };
+    execute: async () => {
 
-      let changed = findChangedFiles();
-      let files = changed.length === 0 ? allTsFiles() : filterTsFiles(changed);
+      let files = (await git.findChangedFiles()).filter(isTypescriptFile);
 
       let lintFiles = () => {
-        return linter.lintOnce(false);
+        return linter.lintOnce(false, files);
       };
 
       return tsfmt.processFiles(files, {

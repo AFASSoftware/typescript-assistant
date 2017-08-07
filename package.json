@@ -15,6 +15,7 @@
     "postcheckout": "ts-node --fast src/index post-checkout",
     "postmerge": "ts-node --fast src/index post-merge",
     "precommit": "ts-node --fast src/index pre-commit",
+    "ci": "ts-node --fast src/index ci",
     "prepush": "cross-env TS_NODE_FAST=true nyc --check-coverage -- mocha --compilers ts:ts-node/register --reporter dot --recursive"
   },
   "files": [

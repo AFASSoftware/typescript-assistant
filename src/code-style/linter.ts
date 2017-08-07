@@ -8,7 +8,7 @@ import { ChildProcess, fork } from 'child_process';
 export interface Linter {
   start(trigger: EventType): void;
   stop(): void;
-  lintOnce(fix: boolean): Promise<boolean>;
+  lintOnce(fix: boolean, files?: string[]): Promise<boolean>;
 }
 
 /**
@@ -42,29 +42,29 @@ export let createLinter = (dependencies: { taskRunner: TaskRunner, logger: Logge
   let errors = 0;
   let fixable = 0;
 
-  let startLint = () => {
+  let startLint = async (files?: string[]) => {
     rescheduled = false;
     running = true;
-    git.findChangedFiles().then((files) => {
-      files = files.filter(isTypescriptFile);
-      logger.log('linter', `Linting ${files.length} files...`);
-      errors = 0;
-      fixable = 0;
-      let command: LinterCommand = {
-        fix: fix,
-        filesToLint: files
-      };
-      lintProcess.send(command);
-    });
+    if (!files) {
+      files = (await git.findChangedFilesOrAllTypescriptFiles()).filter(isTypescriptFile);
+    }
+    logger.log('linter', `Linting ${files.length} files...`);
+    errors = 0;
+    fixable = 0;
+    let command: LinterCommand = {
+      fix: fix,
+      filesToLint: files
+    };
+    lintProcess.send(command);
   };
 
-  let lint = () => {
+  let lint = (files?: string[]) => {
     if (rescheduled) {
       return;
     } else if (running) {
       rescheduled = true;
     } else {
-      startLint();
+      startLint(files);
     }
   };
 
@@ -105,7 +105,7 @@ export let createLinter = (dependencies: { taskRunner: TaskRunner, logger: Logge
       lintProcess.kill();
       lintProcess = undefined;
     },
-    lintOnce: (fixOnce: boolean) => {
+    lintOnce: (fixOnce: boolean, files?: string[]) => {
       fix = fixOnce;
       let isRunning = lintProcess !== undefined;
       if (!isRunning) {
@@ -131,7 +131,7 @@ export let createLinter = (dependencies: { taskRunner: TaskRunner, logger: Logge
         };
         bus.register('lint-linted', linted);
         bus.register('lint-errored', errored);
-        lint();
+        lint(files);
       });
     }
   };

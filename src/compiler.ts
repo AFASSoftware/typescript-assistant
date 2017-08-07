@@ -6,6 +6,7 @@ import { absolutePath } from './util';
 export interface Compiler {
   start(): Promise<void>;
   stop(): void;
+  runOnce(tscArgs: string[]): Promise<boolean>;
 }
 
 export let createCompiler = (dependencies: { taskRunner: TaskRunner, logger: Logger, bus: Bus }): Compiler => {
@@ -46,6 +47,14 @@ export let createCompiler = (dependencies: { taskRunner: TaskRunner, logger: Log
   let task: Task;
 
   return {
+    runOnce: (tscArgs: string[]) => {
+      task = taskRunner.runTask('./node_modules/.bin/tsc', tscArgs, {
+        name: 'tsc',
+        logger,
+        handleOutput
+      });
+      return task.result.then(() => true).catch(() => false);
+    },
     start: () => {
       task = taskRunner.runTask('./node_modules/.bin/tsc', ['--watch'], {
         name: 'tsc',

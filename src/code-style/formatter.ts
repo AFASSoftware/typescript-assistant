@@ -37,6 +37,7 @@ let verifyOptions: Options = {
 
 export interface Formatter {
   format(): Promise<boolean>;
+  verifyAll(files: string[]): Promise<boolean>;
   startVerifying(triggers: EventType[]): void;
   stopVerifying(): void;
 }
@@ -44,23 +45,27 @@ export interface Formatter {
 export let createFormatter = (dependencies: { logger: Logger, git: Git, bus: Bus }): Formatter => {
   let { logger, bus, git } = dependencies;
 
-  let runFormatter = (options: Options) => {
-    return git.findChangedFiles().then((files: string[]) => {
-      files = files.filter(isTypescriptFile);
-      logger.log('formatter', `checking ${files.length} files...`);
-      return processFiles(files, options).then((resultMap: ResultMap) => {
-        let success = true;
-        Object.keys(resultMap).forEach((fileName: string) => {
-          let result = resultMap[fileName];
-          if (result.error) {
-            success = false;
-          }
-          if (result.message) {
-            logger.log('formatter', `${absolutePath(fileName)}: ${result.message}`);
-          }
-        });
-        return success;
+  let runFormatterOn = (files: string[], options: Options): Promise<boolean> => {
+    logger.log('formatter', `checking ${files.length} files...`);
+    return processFiles(files, options).then((resultMap: ResultMap) => {
+      let success = true;
+      Object.keys(resultMap).forEach((fileName: string) => {
+        let result = resultMap[fileName];
+        if (result.error) {
+          success = false;
+        }
+        if (result.message) {
+          logger.log('formatter', `${options.replace ? 'Fixed ' : ''}${absolutePath(fileName)}: ${result.message}`);
+        }
       });
+      return success;
+    });
+  };
+
+  let runFormatter = (options: Options) => {
+    return git.findChangedFilesOrAllTypescriptFiles().then((files: string[]) => {
+      files = files.filter(isTypescriptFile);
+      return runFormatterOn(files, options);
     });
   };
 
@@ -73,6 +78,9 @@ export let createFormatter = (dependencies: { logger: Logger, git: Git, bus: Bus
   };
 
   return {
+    verifyAll: (files) => {
+      return runFormatterOn(files, verifyOptions);
+    },
     format: () => {
       return runFormatter(replaceOptions);
     },

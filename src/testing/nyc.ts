@@ -6,13 +6,14 @@ import { absolutePath } from '../util';
 export interface NYC {
   start(): void;
   stop(): void;
+  run(): Promise<boolean>;
 }
 
 export let createNyc = (dependencies: { taskRunner: TaskRunner, logger: Logger, bus: Bus }): NYC => {
   let { taskRunner, logger, bus } = dependencies;
   let runningTask: Task | undefined;
 
-  let startNyc = () => {
+  let startNyc = (): Promise<boolean> => {
     if (runningTask) {
       runningTask.kill();
     }
@@ -54,18 +55,21 @@ export let createNyc = (dependencies: { taskRunner: TaskRunner, logger: Logger, 
         handleOutput,
         handleError
       });
-    runningTask.result.then(() => {
+    return runningTask.result.then(() => {
       if (task === runningTask) {
         logger.log('nyc', 'code coverage OK');
       }
+      return true;
     }).catch(() => {
       if (task === runningTask) {
         logger.log('nyc', 'code coverage FAILED');
       }
+      return false;
     });
   };
 
   return {
+    run: startNyc,
     start: () => {
       bus.registerAll(['compile-started', 'test-files-changed'], startNyc);
       startNyc();
