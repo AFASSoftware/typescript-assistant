@@ -1,6 +1,6 @@
 /* Runs in a separate process and communicates using process.on('message', ...) */
 /* This is because tslint is implemented synchronously */
-import { readFileSync, writeFileSync } from 'fs';
+import { readFileSync } from 'fs';
 import { ILinterOptions, Linter, RuleFailure } from 'tslint';
 import { IConfigurationFile } from 'tslint/lib/configuration';
 import { LinterCommand, LinterResponse } from './linter';
@@ -39,11 +39,13 @@ process.on('message', (msg: LinterCommand) => {
     let results = linter.getResult();
     results.failures.forEach((failure: RuleFailure) => {
       success = false;
+      let line: number = failure.getStartPosition().getLineAndCharacter().line;
+      let column = failure.getStartPosition().getLineAndCharacter().character;
       let response: LinterResponse = {
         violation: {
           fileName,
-          line: failure.getStartPosition().getLineAndCharacter().line + 1,
-          column: failure.getStartPosition().getLineAndCharacter().character,
+          line: line + 1,
+          column: column,
           message: failure.getFailure(),
           hasFix: failure.hasFix()
         }

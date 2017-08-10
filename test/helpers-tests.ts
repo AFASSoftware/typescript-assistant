@@ -4,7 +4,6 @@ import { findChangedFiles, packageJsonChanged } from '../src/helpers';
 import { expect } from 'chai';
 
 describe('git-helper', () => {
-
   let execSync: SinonStub;
 
   beforeEach(() => {

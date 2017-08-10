@@ -34,6 +34,9 @@ export interface LinterResponse {
 
 export let createLinter = (dependencies: { taskRunner: TaskRunner, logger: Logger, bus: Bus, git: Git }): Linter => {
   let { logger, bus, git } = dependencies;
+
+  let logError = (err: any) => logger.error('linter', `error: ${err}`);
+
   let lintProcess: ChildProcess;
 
   let running = false;
@@ -64,14 +67,14 @@ export let createLinter = (dependencies: { taskRunner: TaskRunner, logger: Logge
     } else if (running) {
       rescheduled = true;
     } else {
-      startLint(files);
+      startLint(files).catch(logError);
     }
   };
 
   let startProcess = () => {
-    lintProcess = fork(__dirname + '/linter-process', [], {});
+    lintProcess = fork(`${__dirname}/linter-process`, [], {});
     lintProcess.on('close', (code: number) => {
-      if (code) {
+      if (code !== 0) {
         logger.log('linter', `linting process exited with code ${code}`);
       }
     });
@@ -91,7 +94,7 @@ export let createLinter = (dependencies: { taskRunner: TaskRunner, logger: Logge
           : `${errors} Linting problems found, ${fixable} ${fix ? 'fixed' : 'fixable'}`);
         bus.signal(response.finished.success ? 'lint-linted' : 'lint-errored');
         if (rescheduled) {
-          startLint();
+          startLint().catch(logError);
         }
       }
     });

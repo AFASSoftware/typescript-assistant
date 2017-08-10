@@ -18,5 +18,5 @@ export interface Dependencies {
   git: Git;
   logger: Logger;
   nyc: NYC;
-  inject: <T>(createFunction: (dependencies: Partial<Dependencies>) => T) => T;
+  inject<T>(createFunction: (dependencies: Partial<Dependencies>) => T): T;
 }

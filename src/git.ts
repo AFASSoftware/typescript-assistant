@@ -44,7 +44,7 @@ export let createGit = (dependencies: { taskRunner: TaskRunner, logger: Logger }
     findChangedFilesOrAllTypescriptFiles: async (sinceLastPush): Promise<string[]> => {
       return git.findChangedFiles(sinceLastPush)
         .then(files => files.length === 0 ? findAllTypescriptFiles() : files) // no changed files found => All TS Files
-        .catch(() => findAllTypescriptFiles()); // If not inside a git repository
+        .catch(findAllTypescriptFiles); // If not inside a git repository
     },
 
     findAllTypescriptFiles,

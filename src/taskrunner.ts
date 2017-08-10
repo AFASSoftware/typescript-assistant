@@ -66,7 +66,7 @@ export let createDefaultTaskRunner = (): TaskRunner => {
 
       let result = new Promise<void>((resolve, reject) => {
         task.on('close', (code: number) => {
-          if (!code) {
+          if (code === 0) {
             resolve();
           } else {
             reject(`Process exited with code ${code}`);

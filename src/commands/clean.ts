@@ -4,7 +4,7 @@ import * as glob from 'glob';
 let deleteFolderRecursive = (path: string) => {
   if (fs.existsSync(path)) {
     fs.readdirSync(path).forEach((file, index) => {
-      let curPath = path + '/' + file;
+      let curPath = `${path}/${file}`;
       if (fs.lstatSync(curPath).isDirectory()) { // recurse
         deleteFolderRecursive(curPath);
       } else { // delete file

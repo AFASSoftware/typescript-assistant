@@ -31,9 +31,9 @@ export let createNyc = (dependencies: { taskRunner: TaskRunner, logger: Logger, 
         let contextIt = /^(} )?at Context\.\S+ \(([^)]+)\)/.exec(line);
         if (notOk) {
           lastLineWasNotOk = true;
-          logger.log('nyc', 'FAILED: ' + notOk[1]);
+          logger.log('nyc', `FAILED: ${notOk[1]}`);
         } else if (contextIt) {
-          logger.log('nyc', absolutePath(contextIt[2]) + ' ' + errorLine);
+          logger.log('nyc', `${absolutePath(contextIt[2])} ${errorLine}`);
           errorLine = '';
         }
       }
@@ -69,10 +69,10 @@ export let createNyc = (dependencies: { taskRunner: TaskRunner, logger: Logger, 
   };
 
   return {
-    run: startNyc,
+    run: () => startNyc().catch(() => false),
     start: () => {
       bus.registerAll(['compile-started', 'test-files-changed'], startNyc);
-      startNyc();
+      startNyc().catch(() => false);
     },
     stop: () => {
       bus.unregister(startNyc);

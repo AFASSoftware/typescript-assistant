@@ -15,11 +15,11 @@ export let createConsoleLogger = (): Logger => {
   return {
     log: (category, message) => {
       setCategory(category);
-      console.log('  ' + message);
+      console.log(`  ${message}`);
     },
     error: (category, message) => {
       setCategory(category);
-      console.error('! ' + message);
+      console.error(`! ${message}`);
     }
   };
 };

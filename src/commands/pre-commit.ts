@@ -5,12 +5,7 @@
 // - This prevents over-complicated merge conflicts
 // - This prevents small formatting/linting fix commits
 
-import { filterTsFiles, findChangedFiles } from '../helpers';
 import * as tsfmt from 'typescript-formatter';
-import { ResultMap } from 'typescript-formatter';
-import { readFileSync } from 'fs';
-import { join } from 'path';
-import * as glob from 'glob';
 import { Bus } from '../bus';
 import { Linter } from '../code-style/linter';
 import { Logger } from '../logger';
@@ -28,7 +23,6 @@ export let createPreCommitCommand = (deps: PostCheckoutDependencies) => {
   let { logger, linter, git } = deps;
   return {
     execute: async () => {
-
       let files = (await git.findChangedFiles()).filter(isTypescriptFile);
 
       let lintFiles = () => {
@@ -38,7 +32,7 @@ export let createPreCommitCommand = (deps: PostCheckoutDependencies) => {
       return tsfmt.processFiles(files, {
         verify: true, replace: false, verbose: false, baseDir: process.cwd(), editorconfig: true, tslint: true, tsfmt: true, tsconfig: true,
         tsconfigFile: undefined, tslintFile: undefined, tsfmtFile: undefined, vscode: false
-      }).then(async (resultList: ResultMap) => {
+      }).then(async (resultList: tsfmt.ResultMap) => {
         let unformattedFiles: string[] = [];
         Object.keys(resultList).forEach((key) => {
           let result = resultList[key];

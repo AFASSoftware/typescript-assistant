@@ -2,7 +2,7 @@ import * as chokidar from 'chokidar';
 import { Bus } from './bus';
 
 export interface Watcher {
-  watchTestFileChanged: () => void;
+  watchTestFileChanged(): void;
 }
 
 export let createWatcher = (dependencies: { bus: Bus }): Watcher => {

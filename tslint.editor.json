@@ -1,4 +1,5 @@
 {
+  // Handy to use this file in an IDE for reporting tslint violations
   "extends" : "./tslint.json",
   "rules": {
     "no-trailing-whitespace": false,

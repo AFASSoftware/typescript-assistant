@@ -5,7 +5,13 @@
     "tslint-microsoft-contrib"
   ],
   "rules": {
-    // Changed to our requirements.
+
+    // Disabled due to errors:
+
+    "align": false, // https://github.com/Microsoft/TypeScript/issues/16869
+
+    // Standard tslint rules adjustments to AFAS requirements:
+
     "array-type": false,
     "ban-types": {
       "options": [
@@ -88,6 +94,20 @@
     "max-file-line-count": false,
     "prefer-conditional-expression": false,
 
+    // Overriding microsoft-contrib changes to standard rules
+
+    "strict-boolean-expressions": [true, "allow-undefined-union", "allow-string"],
+    "no-void-expression": [true, "ignore-arrow-function-shorthand"],
+    "missing-jsdoc": false,
+    "newline-before-return": false,
+    "match-default-export-name": false,
+    "promise-function-async": false,
+    "no-unsafe-any": false,
+    "no-any": false,
+    "no-use-before-declare": false,
+
+    // Changes to microsoft rules for our requirements
+
     // See: https://github.com/Microsoft/tslint-microsoft-contrib#supported-rules
     "function-name": true,
     "insecure-random": true,
@@ -136,6 +156,9 @@
     "no-single-line-block-comment": false,
     "no-sparse-arrays": false,
     "no-unnecessary-local-variable": false,
-    "prefer-const": false
+    "max-func-body-length": false,
+    "export-name": false,
+    "no-multiline-string": false,
+    "chai-vague-errors": false
   }
 }

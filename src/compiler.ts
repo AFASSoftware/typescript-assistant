@@ -4,7 +4,7 @@ import { Task, TaskRunner } from './taskrunner';
 import { absolutePath } from './util';
 
 export interface Compiler {
-  start(): Promise<void>;
+  start(): void;
   stop(): void;
   runOnce(tscArgs: string[]): Promise<boolean>;
 }
@@ -61,7 +61,6 @@ export let createCompiler = (dependencies: { taskRunner: TaskRunner, logger: Log
         logger,
         handleOutput
       });
-      return task.result;
     },
     stop: () => {
       task.kill();
