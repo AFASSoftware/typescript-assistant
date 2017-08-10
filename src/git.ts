@@ -9,6 +9,7 @@ export interface Git {
   findChangedFilesOrAllTypescriptFiles(sinceLastPush?: boolean): Promise<string[]>;
   findChangedFiles(sinceLastPush?: boolean): Promise<string[]>;
   findAllTypescriptFiles(): Promise<string[]>;
+  isPristine(): Promise<boolean>;
   execute(args: string[]): Promise<string[]>;
 }
 
@@ -40,6 +41,11 @@ export let createGit = (dependencies: { taskRunner: TaskRunner, logger: Logger }
           return files;
         }
       );
+    },
+    isPristine: () => {
+      return git.execute(['status', '--porcelain']).then(modifiedFiles => {
+        return modifiedFiles.length === 0;
+      });
     },
     findChangedFilesOrAllTypescriptFiles: async (sinceLastPush): Promise<string[]> => {
       return git.findChangedFiles(sinceLastPush)

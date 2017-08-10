@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { createFixCommand } from './commands/format';
+import { createFixCommand } from './commands/fix';
 import { createCleanCommand } from './commands/clean';
 import { createReleaseCommand } from './commands/release';
 import { createAssistCommand } from './commands/assist';
@@ -10,6 +10,7 @@ import { createPreCommitCommand } from './commands/pre-commit';
 import { createCICommand } from './commands/ci';
 import * as yargsModule from 'yargs';
 import { createDependencyInjector } from './dependency-injector';
+import { createPrePushCommand } from './commands/pre-push';
 
 let inject = createDependencyInjector();
 
@@ -67,6 +68,10 @@ yargsModule.command('post-checkout', 'Post-checkout git hook for husky', {}, (ya
 
 yargsModule.command('post-merge', 'Post-merge git hook for husky', {}, (yargs) => {
   inject(createPostMergeCommand).execute();
+});
+
+yargsModule.command('pre-push', 'Pre-push git hook for husky', {}, (yargs) => {
+  inject(createPrePushCommand).execute().then(failIfUnsuccessful, onFailure);
 });
 
 yargsModule.help().strict().argv;

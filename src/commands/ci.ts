@@ -12,7 +12,7 @@ export let createCICommand = (deps: Dependencies) => {
       let allTypescriptFiles = await git.findAllTypescriptFiles();
       let results = await Promise.all([
         compiler.runOnce(options.tscArgs || []),
-        formatter.verifyAll(allTypescriptFiles),
+        formatter.verifyFiles(allTypescriptFiles),
         linter.lintOnce(false, allTypescriptFiles),
         nyc.run()
       ]);

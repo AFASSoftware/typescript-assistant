@@ -36,8 +36,8 @@ let verifyOptions: Options = {
 };
 
 export interface Formatter {
-  format(): Promise<boolean>;
-  verifyAll(files: string[]): Promise<boolean>;
+  formatFiles(files: string[]): Promise<boolean>;
+  verifyFiles(files: string[]): Promise<boolean>;
   startVerifying(triggers: EventType[]): void;
   stopVerifying(): void;
 }
@@ -80,11 +80,11 @@ export let createFormatter = (dependencies: { logger: Logger, git: Git, bus: Bus
   };
 
   return {
-    verifyAll: (files) => {
+    verifyFiles: (files) => {
       return runFormatterOn(files, verifyOptions);
     },
-    format: () => {
-      return runFormatter(replaceOptions);
+    formatFiles: (files) => {
+      return runFormatterOn(files, replaceOptions);
     },
     startVerifying: (triggers: EventType[]) => {
       bus.registerAll(triggers, verifyFormat);
