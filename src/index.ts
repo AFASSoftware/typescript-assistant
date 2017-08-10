@@ -14,13 +14,19 @@ import { createDependencyInjector } from './dependency-injector';
 let inject = createDependencyInjector();
 
 /* tslint:disable:no-console */
-let success = () => {
+let onSuccess = () => {
   process.exit(0);
 };
 
-let failure = (error: any) => {
+let onFailure = (error: any) => {
   console.error(error);
   process.exit(1);
+};
+
+let failIfUnsuccessful = (success: boolean) => {
+  if (!success) {
+    process.exit(1);
+  }
 };
 
 yargsModule.command(['assist', '*'], 'Watches for file changes and outputs current errors and violations', {}, (yargs) => {
@@ -33,7 +39,7 @@ yargsModule.command(['assist', '*'], 'Watches for file changes and outputs curre
 });
 
 yargsModule.command(['fix', 'f'], 'Formats changed files and applies tslint fixes', {}, (yargs) => {
-  inject(createFixCommand).execute().then(success, failure);
+  inject(createFixCommand).execute().then(onSuccess, onFailure);
 });
 
 yargsModule.command(['clean', 'c'], 'Deletes all output files and intermediate files', {}, (yargs) => {
@@ -41,18 +47,18 @@ yargsModule.command(['clean', 'c'], 'Deletes all output files and intermediate f
 });
 
 yargsModule.command(['release'], 'Interactively makes a new version number, tags, pushes and publishes to npm', {}, (yargs) => {
-  inject(createReleaseCommand).execute().then(success, failure);
+  inject(createReleaseCommand).execute().then(onSuccess, onFailure);
 });
 
 yargsModule.command(['ci'], 'Runs all tools in parallel to find errors', {
   '--': { describe: 'Arguments to be passed to tsc' }
 }, (yargs) => {
   let tscArgs = yargs._.slice(1);
-  inject(createCICommand).execute({ tscArgs }).then(success, failure);
+  inject(createCICommand).execute({ tscArgs }).then(failIfUnsuccessful, onFailure);
 });
 
 yargsModule.command('pre-commit', 'Pre-commit git hook for husky', {}, (yargs) => {
-  inject(createPreCommitCommand).execute().then(success, failure);
+  inject(createPreCommitCommand).execute().then(onSuccess, onFailure);
 });
 
 yargsModule.command('post-checkout', 'Post-checkout git hook for husky', {}, (yargs) => {

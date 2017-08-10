@@ -66,12 +66,12 @@
     }
   },
   "dependencies": {
-    "@types/chai": "4.0.1",
+    "@types/chai": "4.0.2",
     "@types/mocha": "2.2.41",
-    "@types/node": "8.0.17",
-    "chai": "4.1.0",
+    "@types/node": "8.0.20",
+    "chai": "4.1.1",
     "chokidar": "1.7.0",
-    "cross-env": "5.0.1",
+    "cross-env": "5.0.5",
     "glob": "7.1.2",
     "husky": "0.14.3",
     "inquirer": "3.2.1",
@@ -80,7 +80,7 @@
     "source-map-support": "0.4.15",
     "ts-node": "3.3.0",
     "tslib": "1.7.1",
-    "tslint": "5.5.0",
+    "tslint": "5.6.0",
     "tslint-microsoft-contrib": "5.0.1",
     "tsutils": "2.8.0",
     "typescript": "2.4.2",
@@ -92,7 +92,7 @@
     "@types/inquirer": "0.0.35",
     "@types/sinon": "2.3.3",
     "@types/yargs": "8.0.2",
-    "sinon": "2.4.1",
+    "sinon": "3.1.0",
     "yargs": "8.0.2"
   }
 }
