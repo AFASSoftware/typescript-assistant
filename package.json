@@ -16,7 +16,8 @@
     "postmerge": "ts-node --fast src/index post-merge",
     "precommit": "ts-node --fast src/index pre-commit",
     "ci": "ts-node --fast src/index ci -- -d --rootDir ./src --outDir ./dist",
-    "prepush": "cross-env TS_NODE_FAST=true nyc --check-coverage -- mocha --compilers ts:ts-node/register --reporter dot --recursive"
+    "prepush": "cross-env TS_NODE_FAST=true nyc --check-coverage -- mocha --compilers ts:ts-node/register --reporter dot --recursive",
+    "tslint": "tslint --type-check --project ./tsconfig.json ./src/**/*.ts && tslint --type-check --project ./test/tsconfig.json ./test/**/*.ts "
   },
   "author": "johan@johangorter.com",
   "license": "MIT",

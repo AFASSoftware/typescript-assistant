@@ -1,0 +1,141 @@
+{
+  // This file is published in the npm package, so projects using typescript-assistant can extend their rules from it.
+  "extends": [
+    "tslint:latest",
+    "tslint-microsoft-contrib"
+  ],
+  "rules": {
+    // Changed to our requirements.
+    "array-type": false,
+    "ban-types": {
+      "options": [
+        [ "Object", "Avoid using the `Object` type. Did you mean `object`?" ],
+        [ "Boolean", "Avoid using the `Boolean` type. Did you mean `boolean`?" ],
+        [ "Number", "Avoid using the `Number` type. Did you mean `number`?" ],
+        [ "String", "Avoid using the `String` type. Did you mean `string`?" ],
+        [ "Symbol", "Avoid using the `Symbol` type. Did you mean `symbol`?" ]
+      ]
+    },
+    "max-line-length": [
+      true,
+      160
+    ],
+    "no-magic-numbers": false,
+    "no-unused-variable": true,
+    "object-literal-key-quotes": [
+      true,
+      "as-needed"
+    ],
+    "only-arrow-functions": [
+      true,
+      "allow-declarations",
+      "allow-named-functions"
+    ],
+    "prefer-const": false,
+    "prefer-for-of": true,
+    "trailing-comma": [
+      true,
+      {
+        "multiline": "never",
+        "singleline": "never"
+      }
+    ],
+    "triple-equals": true,
+    "quotemark": [
+      true,
+      "single",
+      "avoid-escape"
+    ],
+    "whitespace": [
+      true,
+      "check-branch",
+      "check-decl",
+      "check-operator",
+      "check-module",
+      "check-separator",
+      "check-type"
+    ], // No "check-typecast".
+    "use-default-type-parameter": true,
+
+    // Disabled standard rules.
+    "completed-docs": false,
+    "interface-name": false,
+    "no-angle-bracket-type-assertion": false,
+    "no-empty-interface": false,
+    "no-object-literal-type-assertion": false,
+    "no-string-literal": false,
+    "no-unused-expression": false,
+    "object-literal-shorthand": false,
+    "object-literal-sort-keys": false,
+    "ordered-imports": false,
+    "prefer-object-spread": false,
+    "switch-default": false,
+    "typedef": false,
+    "unified-signatures": false,
+
+    // Enabled non-standard rules.
+    "linebreak-style": [true, "LF"],
+    "no-default-export": true,
+    "no-inferrable-types": true,
+    "no-invalid-this": true,
+    "no-mergeable-namespace": true,
+    "no-null-keyword": true,
+    "restrict-plus-operands": true,
+
+    // Disabled non-standard rules,
+    "arrow-parens": false,
+    "file-header": false,
+    "max-file-line-count": false,
+    "prefer-conditional-expression": false,
+
+    // See: https://github.com/Microsoft/tslint-microsoft-contrib#supported-rules
+    "function-name": true,
+    "insecure-random": true,
+    "mocha-avoid-only": true,
+    "mocha-no-side-effect-code": [
+      true,
+      {
+        "ignore": "^createTestProjector\\(\\)$|^projector.query.*$|^xit\\(.*"
+      }
+    ],
+    "mocha-unneeded-done": true,
+    "no-banned-terms": true,
+    "no-constant-condition": true,
+    "no-control-regex": true,
+    "no-cookies": true,
+    "no-delete-expression": true,
+    "no-disable-auto-sanitization": true,
+    "no-document-domain": true,
+    "no-document-write": true,
+    "no-duplicate-case": true,
+    "no-empty-line-after-opening-brace": true,
+    "no-exec-script": true,
+    "no-for-in": true,
+    "no-function-constructor-with-string-args": true,
+    "no-http-string": true,
+    "no-inner-html": true,
+    "no-invalid-regexp": true,
+    "no-octal-literal": true,
+    "no-regex-spaces": true,
+    "no-string-based-set-immediate": true,
+    "no-string-based-set-interval": true,
+    "no-string-based-set-timeout": true,
+    "no-suspicious-comment": true,
+    "no-unnecessary-bind": true,
+    "no-unnecessary-semicolons": true,
+    "no-var-self": true,
+    "no-with-statement": true,
+    "prefer-array-literal": true,
+    "prefer-type-cast": false,
+    "valid-typeof": true,
+
+    // Explicitly disabled rules.
+    "no-increment-decrement": false,
+    "no-relative-imports": false,
+    "no-reserved-keywords": false,
+    "no-single-line-block-comment": false,
+    "no-sparse-arrays": false,
+    "no-unnecessary-local-variable": false,
+    "prefer-const": false
+  }
+}

@@ -3,6 +3,6 @@
 !/dist/**/*
 !/tools/**/*
 !/readme.md
-!/tslint.tsa.json
+!/tslint.afas.json
 !/tsfmt.json
 !/.editorconfig
