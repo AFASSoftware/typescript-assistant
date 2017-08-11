@@ -1,99 +1,99 @@
 {
   "name": "typescript-assistant",
-    "version": "0.13.7",
-      "description": "",
-        "main": "dist/index.js",
-          "bin": {
+  "version": "0.14.0",
+  "description": "",
+  "main": "dist/index.js",
+  "bin": {
     "tsa": "./dist/index.js"
   },
   "scripts": {
     "prepublishOnly": "tsc -d --rootDir ./src --outDir ./dist",
-      "assist": "ts-node --fast src/index.ts",
-        "release": "ts-node --fast src/index.ts release",
-          "fix": "ts-node --fast src/index fix",
-            "clean": "ts-node --fast src/index clean",
-              "tslint": "tslint --type-check --project ./tsconfig.json ./src/**/*.ts && tslint --type-check --project ./test/tsconfig.json ./test/**/*.ts ",
-                "ci": "ts-node --fast src/index ci -- -d --rootDir ./src --outDir ./dist",
-                  "postcheckout": "ts-node --fast src/index post-checkout",
-                    "postmerge": "ts-node --fast src/index post-merge",
-                      "precommit": "ts-node --fast src/index pre-commit",
-                        "prepush": "ts-node --fast src/index pre-push"
+    "assist": "ts-node --fast src/index.ts",
+    "release": "ts-node --fast src/index.ts release",
+    "fix": "ts-node --fast src/index fix",
+    "clean": "ts-node --fast src/index clean",
+    "tslint": "tslint --type-check --project ./tsconfig.json ./src/**/*.ts && tslint --type-check --project ./test/tsconfig.json ./test/**/*.ts ",
+    "ci": "ts-node --fast src/index ci -- -d --rootDir ./src --outDir ./dist",
+    "postcheckout": "ts-node --fast src/index post-checkout",
+    "postmerge": "ts-node --fast src/index post-merge",
+    "precommit": "ts-node --fast src/index pre-commit",
+    "prepush": "ts-node --fast src/index pre-push"
   },
   "author": "johan@johangorter.com",
-    "license": "MIT",
-      "repository": {
+  "license": "MIT",
+  "repository": {
     "type": "git",
-      "url": "https://github.com/AFASResearch/typescript-assistant"
+    "url": "https://github.com/AFASResearch/typescript-assistant"
   },
   "nyc": {
     "include": [
       "src/**/*.ts"
     ],
-      "extension": [
-        ".ts"
-      ],
-        "reporter": [
-          "json",
-          "html",
-          "text-summary"
-        ],
-          "cache": true,
-            "temp-directory": "./build/nyc/cache",
-              "all": true,
-                "check-coverage": false,
-                  "report-dir": "./build/coverage",
-                    "es-module": false,
-                      "lines": 1,
-                        "statements": 1,
-                          "functions": 1,
-                            "branches": 0.5,
-                              "watermarks": {
+    "extension": [
+      ".ts"
+    ],
+    "reporter": [
+      "json",
+      "html",
+      "text-summary"
+    ],
+    "cache": true,
+    "temp-directory": "./build/nyc/cache",
+    "all": true,
+    "check-coverage": false,
+    "report-dir": "./build/coverage",
+    "es-module": false,
+    "lines": 1,
+    "statements": 1,
+    "functions": 1,
+    "branches": 0.5,
+    "watermarks": {
       "lines": [
         75,
         100
       ],
-        "functions": [
-          75,
-          100
-        ],
-          "branches": [
-            75,
-            100
-          ],
-            "statements": [
-              75,
-              100
-            ]
+      "functions": [
+        75,
+        100
+      ],
+      "branches": [
+        75,
+        100
+      ],
+      "statements": [
+        75,
+        100
+      ]
     }
   },
   "dependencies": {
     "@types/chai": "4.0.2",
-      "@types/mocha": "2.2.41",
-        "@types/node": "8.0.20",
-          "chai": "4.1.1",
-            "chokidar": "1.7.0",
-              "cross-env": "5.0.5",
-                "glob": "7.1.2",
-                  "husky": "0.14.3",
-                    "inquirer": "3.2.1",
-                      "mocha": "3.5.0",
-                        "nyc": "10.3.2",
-                          "source-map-support": "0.4.15",
-                            "ts-node": "3.3.0",
-                              "tslib": "1.7.1",
-                                "tslint": "5.6.0",
-                                  "tslint-microsoft-contrib": "5.0.1",
-                                    "tsutils": "2.8.0",
-                                      "typescript": "2.4.2",
-                                        "typescript-formatter": "5.2.0"
+    "@types/mocha": "2.2.41",
+    "@types/node": "8.0.20",
+    "chai": "4.1.1",
+    "chokidar": "1.7.0",
+    "cross-env": "5.0.5",
+    "glob": "7.1.2",
+    "husky": "0.14.3",
+    "inquirer": "3.2.1",
+    "mocha": "3.5.0",
+    "nyc": "10.3.2",
+    "source-map-support": "0.4.15",
+    "ts-node": "3.3.0",
+    "tslib": "1.7.1",
+    "tslint": "5.6.0",
+    "tslint-microsoft-contrib": "5.0.1",
+    "tsutils": "2.8.0",
+    "typescript": "2.4.2",
+    "typescript-formatter": "5.2.0"
   },
   "devDependencies": {
     "@types/chokidar": "1.7.1",
-      "@types/glob": "5.0.30",
-        "@types/inquirer": "0.0.35",
-          "@types/sinon": "2.3.3",
-            "@types/yargs": "8.0.2",
-              "sinon": "3.1.0",
-                "yargs": "8.0.2"
+    "@types/glob": "5.0.30",
+    "@types/inquirer": "0.0.35",
+    "@types/sinon": "2.3.3",
+    "@types/yargs": "8.0.2",
+    "sinon": "3.1.0",
+    "yargs": "8.0.2"
   }
 }
