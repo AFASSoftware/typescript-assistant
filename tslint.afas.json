@@ -9,6 +9,8 @@
     // Disabled due to errors:
 
     "align": false, // https://github.com/Microsoft/TypeScript/issues/16869
+    "no-string-based-set-timeout": false, // https://github.com/Microsoft/tslint-microsoft-contrib/issues/355
+    "no-unused-variable": false, // https://github.com/palantir/tslint/issues/2876
 
     // Standard tslint rules adjustments to AFAS requirements:
 
@@ -27,7 +29,6 @@
       160
     ],
     "no-magic-numbers": false,
-    "no-unused-variable": true,
     "object-literal-key-quotes": [
       true,
       "as-needed"
@@ -62,22 +63,7 @@
       "check-type"
     ], // No "check-typecast".
     "use-default-type-parameter": true,
-
-    // Disabled standard rules.
-    "completed-docs": false,
-    "interface-name": false,
-    "no-angle-bracket-type-assertion": false,
-    "no-empty-interface": false,
-    "no-object-literal-type-assertion": false,
-    "no-string-literal": false,
-    "no-unused-expression": false,
-    "object-literal-shorthand": false,
-    "object-literal-sort-keys": false,
-    "ordered-imports": false,
-    "prefer-object-spread": false,
-    "switch-default": false,
-    "typedef": false,
-    "unified-signatures": false,
+    "one-variable-per-declaration": [true, "ignore-for-loop"],
 
     // Enabled non-standard rules.
     "linebreak-style": [true, "LF"],
@@ -88,25 +74,7 @@
     "no-null-keyword": true,
     "restrict-plus-operands": true,
 
-    // Disabled non-standard rules,
-    "arrow-parens": false,
-    "file-header": false,
-    "max-file-line-count": false,
-    "prefer-conditional-expression": false,
-
-    // Overriding microsoft-contrib changes to standard rules
-
-    "strict-boolean-expressions": [true, "allow-undefined-union", "allow-string"],
-    "no-void-expression": [true, "ignore-arrow-function-shorthand"],
-    "missing-jsdoc": false,
-    "newline-before-return": false,
-    "match-default-export-name": false,
-    "promise-function-async": false,
-    "no-unsafe-any": false,
-    "no-any": false,
-    "no-use-before-declare": false,
-
-    // Changes to microsoft rules for our requirements
+    // Microsoft rules
 
     // See: https://github.com/Microsoft/tslint-microsoft-contrib#supported-rules
     "function-name": true,
@@ -139,7 +107,6 @@
     "no-regex-spaces": true,
     "no-string-based-set-immediate": true,
     "no-string-based-set-interval": true,
-    "no-string-based-set-timeout": true,
     "no-suspicious-comment": true,
     "no-unnecessary-bind": true,
     "no-unnecessary-semicolons": true,
@@ -150,6 +117,34 @@
     "valid-typeof": true,
 
     // Explicitly disabled rules.
+    "no-non-null-assertion": false,
+    "strict-boolean-expressions": false,
+    "no-void-expression": [true, "ignore-arrow-function-shorthand"],
+    "missing-jsdoc": false,
+    "newline-before-return": false,
+    "match-default-export-name": false,
+    "promise-function-async": false,
+    "no-unsafe-any": false,
+    "no-any": false,
+    "no-use-before-declare": false,
+    "cyclomatic-complexity": false,
+    "prefer-template": false,
+    "no-floating-promises": false,
+    "prefer-method-signature": false,
+    "completed-docs": false,
+    "interface-name": false,
+    "no-angle-bracket-type-assertion": false,
+    "no-empty-interface": false,
+    "no-object-literal-type-assertion": false,
+    "no-string-literal": false,
+    "no-unused-expression": false,
+    "object-literal-shorthand": false,
+    "object-literal-sort-keys": false,
+    "ordered-imports": false,
+    "prefer-object-spread": false,
+    "switch-default": false,
+    "typedef": false,
+    "unified-signatures": false,
     "no-increment-decrement": false,
     "no-relative-imports": false,
     "no-reserved-keywords": false,
@@ -159,6 +154,15 @@
     "max-func-body-length": false,
     "export-name": false,
     "no-multiline-string": false,
-    "chai-vague-errors": false
+    "chai-vague-errors": false,
+    "no-function-expression": false, // duplicate
+    "promise-must-complete": false, // too inaccurate
+    "no-unnecessary-callback-wrapper": false, // does not add value
+    "arrow-parens": false,
+    "file-header": false,
+    "max-file-line-count": false,
+    "prefer-conditional-expression": false,
+    "no-backbone-get-set-outside-model": false, // we do not use backbone
+    "no-duplicate-imports": false // Problems when creating stubs and importing Interfaces
   }
 }
