@@ -49,7 +49,7 @@ export let createLinter = (dependencies: { taskRunner: TaskRunner, logger: Logge
     rescheduled = false;
     running = true;
     if (!files) {
-      files = (await git.findChangedFilesOrAllTypescriptFiles()).filter(isTypescriptFile);
+      files = (await git.findChangedFiles()).filter(isTypescriptFile);
     }
     logger.log('linter', `Linting ${files.length} files...`);
     errors = 0;

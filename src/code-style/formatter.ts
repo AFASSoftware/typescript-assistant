@@ -65,7 +65,7 @@ export let createFormatter = (dependencies: { logger: Logger, git: Git, bus: Bus
   };
 
   let runFormatter = (options: Options) => {
-    return git.findChangedFilesOrAllTypescriptFiles().then((files: string[]) => {
+    return git.findChangedFiles().then((files: string[]) => {
       files = files.filter(isTypescriptFile);
       return runFormatterOn(files, options);
     });
