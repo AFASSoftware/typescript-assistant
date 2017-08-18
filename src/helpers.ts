@@ -14,6 +14,7 @@ export let findChangedFiles = (refA?: string, refB?: string) => {
 
 export let npmInstall = () => {
   execSync('npm install', { encoding: 'UTF-8', stdio: [0, 1, 2] });
+  execSync('npm dedupe', { encoding: 'UTF-8', stdio: [0, 1, 2] });
 };
 
 export let packageJsonChanged = (refA: string, refB: string) => findChangedFiles(refA, refB).filter(f => f.indexOf('package.json') !== -1).length >= 1;
