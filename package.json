@@ -85,7 +85,8 @@
     "tslint-microsoft-contrib": "5.0.1",
     "tsutils": "2.8.0",
     "typescript": "2.4.2",
-    "typescript-formatter": "5.2.0"
+    "typescript-formatter": "5.2.0",
+    "yargs": "8.0.2"
   },
   "devDependencies": {
     "@types/chokidar": "1.7.1",
@@ -93,7 +94,6 @@
     "@types/inquirer": "0.0.35",
     "@types/sinon": "2.3.3",
     "@types/yargs": "8.0.2",
-    "sinon": "3.2.0",
-    "yargs": "8.0.2"
+    "sinon": "3.2.0"
   }
 }
