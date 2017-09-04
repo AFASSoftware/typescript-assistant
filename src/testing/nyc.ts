@@ -2,6 +2,7 @@ import { Task, TaskRunner } from '../taskrunner';
 import { Logger } from '../logger';
 import { Bus } from '../bus';
 import { absolutePath } from '../util';
+import { Git } from '../git';
 
 export interface NYC {
   start(): void;
@@ -9,8 +10,8 @@ export interface NYC {
   run(): Promise<boolean>;
 }
 
-export let createNyc = (dependencies: { taskRunner: TaskRunner, logger: Logger, bus: Bus }): NYC => {
-  let { taskRunner, logger, bus } = dependencies;
+export let createNyc = (dependencies: { taskRunner: TaskRunner, logger: Logger, bus: Bus, git: Git }): NYC => {
+  let { taskRunner, logger, bus, git } = dependencies;
   let runningTask: Task | undefined;
 
   let startNyc = (): Promise<boolean> => {
@@ -60,11 +61,12 @@ export let createNyc = (dependencies: { taskRunner: TaskRunner, logger: Logger, 
         logger.log('nyc', 'code coverage OK');
       }
       return true;
-    }).catch(() => {
+    }).catch(async () => {
       if (task === runningTask) {
         logger.log('nyc', 'code coverage FAILED');
       }
-      return false;
+      let isOnBranch = await git.isOnBranch();
+      return isOnBranch;
     });
   };
 

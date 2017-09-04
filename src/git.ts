@@ -11,6 +11,7 @@ export interface Git {
   findAllTypescriptFiles(): Promise<string[]>;
   isPristine(): Promise<boolean>;
   execute(args: string[]): Promise<string[]>;
+  isOnBranch(): Promise<boolean>;
 }
 
 export let createGit = (dependencies: { taskRunner: TaskRunner, logger: Logger }): Git => {
@@ -54,6 +55,17 @@ export let createGit = (dependencies: { taskRunner: TaskRunner, logger: Logger }
     },
 
     findAllTypescriptFiles,
+
+    isOnBranch: async () => {
+      let [stdout] = await git.execute(['rev-parse', '--abbrev-ref', 'HEAD']);
+      let currentBranchName = stdout.toString().trim();
+
+      // When in detached HEAD, assume it's master.
+      if (currentBranchName === 'HEAD') {
+        return true;
+      }
+      return false;
+    },
 
     execute: (args: string[]) => {
       let lines: string[] = [];
