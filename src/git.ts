@@ -64,7 +64,7 @@ export let createGit = (dependencies: { taskRunner: TaskRunner, logger: Logger }
       if (currentBranchName === 'HEAD') {
         return true;
       }
-      return false;
+      return currentBranchName !== 'master';
     },
 
     execute: (args: string[]) => {
