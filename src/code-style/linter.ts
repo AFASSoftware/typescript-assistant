@@ -74,7 +74,7 @@ export let createLinter = (dependencies: { taskRunner: TaskRunner, logger: Logge
   let startProcess = () => {
     lintProcess = fork(`${__dirname}/linter-process`, [], {});
     lintProcess.on('close', (code: number) => {
-      if (code !== 0) {
+      if (code !== 0 && code !== null) {
         logger.log('linter', `linting process exited with code ${code}`);
       }
     });
