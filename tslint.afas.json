@@ -5,15 +5,10 @@
     "tslint-microsoft-contrib"
   ],
   "rules": {
-
     // Disabled due to errors:
-
-    "align": false, // https://github.com/Microsoft/TypeScript/issues/16869
     "no-string-based-set-timeout": false, // https://github.com/Microsoft/tslint-microsoft-contrib/issues/355
-    "no-unused-variable": false, // https://github.com/palantir/tslint/issues/2876
 
     // Standard tslint rules adjustments to AFAS requirements:
-
     "array-type": false,
     "ban-types": {
       "options": [
