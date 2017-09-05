@@ -17,5 +17,4 @@ describe('index', () => {
     let lines = contents.split('\n');
     expect(lines[0]).to.equal('#!/usr/bin/env node'); // important: no \r at the end
   });
-
 });

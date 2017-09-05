@@ -6,7 +6,7 @@ export type EventType =
   'lint-errored' |
   'format-verified' |
   'format-errored' |
-  'test-files-changed';
+  'source-files-changed';
 
 export type Callback = () => void;
 
