@@ -55,7 +55,11 @@ export let createCompiler = (dependencies: { taskRunner: TaskRunner, logger: Log
             reject(error);
           }
           tsConfigFiles.forEach(file => {
-            let task = taskRunner.runTask(`./node_modules/.bin/tsc`, [...tscArgs, '-p', file], {
+            let args = ['-p', file];
+            if (file === 'tsconfig.json') {
+              args = [...args, ...tscArgs];
+            }
+            let task = taskRunner.runTask(`./node_modules/.bin/tsc`, args, {
               name: `tsc --project ${file}`,
               logger,
               handleOutput
