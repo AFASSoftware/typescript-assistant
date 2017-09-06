@@ -3,6 +3,7 @@
 !/dist/**/*
 !/tools/**/*
 !/readme.md
-!/tslint.afas.json
+!/tslint-afas.json
+!/tslint-enabled-microsoft-rules.json
 !/tsfmt.json
 !/.editorconfig
