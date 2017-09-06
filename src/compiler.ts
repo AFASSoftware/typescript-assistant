@@ -2,6 +2,7 @@ import { Bus } from './bus';
 import { Logger } from './logger';
 import { Task, TaskRunner } from './taskrunner';
 import { absolutePath } from './util';
+import * as glob from 'glob';
 
 export interface Compiler {
   start(): void;
@@ -44,27 +45,47 @@ export let createCompiler = (dependencies: { taskRunner: TaskRunner, logger: Log
     return true;
   };
 
-  let task: Task;
+  let tasks: Task[] = [];
 
   return {
     runOnce: (tscArgs: string[]) => {
-      task = taskRunner.runTask('./node_modules/.bin/tsc', tscArgs, {
-        name: 'tsc',
-        logger,
-        handleOutput
+      return new Promise((resolve, reject) => {
+        glob('**/tsconfig.json', { ignore: 'node_modules/**' }, (error: Error | null, tsConfigFiles: string[]) => {
+          if (error) {
+            reject(error);
+          }
+          tsConfigFiles.forEach(file => {
+            let task = taskRunner.runTask(`./node_modules/.bin/tsc`, [...tscArgs, '-p', file], {
+              name: `tsc --project ${file}`,
+              logger,
+              handleOutput
+            });
+
+            tasks.push(task);
+          });
+
+          resolve(Promise.all(tasks.map(task => task.result)).then(() => true).catch(() => false));
+        });
       });
-      return task.result.then(() => true).catch(() => false);
     },
     start: () => {
-      task = taskRunner.runTask('./node_modules/.bin/tsc', ['--watch'], {
-        name: 'tsc',
-        logger,
-        handleOutput
+      glob('**/tsconfig.json', { ignore: 'node_modules/**' }, (error: Error | null, tsConfigFiles: string[]) => {
+        tsConfigFiles.forEach(file => {
+          let task = taskRunner.runTask('./node_modules/.bin/tsc', ['-p', file, '--watch'], {
+            name: `tsc -p ${file} --watch`,
+            logger,
+            handleOutput
+          });
+
+          tasks.push(task);
+        });
       });
     },
     stop: () => {
-      task.kill();
-      task = undefined;
+      tasks.forEach(task => {
+        task.kill();
+      });
+      tasks = [];
     }
   };
 };
