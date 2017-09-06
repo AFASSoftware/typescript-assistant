@@ -73,7 +73,7 @@ export let createNyc = (dependencies: { taskRunner: TaskRunner, logger: Logger, 
   return {
     run: () => startNyc().catch(() => false),
     start: () => {
-      bus.registerAll(['compile-started', 'source-files-changed'], startNyc);
+      bus.registerAll(['source-files-changed'], startNyc);
       startNyc().catch(() => false);
     },
     stop: () => {
