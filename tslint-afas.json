@@ -60,6 +60,46 @@
     "use-default-type-parameter": true,
     "one-variable-per-declaration": [true, "ignore-for-loop"],
 
+    // Disabled standard rules.
+    "arrow-parens": false,
+    "completed-docs": false,
+    "cyclomatic-complexity": false,
+    "file-header": false,
+    "interface-name": false,
+    "match-default-export-name": false,
+    "max-file-line-count": false,
+    "newline-before-return": false,
+    "no-angle-bracket-type-assertion": false,
+    "no-any": false,
+    "no-duplicate-imports": false, // Problems when creating stubs and importing Interfaces
+    "no-empty-interface": false,
+    "no-floating-promises": false,
+    "no-non-null-assertion": false,
+    "no-object-literal-type-assertion": false,
+    "no-sparse-arrays": false,
+    "no-string-literal": false,
+    "no-submodule-imports": false,
+    "no-unnecessary-callback-wrapper": false, // does not add value
+    "no-unsafe-any": false,
+    "no-unused-expression": false,
+    "no-use-before-declare": false,
+    "no-void-expression": [
+      true,
+      "ignore-arrow-function-shorthand"
+    ],
+    "object-literal-shorthand": false,
+    "object-literal-sort-keys": false,
+    "ordered-imports": false,
+    "prefer-conditional-expression": false,
+    "prefer-method-signature": false,
+    "prefer-object-spread": false,
+    "prefer-template": false,
+    "promise-function-async": false,
+    "strict-boolean-expressions": false,
+    "switch-default": false,
+    "typedef": false,
+    "unified-signatures": false,
+
     // Enabled non-standard rules.
     "linebreak-style": [true, "LF"],
     "no-default-export": true,
