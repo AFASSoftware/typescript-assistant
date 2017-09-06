@@ -9,7 +9,6 @@
     "align": false, // Rule is fixed, fixer/formatter is broken.
 
     // Standard tslint rules adjustments to AFAS requirements:
-    "array-type": false,
     "ban-types": {
       "options": [
         [ "Object", "Avoid using the `Object` type. Did you mean `object`?" ],
@@ -23,7 +22,6 @@
       true,
       160
     ],
-    "no-magic-numbers": false,
     "object-literal-key-quotes": [
       true,
       "as-needed"
@@ -33,7 +31,6 @@
       "allow-declarations",
       "allow-named-functions"
     ],
-    "prefer-const": false,
     "prefer-for-of": true,
     "trailing-comma": [
       true,
@@ -61,6 +58,7 @@
     "one-variable-per-declaration": [true, "ignore-for-loop"],
 
     // Disabled standard rules.
+    "array-type": false,
     "arrow-parens": false,
     "completed-docs": false,
     "cyclomatic-complexity": false,
@@ -74,6 +72,7 @@
     "no-duplicate-imports": false, // Problems when creating stubs and importing Interfaces
     "no-empty-interface": false,
     "no-floating-promises": false,
+    "no-magic-numbers": false,
     "no-non-null-assertion": false,
     "no-object-literal-type-assertion": false,
     "no-sparse-arrays": false,
@@ -91,6 +90,7 @@
     "object-literal-sort-keys": false,
     "ordered-imports": false,
     "prefer-conditional-expression": false,
+    "prefer-const": false,
     "prefer-method-signature": false,
     "prefer-object-spread": false,
     "prefer-template": false,
