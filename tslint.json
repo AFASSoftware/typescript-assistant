@@ -1,6 +1,6 @@
 {
   // This file is used to check the typescript-assistant code itself
   "extends": [
-    "./tslint.afas.json"
+    "./tslint-afas.json"
   ]
 }
