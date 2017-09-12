@@ -58,6 +58,8 @@ export let createCompiler = (dependencies: { taskRunner: TaskRunner, logger: Log
             let args = ['-p', file];
             if (file === 'tsconfig.json') {
               args = [...args, ...tscArgs];
+            } else {
+              args = [...args, '--noEmit'];
             }
             let task = taskRunner.runTask(`./node_modules/.bin/tsc`, args, {
               name: `tsc --project ${file}`,
@@ -75,7 +77,7 @@ export let createCompiler = (dependencies: { taskRunner: TaskRunner, logger: Log
     start: () => {
       glob('**/tsconfig.json', { ignore: 'node_modules/**' }, (error: Error | null, tsConfigFiles: string[]) => {
         tsConfigFiles.forEach(file => {
-          let task = taskRunner.runTask('./node_modules/.bin/tsc', ['-p', file, '--watch'], {
+          let task = taskRunner.runTask('./node_modules/.bin/tsc', ['-p', file, '--watch', '--noEmit'], {
             name: `tsc -p ${file} --watch`,
             logger,
             handleOutput
