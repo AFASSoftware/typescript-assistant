@@ -20,7 +20,7 @@ export let createReleaseCommand = (deps: Dependencies) => {
           name: 'confirm',
           message: 'You are not on master, do you want to do a pre-release?'
         });
-        if (!answers[0]) {
+        if (!answers['confirm']) {
           return;
         }
         await taskRunner.runTask(npm, ['version', 'prerelease'], { name: 'npm', logger }).result;
