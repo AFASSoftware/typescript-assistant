@@ -106,6 +106,7 @@
     "no-invalid-this": true,
     "no-mergeable-namespace": true,
     "no-null-keyword": true,
-    "restrict-plus-operands": true
+    "restrict-plus-operands": true,
+    "prefer-template": true
   }
 }
