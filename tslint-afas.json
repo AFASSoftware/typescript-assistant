@@ -91,7 +91,6 @@
     "ordered-imports": false,
     "prefer-conditional-expression": false,
     "prefer-const": false,
-    "prefer-method-signature": false,
     "prefer-object-spread": false,
     "prefer-template": false,
     "promise-function-async": false,
