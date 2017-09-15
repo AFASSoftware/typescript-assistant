@@ -10,6 +10,18 @@ export interface Compiler {
   runOnce(tscArgs: string[]): Promise<boolean>;
 }
 
+let execTasksSync = (tasks: Promise<any>[]): Promise<boolean> => {
+  return new Promise((resolve, reject) => {
+    tasks.forEach((t, index) => {
+      if (index + 1 === tasks.length) {
+        t.then(resolve).catch(() => reject);
+      } else {
+        t.then(tasks[index + 1].then).catch(() => reject);
+      }
+    });
+  });
+};
+
 export let createCompiler = (dependencies: { taskRunner: TaskRunner, logger: Logger, bus: Bus }): Compiler => {
   let { taskRunner, logger, bus } = dependencies;
 
@@ -70,7 +82,7 @@ export let createCompiler = (dependencies: { taskRunner: TaskRunner, logger: Log
             tasks.push(task);
           });
 
-          resolve(Promise.all(tasks.map(task => task.result)).then(() => true).catch(() => false));
+          resolve(execTasksSync(tasks.map(task => task.result)).then(() => true).catch(() => false));
         });
       });
     },
