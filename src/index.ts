@@ -74,6 +74,6 @@ yargsModule.command('pre-push', 'Pre-push git hook for husky', {}, (yargs) => {
   inject(createPrePushCommand).execute().then(failIfUnsuccessful, onFailure);
 });
 
-yargsModule.help().strict().argv;
+yargsModule.strict().argv;
 
 /* tslint:enable:no-console */
