@@ -10,16 +10,15 @@ export interface Compiler {
   runOnce(tscArgs: string[]): Promise<boolean>;
 }
 
-let execTasksSync = (tasks: Promise<any>[]): Promise<boolean> => {
-  return new Promise((resolve, reject) => {
-    tasks.forEach((t, index) => {
-      if (index + 1 === tasks.length) {
-        t.then(resolve).catch(() => reject);
-      } else {
-        t.then(tasks[index + 1].then).catch(() => reject);
-      }
+let runningTasks: Task[] = [];
+let execTasksSequential = (taskFunctions: (() => Task)[]): Promise<void> => {
+  return taskFunctions.reduce((a: Promise<void>, b: () => Task) => {
+    return a.then(() => {
+      let running = b();
+      runningTasks.push(running);
+      return running.result;
     });
-  });
+  }, Promise.resolve());
 };
 
 export let createCompiler = (dependencies: { taskRunner: TaskRunner, logger: Logger, bus: Bus }): Compiler => {
@@ -57,7 +56,7 @@ export let createCompiler = (dependencies: { taskRunner: TaskRunner, logger: Log
     return true;
   };
 
-  let tasks: Task[] = [];
+  let taskFunctions: (() => Task)[] = [];
 
   return {
     runOnce: (tscArgs: string[]) => {
@@ -73,37 +72,39 @@ export let createCompiler = (dependencies: { taskRunner: TaskRunner, logger: Log
             } else {
               args = [...args, '--noEmit'];
             }
-            let task = taskRunner.runTask(`./node_modules/.bin/tsc`, args, {
+            let taskFunction = () => taskRunner.runTask(`./node_modules/.bin/tsc`, args, {
               name: `tsc --project ${file}`,
               logger,
               handleOutput
             });
 
-            tasks.push(task);
+            taskFunctions.push(taskFunction);
           });
 
-          resolve(execTasksSync(tasks.map(task => task.result)).then(() => true).catch(() => false));
+          resolve(execTasksSequential(taskFunctions).then(() => true));
         });
       });
     },
     start: () => {
       glob('**/tsconfig.json', { ignore: 'node_modules/**' }, (error: Error | null, tsConfigFiles: string[]) => {
         tsConfigFiles.forEach(file => {
-          let task = taskRunner.runTask('./node_modules/.bin/tsc', ['-p', file, '--watch', '--noEmit'], {
+          let taskFunction = () => taskRunner.runTask('./node_modules/.bin/tsc', ['-p', file, '--watch', '--noEmit'], {
             name: `tsc -p ${file} --watch`,
             logger,
             handleOutput
           });
 
-          tasks.push(task);
+          taskFunctions.push(taskFunction);
         });
+
+        execTasksSequential(taskFunctions).then(() => true).catch(() => false);
       });
     },
     stop: () => {
-      tasks.forEach(task => {
+      runningTasks.forEach(task => {
         task.kill();
       });
-      tasks = [];
+      runningTasks = [];
     }
   };
 };
