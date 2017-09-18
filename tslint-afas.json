@@ -71,7 +71,7 @@
     "no-any": false,
     "no-duplicate-imports": false, // Problems when creating stubs and importing Interfaces
     "no-empty-interface": false,
-    "no-floating-promises": false,
+    "no-floating-promises": true,
     "no-magic-numbers": false,
     "no-non-null-assertion": false,
     "no-object-literal-type-assertion": false,
@@ -107,6 +107,7 @@
     "no-mergeable-namespace": true,
     "no-null-keyword": true,
     "restrict-plus-operands": true,
-    "prefer-template": true
+    "prefer-template": true,
+    "prefer-method-signature": true
   }
 }
