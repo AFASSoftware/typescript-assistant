@@ -97,7 +97,7 @@ export let createCompiler = (dependencies: { taskRunner: TaskRunner, logger: Log
           taskFunctions.push(taskFunction);
         });
 
-        execTasksSequential(taskFunctions).then(() => true).catch(() => false);
+        taskFunctions.forEach(fn => fn());
       });
     },
     stop: () => {
