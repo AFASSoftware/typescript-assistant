@@ -70,13 +70,13 @@
   "dependencies": {
     "@types/chai": "4.0.4",
     "@types/mocha": "2.2.43",
-    "@types/node": "8.0.28",
+    "@types/node": "8.0.30",
     "chai": "4.1.2",
     "chokidar": "1.7.0",
     "cross-env": "5.0.5",
     "glob": "7.1.2",
     "husky": "0.14.3",
-    "inquirer": "3.2.3",
+    "inquirer": "3.3.0",
     "mocha": "3.5.3",
     "nyc": "11.2.1",
     "opn-cli": "3.1.0",
@@ -91,11 +91,11 @@
     "yargs": "9.0.1"
   },
   "devDependencies": {
-    "@types/chokidar": "1.7.2",
+    "@types/chokidar": "1.7.3",
     "@types/glob": "5.0.32",
     "@types/inquirer": "0.0.35",
-    "@types/sinon": "2.3.4",
+    "@types/sinon": "2.3.5",
     "@types/yargs": "8.0.2",
-    "sinon": "3.2.1"
+    "sinon": "3.3.0"
   }
 }
