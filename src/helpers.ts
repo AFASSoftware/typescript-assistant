@@ -1,4 +1,5 @@
-import { execSync } from 'child_process';
+import { execSync, spawn } from 'child_process';
+import { writeFileSync } from 'fs';
 
 export let findChangedFiles = (refA?: string, refB?: string) => {
   if (refA === undefined) {
@@ -13,8 +14,17 @@ export let findChangedFiles = (refA?: string, refB?: string) => {
 };
 
 export let npmInstall = () => {
-  execSync('npm install', { encoding: 'UTF-8', stdio: [0, 1, 2] });
-  execSync('npm dedupe', { encoding: 'UTF-8', stdio: [0, 1, 2] });
+  let path = `${process.cwd()}/build/npm-install.js`;
+  let currentDir = process.cwd().replace(/\\/g, '\\\\');
+
+  writeFileSync(path, `
+const child_process = require('child_process');
+child_process.execSync('npm install', { cwd: '${currentDir}', encoding: 'UTF-8', stdio: [0, 1, 2] });
+child_process.execSync('npm dedupe', { cwd: '${currentDir}', encoding: 'UTF-8', stdio: [0, 1, 2] });
+`);
+
+  let install = spawn('node', [path], { stdio: 'ignore', shell: true, detached: true });
+  install.unref();
 };
 
 export let packageJsonChanged = (refA: string, refB: string) => findChangedFiles(refA, refB).filter(f => f.indexOf('package.json') !== -1).length >= 1;
