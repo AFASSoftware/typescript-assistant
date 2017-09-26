@@ -3,6 +3,7 @@ import { Logger } from './logger';
 import { Task, TaskRunner } from './taskrunner';
 import { absolutePath } from './util';
 import * as glob from 'glob';
+import { parallelLimit } from 'async';
 
 export interface Compiler {
   start(): void;
@@ -10,16 +11,10 @@ export interface Compiler {
   runOnce(tscArgs: string[]): Promise<boolean>;
 }
 
+type TaskFunctionCallback = () => void;
+type TaskFunction = (callback: TaskFunctionCallback) => void;
+
 let runningTasks: Task[] = [];
-let execTasksSequential = (taskFunctions: (() => Task)[]): Promise<void> => {
-  return taskFunctions.reduce((a: Promise<void>, b: () => Task) => {
-    return a.then(() => {
-      let running = b();
-      runningTasks.push(running);
-      return running.result;
-    });
-  }, Promise.resolve());
-};
 
 export let createCompiler = (dependencies: { taskRunner: TaskRunner, logger: Logger, bus: Bus }): Compiler => {
   let { taskRunner, logger, bus } = dependencies;
@@ -56,7 +51,7 @@ export let createCompiler = (dependencies: { taskRunner: TaskRunner, logger: Log
     return true;
   };
 
-  let taskFunctions: (() => Task)[] = [];
+  let taskFunctions: TaskFunction[] = [];
 
   return {
     runOnce: (tscArgs: string[]) => {
@@ -72,32 +67,43 @@ export let createCompiler = (dependencies: { taskRunner: TaskRunner, logger: Log
             } else {
               args = [...args, '--noEmit'];
             }
-            let taskFunction = () => taskRunner.runTask(`./node_modules/.bin/tsc`, args, {
-              name: `tsc --project ${file}`,
-              logger,
-              handleOutput
-            });
+            let taskFunction = (callback: TaskFunctionCallback) => {
+              let task = taskRunner.runTask(`./node_modules/.bin/tsc`, args, {
+                name: `tsc --project ${file}`,
+                logger,
+                handleOutput
+              });
+              runningTasks.push(task);
+              task.result.then(() => {
+                runningTasks.splice(runningTasks.indexOf(task), 1);
+              }).then(callback).catch(reject);
+            };
 
             taskFunctions.push(taskFunction);
           });
 
-          resolve(execTasksSequential(taskFunctions).then(() => true));
+          let limit = 2;
+          parallelLimit(taskFunctions, limit, resolve);
         });
       });
     },
     start: () => {
       glob('**/tsconfig.json', { ignore: 'node_modules/**' }, (error: Error | null, tsConfigFiles: string[]) => {
         tsConfigFiles.forEach(file => {
-          let taskFunction = () => taskRunner.runTask('./node_modules/.bin/tsc', ['-p', file, '--watch', '--noEmit'], {
-            name: `tsc -p ${file} --watch`,
-            logger,
-            handleOutput
-          });
+          let taskFunction = () => {
+            let task = taskRunner.runTask('./node_modules/.bin/tsc', ['-p', file, '--watch', '--noEmit'], {
+              name: `tsc -p ${file} --watch`,
+              logger,
+              handleOutput
+            });
+            runningTasks.push(task);
+            task.result.then(() => {
+              runningTasks.splice(runningTasks.indexOf(task), 1);
+            }).catch(err => logger.error('compiler', err.message));
+          };
 
-          taskFunctions.push(taskFunction);
+          taskFunction();
         });
-
-        taskFunctions.forEach(fn => fn());
       });
     },
     stop: () => {

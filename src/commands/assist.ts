@@ -1,5 +1,4 @@
 import { Dependencies } from '../dependencies';
-import * as fs from 'fs';
 
 export let createAssistCommand = (deps: Dependencies) => {
   let { formatter, linter, compiler, nyc, watcher } = deps;

@@ -71,6 +71,7 @@
     "@types/chai": "4.0.4",
     "@types/mocha": "2.2.43",
     "@types/node": "8.0.30",
+    "async": "2.5.0",
     "chai": "4.1.2",
     "chokidar": "1.7.0",
     "cross-env": "5.0.5",
@@ -91,6 +92,7 @@
     "yargs": "9.0.1"
   },
   "devDependencies": {
+    "@types/async": "2.0.42",
     "@types/chokidar": "1.7.3",
     "@types/glob": "5.0.32",
     "@types/inquirer": "0.0.35",
