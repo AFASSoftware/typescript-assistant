@@ -54,7 +54,7 @@ export let createCompiler = (dependencies: { taskRunner: TaskRunner, logger: Log
   let taskFunctions: TaskFunction[] = [];
 
   return {
-    runOnce: (tscArgs: string[]) => {
+    runOnce: () => {
       return new Promise((resolve, reject) => {
         glob('**/tsconfig.json', { ignore: 'node_modules/**' }, (error: Error | null, tsConfigFiles: string[]) => {
           if (error) {
@@ -62,14 +62,9 @@ export let createCompiler = (dependencies: { taskRunner: TaskRunner, logger: Log
           }
           tsConfigFiles.forEach(file => {
             let args = ['-p', file];
-            if (file === 'tsconfig.json') {
-              args = [...args, ...tscArgs];
-            } else {
-              args = [...args, '--noEmit'];
-            }
             let taskFunction = (callback: TaskFunctionCallback) => {
               let task = taskRunner.runTask(`./node_modules/.bin/tsc`, args, {
-                name: `tsc --project ${file}`,
+                name: `tsc -p ${file}`,
                 logger,
                 handleOutput
               });
@@ -97,9 +92,7 @@ export let createCompiler = (dependencies: { taskRunner: TaskRunner, logger: Log
               handleOutput
             });
             runningTasks.push(task);
-            task.result.then(() => {
-              runningTasks.splice(runningTasks.indexOf(task), 1);
-            }).catch(err => logger.error('compiler', err.message));
+            task.result.catch(err => { logger.error('compiler', err.message); process.exit(1); });
           };
 
           taskFunction();

@@ -5,6 +5,7 @@ export let createPrePushCommand = (deps: Dependencies) => {
 
   return {
     execute: async (): Promise<boolean> => {
+      let timestamp = new Date().getTime();
       let pristine = await git.isPristine();
       if (!pristine) {
         logger.error('pre-push', 'The working directory contains changes that are not committed.');
@@ -17,6 +18,7 @@ export let createPrePushCommand = (deps: Dependencies) => {
         nyc.run()
       ]);
       let toolErrors = results.filter(result => result === false).length;
+      logger.log('pre-push', `Pre-push tasks took ${Math.round((new Date().getTime() - timestamp) / 1000)} seconds`);
       return toolErrors === 0;
     }
   };

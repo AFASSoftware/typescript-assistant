@@ -51,11 +51,8 @@ yargsModule.command(['release'], 'Interactively makes a new version number, tags
   inject(createReleaseCommand).execute().then(onSuccess, onFailure);
 });
 
-yargsModule.command(['ci'], 'Runs all tools in parallel to find errors', {
-  '--': { describe: 'Arguments to be passed to tsc' }
-}, (yargs) => {
-  let tscArgs = yargs._.slice(1);
-  inject(createCICommand).execute({ tscArgs }).then(failIfUnsuccessful, onFailure);
+yargsModule.command(['ci'], 'Runs all tools in parallel to find errors', {}, (yargs) => {
+  inject(createCICommand).execute().then(failIfUnsuccessful, onFailure);
 });
 
 yargsModule.command('pre-commit', 'Pre-commit git hook for husky', {}, (yargs) => {
