@@ -1,5 +1,7 @@
 # Work in progress!
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/AFASResearch/typescript-assistant.svg)](https://greenkeeper.io/)
+
 At *AFAS Software* we do our frontend coding in Typescript. We want our code to be of high quality, so we normalize/format our code, do
 static linting, unit testing and code coverage. We also want code to be normalized/formatted and linted on each commit and we want
 all tests to pass and code coverage thresholds met on every push.
