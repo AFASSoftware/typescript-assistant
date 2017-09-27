@@ -1,3 +1,4 @@
+/* tslint:disable no-null-keyword */
 import { Bus, EventType } from '../bus';
 import { Git } from '../git';
 import { Logger } from '../logger';
@@ -13,10 +14,10 @@ let replaceOptions: Options = {
   tslint: true,
   tsfmt: true,
   verify: false,
-  tsconfig: undefined,
-  tsconfigFile: undefined,
-  tslintFile: undefined,
-  tsfmtFile: undefined,
+  tsconfig: false,
+  tsconfigFile: null,
+  tslintFile: null,
+  tsfmtFile: null,
   vscode: false
 };
 
@@ -28,10 +29,10 @@ let verifyOptions: Options = {
   tslint: true,
   tsfmt: true,
   verify: true,
-  tsconfig: undefined,
-  tsconfigFile: undefined,
-  tslintFile: undefined,
-  tsfmtFile: undefined,
+  tsconfig: false,
+  tsconfigFile: null,
+  tslintFile: null,
+  tsfmtFile: null,
   vscode: false
 };
 

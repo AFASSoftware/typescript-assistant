@@ -37,7 +37,7 @@ export let createLinter = (dependencies: { taskRunner: TaskRunner, logger: Logge
 
   let logError = (err: any) => logger.error('linter', `error: ${err}`);
 
-  let lintProcess: ChildProcess;
+  let lintProcess: ChildProcess | undefined;
 
   let running = false;
   let rescheduled = false;
@@ -58,7 +58,7 @@ export let createLinter = (dependencies: { taskRunner: TaskRunner, logger: Logge
       fix: fix,
       filesToLint: files
     };
-    lintProcess.send(command);
+    lintProcess!.send!(command);
   };
 
   let lint = (files?: string[]) => {
@@ -107,7 +107,7 @@ export let createLinter = (dependencies: { taskRunner: TaskRunner, logger: Logge
     },
     stop: () => {
       bus.unregister(lint);
-      lintProcess.kill();
+      lintProcess!.kill();
       lintProcess = undefined;
     },
     lintOnce: (fixOnce: boolean, files?: string[]) => {
@@ -122,7 +122,7 @@ export let createLinter = (dependencies: { taskRunner: TaskRunner, logger: Logge
           bus.unregister(errored);
           fix = false;
           if (!isRunning) {
-            lintProcess.kill();
+            lintProcess!.kill();
             lintProcess = undefined;
           }
         };

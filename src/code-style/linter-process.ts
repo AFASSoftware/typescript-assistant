@@ -10,7 +10,7 @@ let { rules, rulesDirectory } = Linter.loadConfigurationFromPath(`${process.cwd(
 let configuration: IConfigurationFile = {
   rules: rules,
   rulesDirectory: rulesDirectory,
-  jsRules: undefined,
+  jsRules: new Map(),
   defaultSeverity: 'error',
   extends: [],
   linterOptions: {
@@ -50,8 +50,8 @@ process.on('message', (msg: LinterCommand) => {
           hasFix: failure.hasFix()
         }
       };
-      process.send(response);
+      process.send!(response);
     });
   });
-  process.send({ finished: { success } } as LinterResponse);
+  process.send!({ finished: { success } } as LinterResponse);
 });

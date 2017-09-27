@@ -5,6 +5,7 @@
 // - This prevents over-complicated merge conflicts
 // - This prevents small formatting/linting fix commits
 
+/* tslint:disable no-null-keyword */
 import * as tsfmt from 'typescript-formatter';
 import { Bus } from '../bus';
 import { Linter } from '../code-style/linter';
@@ -31,7 +32,7 @@ export let createPreCommitCommand = (deps: PostCheckoutDependencies) => {
 
       return tsfmt.processFiles(files, {
         verify: true, replace: false, verbose: false, baseDir: process.cwd(), editorconfig: true, tslint: true, tsfmt: true, tsconfig: true,
-        tsconfigFile: undefined, tslintFile: undefined, tsfmtFile: undefined, vscode: false
+        tsconfigFile: null, tslintFile: null, tsfmtFile: null, vscode: false
       }).then(async (resultList: tsfmt.ResultMap) => {
         let unformattedFiles: string[] = [];
         Object.keys(resultList).forEach((key) => {

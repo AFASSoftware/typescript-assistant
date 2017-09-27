@@ -14,7 +14,7 @@
     "clean": "ts-node --fast src/index clean",
     "coverage-show": "opn build/coverage/index.html",
     "tslint": "tslint --type-check --project ./tsconfig.json ./src/**/*.ts && tslint --type-check --project ./test/tsconfig.json ./test/**/*.ts ",
-    "ci": "ts-node --fast src/index ci -- -d --rootDir ./src --outDir ./dist",
+    "ci": "ts-node --fast src/index ci",
     "postcheckout": "ts-node --fast src/index post-checkout",
     "postmerge": "ts-node --fast src/index post-merge",
     "precommit": "ts-node --fast src/index pre-commit",

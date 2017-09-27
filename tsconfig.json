@@ -6,8 +6,10 @@
     "sourceMap": true,
     "outDir": "./build/js",
     "rootDir": ".",
-    "declaration": true,
-    "newLine": "LF"
+    "declaration": false,
+    "newLine": "LF",
+    "strict": true,
+    "strictNullChecks": false
   },
   "exclude": [
     "node_modules",

@@ -1,7 +1,10 @@
 {
   "extends": "../tsconfig.json",
   "compilerOptions": {
-    "strictNullChecks": false
+    "outDir": "../dist",
+    "rootDir": ".",
+    "declaration": true,
+    "strictNullChecks": true
   },
   "include": [
     "./**/*.ts"
