@@ -89,7 +89,8 @@
     "tsutils": "2.9.0",
     "typescript": "2.5.3",
     "typescript-formatter": "6.0.0",
-    "yargs": "9.0.1"
+    "yargs": "9.0.1",
+    "tslint-sonarts": "1.0.0"
   },
   "devDependencies": {
     "@types/async": "2.0.43",
@@ -98,7 +99,6 @@
     "@types/inquirer": "0.0.35",
     "@types/sinon": "2.3.5",
     "@types/yargs": "8.0.2",
-    "sinon": "4.0.0",
-    "tslint-sonarts": "1.0.0"
+    "sinon": "4.0.0"
   }
 }
