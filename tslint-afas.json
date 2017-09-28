@@ -2,7 +2,8 @@
   // This file is published in the npm package, so projects using typescript-assistant can extend their rules from it.
   "extends": [
     "tslint:latest",
-    "./tslint-enabled-microsoft-rules.json"
+    "./tslint-enabled-microsoft-rules.json",
+    "tslint-sonarts"
   ],
   "rules": {
     // Disabled due to errors:
