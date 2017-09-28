@@ -19,10 +19,17 @@ export let npmInstall = () => {
 
   writeFileSync(path, `
 const child_process = require('child_process');
-child_process.execSync('npm install', { cwd: '${currentDir}', encoding: 'UTF-8', stdio: [0, 1, 2] });
-child_process.execSync('npm dedupe', { cwd: '${currentDir}', encoding: 'UTF-8', stdio: [0, 1, 2] });
+try {
+  child_process.execSync('npm install', { cwd: '${currentDir}', encoding: 'UTF-8', stdio: [0, 1, 2] });
+  child_process.execSync('npm dedupe', { cwd: '${currentDir}', encoding: 'UTF-8', stdio: [0, 1, 2] });
+} catch (e) {
+  console.error('npm install failed', e);
+  console.log('Press enter to continue');
+  process.stdin.once('data', function(){
+    process.exit(1);
+  });
+}
 `);
-
   let install = spawn('node', [path], { stdio: 'ignore', shell: true, detached: true });
   install.unref();
 };
