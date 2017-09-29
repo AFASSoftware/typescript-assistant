@@ -1,5 +1,6 @@
 import { execSync, spawn } from 'child_process';
 import { writeFileSync } from 'fs';
+import * as path from 'path';
 
 export let findChangedFiles = (refA?: string, refB?: string) => {
   if (refA === undefined) {
@@ -13,11 +14,16 @@ export let findChangedFiles = (refA?: string, refB?: string) => {
   return output.split('\n').filter(fileName => fileName.length > 0);
 };
 
+let escapeSpaces = (filePath: string): string => {
+  let escapeSequence = (path.sep === '/') ? '\\ ' : '^ ';
+  return filePath.replace(/ /g, escapeSequence);
+};
+
 export let npmInstall = () => {
-  let path = `${process.cwd()}/build/npm-install.js`;
+  let scriptPath = `${process.cwd()}/build/npm-install.js`;
   let currentDir = process.cwd().replace(/\\/g, '\\\\');
 
-  writeFileSync(path, `
+  writeFileSync(scriptPath, `
 const child_process = require('child_process');
 try {
   child_process.execSync('npm install', { cwd: '${currentDir}', encoding: 'UTF-8', stdio: [0, 1, 2] });
@@ -30,7 +36,7 @@ try {
   });
 }
 `);
-  let install = spawn('node', [path], { stdio: 'ignore', shell: true, detached: true });
+  let install = spawn('node', [escapeSpaces(scriptPath)], { stdio: 'ignore', shell: true, detached: true });
   install.unref();
 };
 
