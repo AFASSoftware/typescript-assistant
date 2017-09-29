@@ -7,7 +7,7 @@
     "tsa": "./dist/index.js"
   },
   "scripts": {
-    "prepublishOnly": "tsc -d --rootDir ./src --outDir ./dist",
+    "prepublishOnly": "tsc -p ./src/tsconfig.json",
     "assist": "ts-node --fast src/index.ts",
     "release": "ts-node --fast src/index.ts release",
     "fix": "ts-node --fast src/index fix",
