@@ -24,6 +24,7 @@ export let npmInstall = () => {
   let currentDir = process.cwd().replace(/\\/g, '\\\\');
 
   writeFileSync(scriptPath, `
+console.log('Updating dependencies, please wait...');
 const child_process = require('child_process');
 try {
   child_process.execSync('npm install', { cwd: '${currentDir}', encoding: 'UTF-8', stdio: [0, 1, 2] });
