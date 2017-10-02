@@ -17,7 +17,7 @@ export let createWatcher = (dependencies: { bus: Bus }): Watcher => {
           timeout = setTimeout(() => {
             timeout = undefined;
             bus.signal('source-files-changed');
-          }, 100);
+          }, 200);
         }
       });
     }

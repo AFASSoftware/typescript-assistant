@@ -46,6 +46,9 @@ export interface Formatter {
 export let createFormatter = (dependencies: { logger: Logger, git: Git, bus: Bus }): Formatter => {
   let { logger, bus, git } = dependencies;
 
+  let runningFormatter: Promise<void> | undefined;
+  let rescheduled = false;
+
   let logError = (err: any) => logger.error('formatter', `error: ${err}`);
 
   let runFormatterOn = (files: string[], options: Options): Promise<boolean> => {
@@ -73,11 +76,20 @@ export let createFormatter = (dependencies: { logger: Logger, git: Git, bus: Bus
   };
 
   let verifyFormat = () => {
-    // needs re-entrant fix
-    runFormatter(verifyOptions).then((success) => {
-      logger.log('formatter', success ? 'all files formatted' : 'unformatted files found');
-      bus.signal(success ? 'format-verified' : 'format-errored');
-    }).catch(logError);
+    if (runningFormatter) {
+      rescheduled = true;
+    } else {
+      runFormatter(verifyOptions).then((success) => {
+        logger.log('formatter', success ? 'all files formatted' : 'unformatted files found');
+        bus.signal(success ? 'format-verified' : 'format-errored');
+      }).catch(logError).then(() => {
+        runningFormatter = undefined;
+        if (rescheduled) {
+          rescheduled = false;
+          verifyFormat();
+        }
+      }).catch(logError);
+    }
   };
 
   return {
