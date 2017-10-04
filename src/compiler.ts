@@ -4,6 +4,7 @@ import { Task, TaskRunner } from './taskrunner';
 import { absolutePath } from './util';
 import * as glob from 'glob';
 import { parallelLimit } from 'async';
+import * as fs from 'fs';
 
 export interface Compiler {
   start(): void;
@@ -83,20 +84,20 @@ export let createCompiler = (dependencies: { taskRunner: TaskRunner, logger: Log
       });
     },
     start: () => {
-      glob('**/tsconfig.json', { ignore: 'node_modules/**' }, (error: Error | null, tsConfigFiles: string[]) => {
-        tsConfigFiles.forEach(file => {
-          let taskFunction = () => {
-            let task = taskRunner.runTask('./node_modules/.bin/tsc', ['-p', file, '--watch', '--noEmit'], {
-              name: `tsc -p ${file} --watch`,
-              logger,
-              handleOutput
-            });
-            runningTasks.push(task);
-            task.result.catch(err => { logger.error('compiler', err.message); process.exit(1); });
-          };
-
-          taskFunction();
-        });
+      const tsConfigFiles = ['./tsconfig.json', './src/tsconfig.json']; // Watching all **/tsconfig.json files has proven to cost too much CPU
+      tsConfigFiles.forEach(tsconfigFile => {
+        if (fs.existsSync(tsconfigFile)) {
+          let task = taskRunner.runTask('./node_modules/.bin/tsc', ['-p', tsconfigFile, '--watch', '--noEmit'], {
+            name: `tsc -p ${tsconfigFile} --watch`,
+            logger,
+            handleOutput
+          });
+          runningTasks.push(task);
+          task.result.catch(err => {
+            logger.error('compiler', err.message);
+            process.exit(1);
+          });
+        }
       });
     },
     stop: () => {
