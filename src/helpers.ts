@@ -1,6 +1,5 @@
 import { execSync, spawn } from 'child_process';
 import { writeFileSync } from 'fs';
-import * as path from 'path';
 
 export let findChangedFiles = (refA?: string, refB?: string) => {
   if (refA === undefined) {
@@ -12,11 +11,6 @@ export let findChangedFiles = (refA?: string, refB?: string) => {
 
   let output = execSync(`git diff --name-only --diff-filter=ACMR ${refA} ${refB}`, { encoding: 'utf8' });
   return output.split('\n').filter(fileName => fileName.length > 0);
-};
-
-let escapeSpaces = (filePath: string): string => {
-  let escapeSequence = (path.sep === '/') ? '\\ ' : '^ ';
-  return filePath.replace(/ /g, escapeSequence);
 };
 
 export let npmInstall = () => {
@@ -37,7 +31,7 @@ try {
   });
 }
 `);
-  let install = spawn('node', [escapeSpaces(scriptPath)], { stdio: 'ignore', shell: true, detached: true });
+  let install = spawn('node', ['./build/npm-install.js'], { stdio: 'ignore', shell: true, detached: true, cwd: currentDir });
   install.unref();
 };
 
