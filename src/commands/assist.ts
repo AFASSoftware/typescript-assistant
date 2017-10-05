@@ -8,7 +8,7 @@ export let createAssistCommand = (deps: Dependencies) => {
       // watcher.watchSourceFileChanged();
       formatter.startVerifying(['compile-started' /*, 'source-files-changed' */]);
       linter.start('format-verified');
-      nyc.start();
+      nyc.start(['compile-started' /*, 'source-files-changed' */]);
       compiler.start();
     }
   };

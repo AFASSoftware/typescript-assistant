@@ -1,22 +1,34 @@
 import { Task, TaskRunner } from '../taskrunner';
 import { Logger } from '../logger';
-import { Bus } from '../bus';
+import { Bus, EventType } from '../bus';
 import { absolutePath } from '../util';
 import { Git } from '../git';
 
 export interface NYC {
-  start(): void;
+  start(triggers: EventType[]): void;
   stop(): void;
   run(): Promise<boolean>;
 }
 
+let delay = (ms: number): Promise<void> => new Promise((resolve) => setTimeout(resolve, ms));
+
 export let createNyc = (dependencies: { taskRunner: TaskRunner, logger: Logger, bus: Bus, git: Git }): NYC => {
   let { taskRunner, logger, bus, git } = dependencies;
   let runningTask: Task | undefined;
+  let coolingDown: Promise<void> | undefined;
 
-  let startNyc = (): Promise<boolean> => {
+  let startNyc = async (): Promise<boolean> => {
+    let myCoolingDown = delay(100);
+    coolingDown = myCoolingDown;
+    await (myCoolingDown);
+    if (coolingDown !== myCoolingDown) {
+      return false;
+    }
+
     if (runningTask) {
+      logger.log('nyc', 'Aborting previous nyc run');
       runningTask.kill();
+      runningTask = undefined;
     }
     let errorLine = '';
     let lastLineWasNotOk = false;
@@ -58,11 +70,13 @@ export let createNyc = (dependencies: { taskRunner: TaskRunner, logger: Logger, 
       });
     return runningTask.result.then(() => {
       if (task === runningTask) {
+        runningTask = undefined;
         logger.log('nyc', 'code coverage OK');
       }
       return true;
     }).catch(async () => {
       if (task === runningTask) {
+        runningTask = undefined;
         logger.log('nyc', 'code coverage FAILED');
       }
       let isOnBranch = await git.isOnBranch();
@@ -72,8 +86,8 @@ export let createNyc = (dependencies: { taskRunner: TaskRunner, logger: Logger, 
 
   return {
     run: () => startNyc().catch(() => false),
-    start: () => {
-      bus.registerAll(['source-files-changed'], startNyc);
+    start: (triggers: EventType[]) => {
+      bus.registerAll(triggers, startNyc);
       startNyc().catch(() => false);
     },
     stop: () => {
