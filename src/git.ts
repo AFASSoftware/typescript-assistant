@@ -21,7 +21,7 @@ export let createGit = (dependencies: { taskRunner: TaskRunner, logger: Logger }
     // Not using this mechanism anymore but a blacklist to allow multiple tsconfig files.
     // let tsConfig = JSON.parse(readFileSync(join(process.cwd(), 'tsconfig.json'), 'UTF-8'));
     // let globs: string[] = tsConfig && tsConfig.include ? tsConfig.include : ['src/**/*.ts', 'test/**/*.ts'];
-    let blacklist = ['node_modules/**', 'typings/**', 'build/**', 'dist/**'];
+    let blacklist = ['**/node_modules/**', 'typings/**', 'build/**', 'dist/**'];
 
     return new Promise((resolve, reject) => {
       glob('**/*.ts', { ignore: blacklist }, (error, matches) => {
