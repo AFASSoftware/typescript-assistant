@@ -79,7 +79,7 @@ export let createFormatter = (dependencies: { logger: Logger, git: Git, bus: Bus
     if (runningFormatter) {
       rescheduled = true;
     } else {
-      runFormatter(verifyOptions).then((success) => {
+      runningFormatter = runFormatter(verifyOptions).then((success) => {
         logger.log('formatter', success ? 'all files formatted' : 'unformatted files found');
         bus.signal(success ? 'format-verified' : 'format-errored');
       }).catch(logError).then(() => {
