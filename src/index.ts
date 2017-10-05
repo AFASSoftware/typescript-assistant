@@ -11,6 +11,7 @@ import { createCICommand } from './commands/ci';
 import * as yargsModule from 'yargs';
 import { createDependencyInjector } from './dependency-injector';
 import { createPrePushCommand } from './commands/pre-push';
+import { createFixAllCommand } from './commands/fix-all';
 
 let inject = createDependencyInjector();
 
@@ -41,6 +42,10 @@ yargsModule.command(['assist', '*'], 'Watches for file changes and outputs curre
 
 yargsModule.command(['fix', 'f'], 'Formats changed files and applies tslint fixes', {}, (yargs) => {
   inject(createFixCommand).execute().then(onSuccess, onFailure);
+});
+
+yargsModule.command(['fixall'], 'Formats all files and applies tslint fixes', {}, (yargs) => {
+  inject(createFixAllCommand).execute().then(onSuccess, onFailure);
 });
 
 yargsModule.command(['clean', 'c'], 'Deletes all output files and intermediate files', {}, (yargs) => {
