@@ -93,7 +93,7 @@
     "tslint-sonarts": "1.0.0"
   },
   "devDependencies": {
-    "@types/async": "2.0.43",
+    "@types/async": "2.0.44",
     "@types/chokidar": "1.7.3",
     "@types/glob": "5.0.32",
     "@types/inquirer": "0.0.35",
