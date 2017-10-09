@@ -7,6 +7,7 @@ import { Logger } from './logger';
 import { TaskRunner } from './taskrunner';
 import { NYC } from './testing/nyc';
 import { Watcher } from './watcher';
+import { Server } from './server';
 
 export interface Dependencies {
   watcher: Watcher;
@@ -18,5 +19,6 @@ export interface Dependencies {
   git: Git;
   logger: Logger;
   nyc: NYC;
+  server: Server;
   inject<T>(createFunction: (dependencies: Partial<Dependencies>) => T): T;
 }

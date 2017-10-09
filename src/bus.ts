@@ -6,12 +6,21 @@ export type EventType =
   'lint-errored' |
   'format-verified' |
   'format-errored' |
-  'source-files-changed';
+  'source-files-changed' |
+  'report';
 
-export type Callback = () => void;
+export type Callback = (info?: Report) => void;
+
+export interface Report {
+  tool: 'format' | 'lint' | 'test' | 'coverage' | 'compiler';
+  status: 'ready' | 'busy';
+  errors?: number;
+  fixable?: number;
+}
 
 export interface Bus {
   signal(eventType: EventType): void;
+  report(report: Report): void;
   register(type: EventType, callback: Callback): void;
   registerAll(types: EventType[], callback: Callback): void;
   unregister(callback: Callback): void;
@@ -24,6 +33,12 @@ export let createBus = (): Bus => {
       let subscribers = allSubscribers[eventType];
       if (subscribers) {
         subscribers.forEach(s => s());
+      }
+    },
+    report: (report: Report) => {
+      let subscribers = allSubscribers['report'];
+      if (subscribers) {
+        subscribers.forEach(s => s(report));
       }
     },
     register: (type, callback) => {

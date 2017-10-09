@@ -1,7 +1,7 @@
 import { Dependencies } from '../dependencies';
 
 export let createAssistCommand = (deps: Dependencies) => {
-  let { formatter, linter, compiler, nyc } = deps;
+  let { formatter, linter, compiler, nyc, server } = deps;
 
   return {
     execute: () => {
@@ -10,6 +10,7 @@ export let createAssistCommand = (deps: Dependencies) => {
       linter.start('format-verified');
       nyc.start(['compile-started' /*, 'source-files-changed' */]);
       compiler.start();
+      server.start();
     }
   };
 };

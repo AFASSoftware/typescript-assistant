@@ -10,6 +10,7 @@ import { createBus } from './bus';
 import { createDefaultTaskRunner, createWindowsTaskRunner } from './taskrunner';
 import { sep } from 'path';
 import { createConsoleLogger } from './logger';
+import { createServer } from './server';
 
 export let createDependencyInjector = (): <T>(createFunction: (dependencies: Partial<Dependencies>) => T) => T => {
   let logger = createConsoleLogger();
@@ -29,6 +30,7 @@ export let createDependencyInjector = (): <T>(createFunction: (dependencies: Par
   dependencies.linter = inject(createLinter);
   dependencies.nyc = inject(createNyc);
   dependencies.watcher = inject(createWatcher);
+  dependencies.server = inject(createServer);
 
   return dependencies.inject;
 };

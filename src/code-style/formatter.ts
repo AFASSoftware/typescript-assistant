@@ -79,9 +79,19 @@ export let createFormatter = (dependencies: { logger: Logger, git: Git, bus: Bus
     if (runningFormatter) {
       rescheduled = true;
     } else {
+      bus.report({
+        tool: 'format',
+        status: 'busy'
+      });
       runningFormatter = runFormatter(verifyOptions).then((success) => {
         logger.log('formatter', success ? 'all files formatted' : 'unformatted files found');
         bus.signal(success ? 'format-verified' : 'format-errored');
+        bus.report({
+          tool: 'format',
+          status: 'ready',
+          errors: success ? 0 : 1,
+          fixable: success ? 0 : 1
+        });
       }).catch(logError).then(() => {
         runningFormatter = undefined;
         if (rescheduled) {

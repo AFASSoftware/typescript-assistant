@@ -48,6 +48,10 @@ export let createLinter = (dependencies: { taskRunner: TaskRunner, logger: Logge
   let startLint = async (files?: string[]) => {
     rescheduled = false;
     running = true;
+    bus.report({
+      tool: 'lint',
+      status: 'busy'
+    });
     if (!files) {
       files = (await git.findChangedFiles()).filter(isTypescriptFile);
     }
@@ -93,6 +97,12 @@ export let createLinter = (dependencies: { taskRunner: TaskRunner, logger: Logge
           ? 'All files are ok'
           : `${errors} Linting problems found, ${fixable} ${fix ? 'fixed' : 'fixable'}`);
         bus.signal(response.finished.success ? 'lint-linted' : 'lint-errored');
+        bus.report({
+          tool: 'lint',
+          status: 'ready',
+          errors: errors,
+          fixable: fixable
+        });
         if (rescheduled) {
           startLint().catch(logError);
         }
@@ -100,13 +110,15 @@ export let createLinter = (dependencies: { taskRunner: TaskRunner, logger: Logge
     });
   };
 
+  let lintCallback = () => lint();
+
   return {
     start: (trigger: EventType) => {
       startProcess();
-      bus.register(trigger, lint);
+      bus.register(trigger, lintCallback);
     },
     stop: () => {
-      bus.unregister(lint);
+      bus.unregister(lintCallback);
       lintProcess!.kill();
       lintProcess = undefined;
     },

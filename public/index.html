@@ -1,0 +1,28 @@
+<html>
+<head>
+  <title>Typescript assistant</title>
+</head>
+<body>
+<pre id="output">
+  CONNECTING...
+</pre>
+<script>
+
+  var webSocket = new WebSocket('ws://' + window.location.host + '/ws');
+
+  var reports = {};
+
+  webSocket.onmessage = function(evt) {
+    console.log(evt.data);
+    var report = JSON.parse(evt.data);
+    reports[report.tool] = report;
+    document.getElementById('output').innerText = JSON.stringify(reports, undefined, 2);
+  };
+
+  webSocket.onclose = function() {
+    document.getElementById('output').innerText = 'NOT CONNECTED';
+  }
+
+</script>
+</body>
+</html>
