@@ -29,6 +29,9 @@ export let createNyc = (dependencies: { taskRunner: TaskRunner, logger: Logger, 
       logger.log('nyc', 'Aborting previous nyc run');
       runningTask.kill();
       runningTask = undefined;
+    } else {
+      bus.report({ tool: 'test', status: 'busy' });
+      bus.report({ tool: 'coverage', status: 'busy' });
     }
     let errorLine = '';
     let lastLineWasNotOk = false;
@@ -72,12 +75,16 @@ export let createNyc = (dependencies: { taskRunner: TaskRunner, logger: Logger, 
       if (task === runningTask) {
         runningTask = undefined;
         logger.log('nyc', 'code coverage OK');
+        bus.report({ tool: 'test', status: 'ready', errors: 0 });
+        bus.report({ tool: 'coverage', status: 'ready', errors: 0 });
       }
       return true;
     }).catch(async () => {
       if (task === runningTask) {
         runningTask = undefined;
         logger.log('nyc', 'code coverage FAILED');
+        bus.report({ tool: 'test', status: 'ready', errors: 1 });
+        bus.report({ tool: 'coverage', status: 'ready', errors: 1 });
       }
       let isOnBranch = await git.isOnBranch();
       return isOnBranch;

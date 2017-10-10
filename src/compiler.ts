@@ -20,19 +20,25 @@ let runningTasks: Task[] = [];
 export let createCompiler = (dependencies: { taskRunner: TaskRunner, logger: Logger, bus: Bus }): Compiler => {
   let { taskRunner, logger, bus } = dependencies;
 
-  let busy = true;
+  let busyCompilers = 0;
   let errors: string[] = [];
 
   let handleOutput = (line: string) => {
     if (/Starting incremental compilation...$/.test(line)) {
-      busy = true;
+      if (busyCompilers === 0) {
+        bus.report({ tool: 'compiler', status: 'busy' });
+        errors = [];
+      }
+      busyCompilers++;
       logger.log('compiler', 'compiling...');
-      errors = [];
       bus.signal('compile-started');
     } else if (/Compilation complete\. Watching for file changes.$/.test(line)) {
-      busy = false;
+      busyCompilers--;
       logger.log('compiler', `ready, found ${errors.length} errors`);
       bus.signal(errors.length === 0 ? 'compile-compiled' : 'compile-errored');
+      if (busyCompilers === 0) {
+        bus.report({ tool: 'compiler', status: 'ready', errors: errors.length });
+      }
     } else {
       let matches = /([^(]+)\((\d+),(\d+)\): (error TS\d+: )?(.*)$/.exec(line);
       if (matches) {

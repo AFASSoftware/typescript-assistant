@@ -45,9 +45,9 @@
     "report-dir": "./build/coverage",
     "es-module": false,
     "lines": 1,
-    "statements": 1,
-    "functions": 1,
-    "branches": 0.5,
+    "statements": 0.1,
+    "functions": 0.1,
+    "branches": 0.1,
     "watermarks": {
       "lines": [
         75,
