@@ -101,6 +101,6 @@
     "@types/sinon": "2.3.5",
     "@types/ws": "3.2.0",
     "@types/yargs": "8.0.2",
-    "sinon": "4.0.0"
+    "sinon": "4.0.1"
   }
 }
