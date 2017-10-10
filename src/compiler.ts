@@ -99,6 +99,7 @@ export let createCompiler = (dependencies: { taskRunner: TaskRunner, logger: Log
             handleOutput
           });
           runningTasks.push(task);
+          busyCompilers++;
           task.result.catch(err => {
             logger.error('compiler', err.message);
             process.exit(1);

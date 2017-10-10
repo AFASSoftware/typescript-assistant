@@ -37,7 +37,7 @@ let verifyOptions: Options = {
 };
 
 export interface Formatter {
-  formatFiles(files: string[]): Promise<boolean>;
+  formatFiles(files: string[] | undefined): Promise<boolean>;
   verifyFiles(files: string[]): Promise<boolean>;
   startVerifying(triggers: EventType[]): void;
   stopVerifying(): void;
@@ -106,7 +106,10 @@ export let createFormatter = (dependencies: { logger: Logger, git: Git, bus: Bus
     verifyFiles: (files) => {
       return runFormatterOn(files, verifyOptions);
     },
-    formatFiles: (files) => {
+    formatFiles: async (files) => {
+      if (!files) {
+        files = (await git.findChangedFiles()).filter(isTypescriptFile);
+      }
       return runFormatterOn(files, replaceOptions);
     },
     startVerifying: (triggers: EventType[]) => {
