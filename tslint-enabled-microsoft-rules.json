@@ -6,6 +6,7 @@
     // Disabled due to errors:
     // https://github.com/Microsoft/tslint-microsoft-contrib/issues/355
 //    "no-string-based-set-timeout": true,
+//    "no-string-based-set-interval": true,
 
     "insecure-random": true,
     "function-name": true,
@@ -37,7 +38,6 @@
     "no-octal-literal": true,
     "no-regex-spaces": true,
     "no-string-based-set-immediate": true,
-    "no-string-based-set-interval": true,
     "no-suspicious-comment": true,
     "no-unnecessary-bind": true,
     "no-unnecessary-semicolons": true,
