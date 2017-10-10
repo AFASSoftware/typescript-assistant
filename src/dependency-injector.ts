@@ -10,7 +10,7 @@ import { createBus } from './bus';
 import { createDefaultTaskRunner, createWindowsTaskRunner } from './taskrunner';
 import { sep } from 'path';
 import { createConsoleLogger } from './logger';
-import { createServer } from './server';
+import { Server } from './server';
 
 export let createDependencyInjector = (): <T>(createFunction: (dependencies: Partial<Dependencies>) => T) => T => {
   let logger = createConsoleLogger();
@@ -30,7 +30,17 @@ export let createDependencyInjector = (): <T>(createFunction: (dependencies: Par
   dependencies.linter = inject(createLinter);
   dependencies.nyc = inject(createNyc);
   dependencies.watcher = inject(createWatcher);
-  dependencies.server = inject(createServer);
+
+  // Server is created lazily, because not all of its dependencies may be present
+  let server: Server | undefined;
+  Object.defineProperty(dependencies, 'server', {
+    get: () => {
+      if (!server) {
+        server = inject(require('./server').createServer);
+      }
+      return server;
+    }
+  });
 
   return dependencies.inject;
 };

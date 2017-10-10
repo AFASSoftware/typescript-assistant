@@ -15,8 +15,8 @@
     "coverage-show": "opn build/coverage/index.html",
     "tslint": "tslint --type-check --project ./src/tsconfig.json ./src/**/*.ts && tslint --type-check --project ./tsconfig.json ./test/**/*.ts",
     "ci": "ts-node --fast src/index ci",
-    "postcheckout": "ts-node --fast src/index post-checkout",
-    "postmerge": "ts-node --fast src/index post-merge",
+    "postcheckout": "ts-node --fast src/index post-checkout || exit 0",
+    "postmerge": "ts-node --fast src/index post-merge || exit 0",
     "precommit": "ts-node --fast src/index pre-commit",
     "prepush": "ts-node --fast src/index pre-push"
   },
