@@ -51,7 +51,10 @@ export let createPreCommitCommand = (deps: PostCheckoutDependencies) => {
             process.exit(1);
           }
         } else {
-          throw new Error(`The following files were not formatted:\r\n  ${unformattedFiles.join('\r\n  ')}`);
+          logger.error('hooks', `The following files were not formatted:\r\n  ${
+            unformattedFiles.join('\r\n  ')
+            }\r\nHint: this can be fixed by running 'npm run fix'`);
+          process.exit(1);
         }
       });
     }
