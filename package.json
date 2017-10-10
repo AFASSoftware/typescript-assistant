@@ -96,7 +96,7 @@
   "devDependencies": {
     "@types/async": "2.0.43",
     "@types/chokidar": "1.7.3",
-    "@types/glob": "5.0.32",
+    "@types/glob": "5.0.33",
     "@types/inquirer": "0.0.35",
     "@types/sinon": "2.3.5",
     "@types/ws": "3.2.0",
