@@ -47,7 +47,7 @@
     "lines": 1,
     "statements": 0.1,
     "functions": 0.1,
-    "branches": 0.1,
+    "branches": 0,
     "watermarks": {
       "lines": [
         75,
