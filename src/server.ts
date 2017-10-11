@@ -3,7 +3,7 @@ import * as WebSocket from 'ws';
 import * as http from 'http';
 import * as fs from 'fs';
 import { Logger } from './logger';
-import { Formatter } from '../build/js/src/code-style/formatter';
+import { Formatter } from './code-style/formatter';
 import { Linter } from './code-style/linter';
 
 export interface Server {
@@ -43,11 +43,11 @@ export let createServer = (deps: { bus: Bus, logger: Logger, linter: Linter, for
           logger.log('server', `received: ${message}`);
           if (message === 'lint-fix') {
             linter.lintOnce(true)
-              .catch((err) => logger.error('server', `Error during lint-fix ${err}`));
+              .catch((err: any) => logger.error('server', `Error during lint-fix ${err}`));
           }
           if (message === 'format-fix') {
             formatter.formatFiles(undefined)
-              .catch((err) => logger.error('server', `Error during format-fix ${err}`));
+              .catch((err: any) => logger.error('server', `Error during format-fix ${err}`));
           }
         });
         Object.keys(lastReports).forEach((tool) => {
