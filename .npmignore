@@ -1,5 +1,6 @@
 /**/*
 !/src/**/*
+!/public/**/*
 !/dist/**/*
 !/tools/**/*
 !/readme.md
