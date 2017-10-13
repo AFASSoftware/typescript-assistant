@@ -63,7 +63,7 @@ export let createCompiler = (dependencies: { taskRunner: TaskRunner, logger: Log
   return {
     runOnce: () => {
       return new Promise((resolve, reject) => {
-        glob('**/tsconfig.json', { ignore: 'node_modules/**' }, (error: Error | null, tsConfigFiles: string[]) => {
+        glob('**/tsconfig.json', { ignore: '**/node_modules/**' }, (error: Error | null, tsConfigFiles: string[]) => {
           if (error) {
             reject(error);
           }
