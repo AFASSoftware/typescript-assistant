@@ -88,7 +88,7 @@
     "tslint-microsoft-contrib": "5.0.1",
     "tslint-sonarts": "1.0.0",
     "tsutils": "2.12.1",
-    "typescript": "2.5.3",
+    "typescript": "2.6.0-rc",
     "typescript-formatter": "6.0.0",
     "ws": "3.2.0",
     "yargs": "9.0.1"

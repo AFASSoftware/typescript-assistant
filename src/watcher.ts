@@ -10,7 +10,8 @@ export let createWatcher = (dependencies: { bus: Bus }): Watcher => {
   return {
     watchSourceFileChanged: () => {
       let timeout: any;
-      let watch = chokidar.watch('./**/*.ts', { ignored: ['.d.ts', 'node_modules', 'build/**/*', 'dist/**/*'], ignoreInitial: true });
+      const ignored = ['**/*.d.ts', 'node_modules/**/*', 'build/**/*', 'dist/**/*', '**/.*/**/*'];
+      let watch = chokidar.watch('./**/*.ts', { ignored, ignoreInitial: true });
       watch.on('all', (evt, path) => {
         // batch events for a short amount of time to catch an IDE doing a save-all
         if (timeout === undefined) {

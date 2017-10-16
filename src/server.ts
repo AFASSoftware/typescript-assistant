@@ -19,8 +19,8 @@ export let createServer = (deps: { bus: Bus, logger: Logger, linter: Linter, for
 
   return {
     start: () => {
-      let processReport = (report: Report) => {
-        lastReports[report.tool] = report;
+      let processReport = (report: Report | undefined): void => {
+        lastReports[report!.tool] = report!;
         let data = JSON.stringify(report, undefined, 2);
         wss.clients.forEach(client => client.send(data));
       };
@@ -55,7 +55,7 @@ export let createServer = (deps: { bus: Bus, logger: Logger, linter: Linter, for
         });
       });
 
-      logger.log('server', 'Experimental server listening on http://localhost:4551');
+      logger.log('server', 'Experimental server listening on http://localhost:4551/');
     }
   };
 };

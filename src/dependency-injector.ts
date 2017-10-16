@@ -12,7 +12,7 @@ import { sep } from 'path';
 import { createConsoleLogger } from './logger';
 import { Server } from './server';
 
-export let createDependencyInjector = (): <T>(createFunction: (dependencies: Partial<Dependencies>) => T) => T => {
+export let createDependencyInjector = (): <T>(createFunction: (dependencies: Dependencies) => T) => T => {
   let logger = createConsoleLogger();
   let taskRunner = sep === '\\' ? createWindowsTaskRunner() : createDefaultTaskRunner();
   let bus = createBus();

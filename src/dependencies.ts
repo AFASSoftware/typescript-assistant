@@ -20,5 +20,5 @@ export interface Dependencies {
   logger: Logger;
   nyc: NYC;
   server: Server;
-  inject<T>(createFunction: (dependencies: Partial<Dependencies>) => T): T;
+  inject<T>(createFunction: (dependencies: Dependencies) => T): T;
 }

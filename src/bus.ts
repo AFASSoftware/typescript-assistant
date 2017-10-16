@@ -9,7 +9,7 @@ export type EventType =
   'source-files-changed' |
   'report';
 
-export type Callback = (info?: Report) => void;
+export type Callback = (info: Report | undefined) => void;
 
 export interface Report {
   tool: 'format' | 'lint' | 'test' | 'coverage' | 'compiler';
@@ -32,7 +32,7 @@ export let createBus = (): Bus => {
     signal: (eventType) => {
       let subscribers = allSubscribers[eventType];
       if (subscribers) {
-        subscribers.forEach(s => s());
+        subscribers.forEach(s => s(undefined));
       }
     },
     report: (report: Report) => {

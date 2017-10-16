@@ -1,15 +1,15 @@
 import { Dependencies } from '../dependencies';
 
 export let createAssistCommand = (deps: Dependencies) => {
-  let { formatter, linter, compiler, nyc, server } = deps;
+  let { formatter, linter, compiler, nyc, server, watcher } = deps;
 
   return {
     execute: () => {
-      // watcher.watchSourceFileChanged();
+      watcher.watchSourceFileChanged();
       server.start();
-      formatter.startVerifying(['compile-started' /*, 'source-files-changed' */]);
+      formatter.startVerifying(['source-files-changed']);
       linter.start('format-verified');
-      nyc.start(['compile-started' /*, 'source-files-changed' */]);
+      nyc.start(['source-files-changed']);
       compiler.start();
     }
   };
