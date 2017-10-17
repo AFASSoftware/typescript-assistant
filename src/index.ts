@@ -13,6 +13,13 @@ import { createDependencyInjector } from './dependency-injector';
 import { createPrePushCommand } from './commands/pre-push';
 import { createFixAllCommand } from './commands/fix-all';
 
+/* tslint:disable:no-console */
+
+if (process.version < 'v7.0.0') {
+  console.error('Please update your version of nodejs.');
+  process.exit(1);
+}
+
 let inject = createDependencyInjector();
 
 /* tslint:disable:no-console */
