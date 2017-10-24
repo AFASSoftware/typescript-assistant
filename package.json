@@ -86,7 +86,7 @@
     "tslib": "1.8.0",
     "tslint": "5.7.0",
     "tslint-microsoft-contrib": "5.0.1",
-    "tslint-sonarts": "1.0.0",
+    "tslint-sonarts": "1.1.0-0",
     "tsutils": "2.12.1",
     "typescript": "2.5.3",
     "typescript-formatter": "6.0.0",
