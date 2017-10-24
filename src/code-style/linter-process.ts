@@ -12,10 +12,7 @@ let configuration: IConfigurationFile = {
   rulesDirectory: rulesDirectory,
   jsRules: new Map(),
   defaultSeverity: 'error',
-  extends: [],
-  linterOptions: {
-    typeCheck: true
-  }
+  extends: []
 };
 
 const options: ILinterOptions = {
