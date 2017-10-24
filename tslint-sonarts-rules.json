@@ -1,0 +1,8 @@
+{
+  "extends": [
+    "tslint-sonarts"
+  ],
+  "rules": {
+    "no-identical-functions": false
+  }
+}

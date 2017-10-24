@@ -6,5 +6,6 @@
 !/readme.md
 !/tslint-afas.json
 !/tslint-enabled-microsoft-rules.json
+!/tslint-sonarts-rules.json
 !/tsfmt.json
 !/.editorconfig

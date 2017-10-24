@@ -3,7 +3,7 @@
   "extends": [
     "tslint:latest",
     "./tslint-enabled-microsoft-rules.json",
-    "tslint-sonarts"
+    "./tslint-sonarts-rules"
   ],
   "rules": {
     // Disabled due to errors:
@@ -58,14 +58,11 @@
     ], // No "check-typecast".
     "use-default-type-parameter": true,
     "one-variable-per-declaration": [true, "ignore-for-loop"],
-    "no-implicit-dependencies": [
-      true,
-      "dev"
-    ],
 
     // Disabled standard rules.
     "array-type": false,
     "arrow-parens": false,
+    "ban-comma-operator": false,
     "completed-docs": false,
     "cyclomatic-complexity": false,
     "file-header": false,
@@ -78,6 +75,7 @@
     "no-duplicate-imports": false, // Problems when creating stubs and importing Interfaces
     "no-empty-interface": false,
     "no-floating-promises": true,
+    "no-implicit-dependencies": false, // TSA holds several of the dependencies for dependent projects, conflicting with this rule.
     "no-magic-numbers": false,
     "no-non-null-assertion": false,
     "no-object-literal-type-assertion": false,
@@ -98,7 +96,6 @@
     "prefer-conditional-expression": false,
     "prefer-const": false,
     "prefer-object-spread": false,
-    "prefer-template": false,
     "promise-function-async": false,
     "strict-boolean-expressions": false,
     "switch-default": false,
