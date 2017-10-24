@@ -58,6 +58,10 @@
     ], // No "check-typecast".
     "use-default-type-parameter": true,
     "one-variable-per-declaration": [true, "ignore-for-loop"],
+    "no-implicit-dependencies": [
+      true,
+      "dev"
+    ],
 
     // Disabled standard rules.
     "array-type": false,
