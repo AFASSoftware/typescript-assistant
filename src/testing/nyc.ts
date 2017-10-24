@@ -18,6 +18,7 @@ export let createNyc = (dependencies: { taskRunner: TaskRunner, logger: Logger, 
   let coolingDown: Promise<void> | undefined;
 
   let startNyc = async (): Promise<boolean> => {
+    let hasFailingTest = false;
     let myCoolingDown = delay(100);
     coolingDown = myCoolingDown;
     await (myCoolingDown);
@@ -48,6 +49,7 @@ export let createNyc = (dependencies: { taskRunner: TaskRunner, logger: Logger, 
         if (notOk) {
           lastLineWasNotOk = true;
           logger.log('nyc', `FAILED: ${notOk[1]}`);
+          hasFailingTest = true;
         } else if (contextIt) {
           logger.log('nyc', `${absolutePath(contextIt[2])} ${errorLine}`);
           errorLine = '';
@@ -83,11 +85,11 @@ export let createNyc = (dependencies: { taskRunner: TaskRunner, logger: Logger, 
       if (task === runningTask) {
         runningTask = undefined;
         logger.log('nyc', 'code coverage FAILED');
-        bus.report({ tool: 'test', status: 'ready', errors: 1 });
+        bus.report({ tool: 'test', status: 'ready', errors: hasFailingTest ? 1 : 0 });
         bus.report({ tool: 'coverage', status: 'ready', errors: 1 });
       }
       let isOnBranch = await git.isOnBranch();
-      return isOnBranch;
+      return isOnBranch && !hasFailingTest;
     });
   };
 
