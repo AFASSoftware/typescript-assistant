@@ -3,7 +3,7 @@
   "extends": [
     "tslint:latest",
     "./tslint-enabled-microsoft-rules.json",
-    "./tslint-sonarts-rules"
+    "./tslint-sonarts-rules.json"
   ],
   "rules": {
     // Disabled due to errors:
