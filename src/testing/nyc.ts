@@ -59,7 +59,9 @@ export let createNyc = (dependencies: { taskRunner: TaskRunner, logger: Logger, 
     };
     let handleError = (line: string) => {
       if (task === runningTask) {
-        // Not so useful info logger.error('nyc', 'STDERR '+line);
+        if (!line.startsWith('ERROR: Coverage for')) {
+          logger.error('nyc', line);
+        }
       }
       return true;
     };
