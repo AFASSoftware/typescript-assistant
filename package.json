@@ -69,12 +69,12 @@
   },
   "dependencies": {
     "@types/chai": "4.0.4",
-    "@types/mocha": "2.2.43",
-    "@types/node": "8.0.46",
+    "@types/mocha": "2.2.44",
+    "@types/node": "8.0.47",
     "async": "2.5.0",
     "chai": "4.1.2",
     "chokidar": "1.7.0",
-    "cross-env": "5.1.0",
+    "cross-env": "5.1.1",
     "glob": "7.1.2",
     "husky": "0.14.3",
     "inquirer": "3.3.0",
@@ -89,7 +89,7 @@
     "tslint-sonarts": "1.1.0-0",
     "tsutils": "2.12.1",
     "typescript": "2.5.3",
-    "typescript-formatter": "6.0.0",
+    "typescript-formatter": "7.0.0",
     "ws": "3.2.0",
     "yargs": "10.0.3"
   },
@@ -98,9 +98,9 @@
     "@types/chokidar": "1.7.3",
     "@types/glob": "5.0.33",
     "@types/inquirer": "0.0.35",
-    "@types/sinon": "2.3.6",
+    "@types/sinon": "2.3.7",
     "@types/ws": "3.2.0",
     "@types/yargs": "8.0.2",
-    "sinon": "4.0.1"
+    "sinon": "4.0.2"
   }
 }

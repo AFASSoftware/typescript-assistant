@@ -32,7 +32,7 @@ export let createPreCommitCommand = (deps: PostCheckoutDependencies) => {
 
       return tsfmt.processFiles(files, {
         verify: true, replace: false, verbose: false, baseDir: process.cwd(), editorconfig: true, tslint: true, tsfmt: true, tsconfig: true,
-        tsconfigFile: null, tslintFile: null, tsfmtFile: null, vscode: false
+        tsconfigFile: null, tslintFile: null, tsfmtFile: null, vscode: false, vscodeFile: null
       }).then(async (resultList: tsfmt.ResultMap) => {
         let unformattedFiles: string[] = [];
         Object.keys(resultList).forEach((key) => {

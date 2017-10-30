@@ -18,7 +18,8 @@ let replaceOptions: Options = {
   tsconfigFile: null,
   tslintFile: null,
   tsfmtFile: null,
-  vscode: false
+  vscode: false,
+  vscodeFile: null
 };
 
 let verifyOptions: Options = {
@@ -33,7 +34,8 @@ let verifyOptions: Options = {
   tsconfigFile: null,
   tslintFile: null,
   tsfmtFile: null,
-  vscode: false
+  vscode: false,
+  vscodeFile: null
 };
 
 export interface Formatter {
