@@ -1,5 +1,6 @@
 import { spawn } from 'child_process';
 import { Logger } from './logger';
+import { createInterface } from 'readline';
 
 export interface Task {
   result: Promise<void>;
@@ -20,17 +21,6 @@ export interface TaskRunner {
   runTask(command: string, args: string[], config: TaskConfig): Task;
 }
 
-let trimAndSplit = (data: string | Buffer): string[] => {
-  if (!data) {
-    return [];
-  }
-  if (data instanceof Buffer) {
-    // meaning data is a Buffer somehow...
-    data = data.toString();
-  }
-  return data.split('\n').map(line => /^\s*(.*?)\s*$/m.exec(line)![1]).filter(line => line.length > 0);
-};
-
 export let createDefaultTaskRunner = (): TaskRunner => {
   return {
     runTask: (command: string, args: string[], config: TaskConfig) => {
@@ -40,28 +30,26 @@ export let createDefaultTaskRunner = (): TaskRunner => {
       logger.log(loggerCategory, `running command ${command} ${args.join(' ')}`);
       let task = spawn(command, args);
 
-      task.stdout.on('data', (data: string) => {
-        trimAndSplit(data).forEach((line) => {
-          let handled = false;
-          if (config.handleOutput) {
-            handled = config.handleOutput(line);
-          }
-          if (!handled) {
-            logger.log(loggerCategory, line);
-          }
-        });
+      let stdout = createInterface({ input: task.stdout });
+      stdout.on('line', line => {
+        let handled = false;
+        if (config.handleOutput) {
+          handled = config.handleOutput(line);
+        }
+        if (!handled) {
+          logger.log(loggerCategory, line);
+        }
       });
 
-      task.stderr.on('data', (data: string) => {
-        trimAndSplit(data).forEach((line) => {
-          let handled = false;
-          if (config.handleError) {
-            handled = config.handleError(line);
-          }
-          if (!handled) {
-            logger.error(loggerCategory, line);
-          }
-        });
+      let stderr = createInterface({ input: task.stderr });
+      stderr.on('line', line => {
+        let handled = false;
+        if (config.handleError) {
+          handled = config.handleError(line);
+        }
+        if (!handled) {
+          logger.error(loggerCategory, line);
+        }
       });
 
       let result = new Promise<void>((resolve, reject) => {
