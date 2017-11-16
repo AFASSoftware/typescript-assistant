@@ -18,6 +18,7 @@
     ".vscode"
   ],
   "include": [
-    "test/**/*.ts"
+    "test/**/*.ts",
+    "src/**/*.ts"
   ]
 }

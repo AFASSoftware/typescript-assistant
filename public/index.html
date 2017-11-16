@@ -44,9 +44,11 @@
   document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('format-fix').addEventListener('click', function() {
       webSocket.send('format-fix');
+      document.getElementById('format').classList.remove('fixable');
     });
     document.getElementById('lint-fix').addEventListener('click', function() {
       webSocket.send('lint-fix');
+      document.getElementById('lint').classList.remove('fixable');
     });
   });
 
@@ -56,21 +58,13 @@
     var report = JSON.parse(evt.data);
     reports[report.tool] = report;
     var sectionElement = document.getElementById(report.tool);
-    if (report.status === 'busy') {
-      sectionElement.classList.add('busy');
-    } else {
-      sectionElement.classList.remove('busy');
+    sectionElement.classList.toggle('busy', report.status === 'busy');
+    if (report.status !== 'busy') {
+      var good = !report.errors;
+      sectionElement.classList.toggle('good', good);
+      sectionElement.classList.toggle('bad', !good);
       if (report.errors) {
-        sectionElement.classList.remove('good');
-        sectionElement.classList.add('bad');
-        if (report.fixable) {
-          sectionElement.classList.add('fixable');
-        } else {
-          sectionElement.classList.remove('fixable');
-        }
-      } else {
-        sectionElement.classList.remove('bad');
-        sectionElement.classList.add('good');
+        sectionElement.classList.toggle('fixable', report.fixable);
       }
     }
   };

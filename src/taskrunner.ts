@@ -21,6 +21,8 @@ export interface TaskRunner {
   runTask(command: string, args: string[], config: TaskConfig): Task;
 }
 
+let strip = (line: string) => /^\s*(.*?)\s*$/m.exec(line)![1];
+
 export let createDefaultTaskRunner = (): TaskRunner => {
   return {
     runTask: (command: string, args: string[], config: TaskConfig) => {
@@ -32,6 +34,10 @@ export let createDefaultTaskRunner = (): TaskRunner => {
 
       let stdout = createInterface({ input: task.stdout });
       stdout.on('line', line => {
+        line = strip(line);
+        if (!line) {
+          return;
+        }
         let handled = false;
         if (config.handleOutput) {
           handled = config.handleOutput(line);
@@ -43,6 +49,10 @@ export let createDefaultTaskRunner = (): TaskRunner => {
 
       let stderr = createInterface({ input: task.stderr });
       stderr.on('line', line => {
+        line = strip(line);
+        if (!line) {
+          return;
+        }
         let handled = false;
         if (config.handleError) {
           handled = config.handleError(line);
