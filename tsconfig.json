@@ -9,7 +9,8 @@
     "declaration": false,
     "newLine": "LF",
     "strict": true,
-    "strictNullChecks": false
+    "strictNullChecks": false,
+    "strictFunctionTypes": false
   },
   "exclude": [
     "node_modules",
