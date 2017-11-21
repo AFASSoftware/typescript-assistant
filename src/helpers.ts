@@ -18,17 +18,31 @@ export let npmInstall = () => {
   let currentDir = process.cwd().replace(/\\/g, '\\\\');
 
   writeFileSync(scriptPath, `
-console.log('Updating dependencies, please wait...');
-const child_process = require('child_process');
-try {
-  child_process.execSync('npm install', { cwd: '${currentDir}', encoding: 'UTF-8', stdio: [0, 1, 2] });
-  child_process.execSync('npm dedupe', { cwd: '${currentDir}', encoding: 'UTF-8', stdio: [0, 1, 2] });
-} catch (e) {
-  console.error('npm install failed', e);
-  console.log('Press enter to continue');
-  process.stdin.once('data', function(){
-    process.exit(1);
-  });
+var fs = require('fs');
+
+var tryNpmInstall = function() {
+  if (fs.existsSync('.git/index.lock')) {
+    return false;
+  }
+  console.log('Updating dependencies, please wait...');
+  const child_process = require('child_process');
+  try {
+    child_process.execSync('npm install', { encoding: 'UTF-8', stdio: [0, 1, 2] });
+    child_process.execSync('npm dedupe', { encoding: 'UTF-8', stdio: [0, 1, 2] });
+  } catch (e) {
+    console.error('npm install failed', e);
+    console.log('Press enter to continue');
+    process.stdin.once('data', function(){
+      process.exit(1);
+    });
+  }
+  process.exit(0);
+}
+
+fs.watch('.git', {persistent: true}, tryNpmInstall);
+
+if (!tryNpmInstall()) {
+  console.log('waiting for git before running npm install');
 }
 `);
   let install = spawn('node', ['./build/npm-install.js'], { stdio: 'ignore', shell: true, detached: true, cwd: currentDir });
