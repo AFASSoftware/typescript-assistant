@@ -27,10 +27,15 @@ var tryNpmInstall = function() {
   console.log('Updating dependencies, please wait...');
   const child_process = require('child_process');
   try {
-    child_process.execSync('npm install', { encoding: 'UTF-8', stdio: [0, 1, 2] });
+    try {
+      child_process.execSync('npm install', { encoding: 'UTF-8', stdio: [0, 1, 2] });
+    } catch (installError) {
+      console.error('Retrying npm install');
+      child_process.execSync('npm install', { encoding: 'UTF-8', stdio: [0, 1, 2] });
+    }
     child_process.execSync('npm dedupe', { encoding: 'UTF-8', stdio: [0, 1, 2] });
-  } catch (e) {
-    console.error('npm install failed', e);
+  } catch (secondError) {
+    console.error('npm install failed');
     console.log('Press enter to continue');
     process.stdin.once('data', function(){
       process.exit(1);
