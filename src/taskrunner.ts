@@ -1,6 +1,7 @@
 import { spawn } from 'child_process';
 import { Logger } from './logger';
 import { createInterface } from 'readline';
+import * as kill from 'tree-kill';
 
 export interface Task {
   result: Promise<void>;
@@ -75,7 +76,7 @@ export let createDefaultTaskRunner = (): TaskRunner => {
       return {
         result,
         kill: () => {
-          task.kill();
+          kill(task.pid);
         }
       };
     }
