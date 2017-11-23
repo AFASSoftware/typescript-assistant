@@ -1,6 +1,6 @@
 {
   "name": "typescript-assistant",
-  "version": "0.24.3",
+  "version": "0.24.4",
   "description": "",
   "main": "dist/index.js",
   "bin": {
