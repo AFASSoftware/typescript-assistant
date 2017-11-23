@@ -27,7 +27,7 @@ export let createServer = (deps: { bus: Bus, logger: Logger, linter: Linter, for
 
       bus.register('report', processReport);
 
-      let server = new http.Server((req, res) => {
+      let server = http.createServer((req, res) => {
         indexHtml = fs.readFileSync(`${__dirname}/../public/index.html`, { encoding: 'UTF8' });
 
         res.writeHead(200, { type: 'text/html' });
@@ -36,6 +36,9 @@ export let createServer = (deps: { bus: Bus, logger: Logger, linter: Linter, for
       });
       const wss = new WebSocket.Server({ server, path: '/ws' });
 
+      server.on('listening', () => {
+        logger.log('server', 'Experimental server listening on http://localhost:4551');
+      });
       server.listen(4551);
 
       wss.on('connection', function connection(ws) {
@@ -54,8 +57,6 @@ export let createServer = (deps: { bus: Bus, logger: Logger, linter: Linter, for
           ws.send(JSON.stringify(lastReports[tool], undefined, 2));
         });
       });
-
-      logger.log('server', 'Experimental server listening on http://localhost:4551');
     }
   };
 };
