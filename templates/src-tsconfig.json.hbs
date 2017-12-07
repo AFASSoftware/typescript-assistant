@@ -1,0 +1,17 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "module": "es6",
+    "strictNullChecks": true,
+    "noEmitOnError": true,
+    "noEmit": false,
+{{#if library}}
+    "declaration": true,
+{{/if}}
+    "outDir": "../dist",
+    "rootDir": "."
+  },
+  "include": [
+    "./**/*.ts"
+  ]
+}

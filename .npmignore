@@ -9,3 +9,4 @@
 !/tslint-sonarts-rules.json
 !/tsfmt.json
 !/.editorconfig
+!/templatess

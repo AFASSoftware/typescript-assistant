@@ -1,0 +1,29 @@
+{
+  "include": [
+    "src/**/*.ts"
+  ],
+  "extension": [
+    ".ts"
+  ],
+  "reporter": [
+    "lcov",
+    "html",
+    "text-summary"
+  ],
+  "cache": true,
+  "temp-directory": "./build/nyc/cache",
+  "all": true,
+  "check-coverage": true,
+  "report-dir": "./build/coverage",
+  "es-module": false,
+  "lines": 100,
+  "statements": 100,
+  "functions": 100,
+  "branches": 100,
+  "watermarks": {
+    "lines": [ 75, 100 ],
+    "functions": [ 75, 100 ],
+    "branches": [ 75, 100 ],
+    "statements": [ 75, 100 ]
+  }
+}

@@ -12,6 +12,7 @@ import * as yargsModule from 'yargs';
 import { createDependencyInjector } from './dependency-injector';
 import { createPrePushCommand } from './commands/pre-push';
 import { createFixAllCommand } from './commands/fix-all';
+import { createInitCommand } from './commands/init';
 
 /* tslint:disable:no-console */
 
@@ -65,6 +66,10 @@ yargsModule.command(['release'], 'Interactively makes a new version number, tags
 
 yargsModule.command(['ci'], 'Runs all tools in parallel to find errors', {}, (yargs) => {
   inject(createCICommand).execute().then(failIfUnsuccessful, onFailure);
+});
+
+yargsModule.command('init', 'Initialize or repair all features of typescript-assistant in your project', {}, (yargs) => {
+  inject(createInitCommand).execute(true);
 });
 
 yargsModule.command('pre-commit', 'Pre-commit git hook for husky', {}, (yargs) => {
