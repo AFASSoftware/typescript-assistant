@@ -27,7 +27,7 @@ const fixOptions: ILinterOptions = {
 
 process.on('message', (msg: LinterCommand) => {
   let success = true;
-  let program = Linter.createProgram(`${process.cwd()}/tslint.json`);
+  let program = Linter.createProgram(`${process.cwd()}/tsconfig.json`);
 
   msg.filesToLint.forEach((fileName) => {
     let linter = new Linter(msg.fix ? fixOptions : options, program);
