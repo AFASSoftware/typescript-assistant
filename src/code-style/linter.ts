@@ -62,7 +62,7 @@ export let createLinter = (dependencies: { taskRunner: TaskRunner, logger: Logge
       fix: fix,
       filesToLint: files
     };
-    lintProcess!.send!(command);
+    lintProcess!.send(command);
   };
 
   let lint = (files?: string[]) => {

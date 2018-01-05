@@ -7,7 +7,6 @@
     "cognitive-complexity": false,
 
     // Broken rules.
-    "no-string-based-set-interval": false,
-    "no-useless-cast": false
+    "no-string-based-set-interval": false
   }
 }

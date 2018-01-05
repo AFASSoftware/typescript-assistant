@@ -9,7 +9,7 @@
     "declaration": false,
     "newLine": "LF",
     "strict": true,
-    "strictNullChecks": false,
+    "strictNullChecks": true,
     "strictFunctionTypes": false
   },
   "exclude": [
