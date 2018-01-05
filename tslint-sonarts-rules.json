@@ -3,6 +3,7 @@
     "tslint-sonarts"
   ],
   "rules": {
-    "no-identical-functions": false
+    "no-identical-functions": false,
+    "cognitive-complexity": false
   }
 }
