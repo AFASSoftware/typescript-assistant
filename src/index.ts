@@ -13,6 +13,7 @@ import { createDependencyInjector } from './dependency-injector';
 import { createPrePushCommand } from './commands/pre-push';
 import { createFixAllCommand } from './commands/fix-all';
 import { createInitCommand } from './commands/init';
+import { createLintCommand } from './commands/lint';
 
 /* tslint:disable:no-console */
 
@@ -46,6 +47,10 @@ yargsModule.command(['assist', '*'], 'Watches for file changes and outputs curre
     console.error('Unknown command');
     process.exit(1);
   }
+});
+
+yargsModule.command(['lint'], 'Lints', {}, yargs => {
+  inject(createLintCommand).execute().then(onSuccess, onFailure);
 });
 
 yargsModule.command(['fix', 'f'], 'Formats changed files and applies tslint fixes', {}, (yargs) => {
