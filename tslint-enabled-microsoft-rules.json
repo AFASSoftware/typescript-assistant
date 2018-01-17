@@ -27,7 +27,6 @@
     "no-disable-auto-sanitization": true,
     "no-document-domain": true,
     "no-document-write": true,
-    "no-duplicate-case": true,
     "no-empty-line-after-opening-brace": true,
     "no-exec-script": true,
     "no-for-in": true,
@@ -41,9 +40,7 @@
     "no-suspicious-comment": true,
     "no-unnecessary-bind": true,
     "no-unnecessary-semicolons": true,
-    "no-var-self": true,
     "no-with-statement": true,
-    "prefer-array-literal": true,
-    "valid-typeof": true
+    "prefer-array-literal": true
   }
 }
