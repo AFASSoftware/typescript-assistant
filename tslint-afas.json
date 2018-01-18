@@ -22,7 +22,10 @@
     },
     "max-line-length": [
       true,
-      160
+      {
+        "limit": 160,
+        "ignore-pattern": "^x?it\\("
+      }
     ],
     "object-literal-key-quotes": [
       true,
