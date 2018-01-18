@@ -30,6 +30,9 @@ export interface LinterResponse {
   finished?: {
     success: boolean;
   };
+  error?: {
+    message: string;
+  };
 }
 
 export let createLinter = (dependencies: { taskRunner: TaskRunner, logger: Logger, bus: Bus, git: Git }): Linter => {
@@ -106,6 +109,9 @@ export let createLinter = (dependencies: { taskRunner: TaskRunner, logger: Logge
         if (rescheduled) {
           startLint().catch(logError);
         }
+      }
+      if (response.error) {
+        logger.error('linter', response.error.message);
       }
     });
   };
