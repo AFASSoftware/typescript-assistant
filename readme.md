@@ -58,9 +58,11 @@ It does not have a configuration file of is own, it lets the underlying tools us
 - `tslint.editor.json` - Extends `tslint.json` and disables some rules to make your IDE (vscode/webstorm) easier to work with.
 
 The folder `/src` is assumed to contain source files, but this can be modified by changing the `tsconfig.json` files and the `nyc` section in `package.json`.
-All configuration files should be able to be changed as needed.
+All configuration files can be changed as needed.
 
-If you are creating a browser package, you can get inspiration from maquette on how you can put browser bundles in the `dist` folder using TypeScript Assistant.
+If you are creating a browser package, you can get inspiration from [maquette](https://maquettejs.org) on how you can put browser bundles in the `dist` folder 
+using TypeScript 
+Assistant.
 See the `dist` task in the [package.json](https://github.com/AFASSoftware/maquette/blob/master/package.json).
 
 ## NOTE:
@@ -68,3 +70,10 @@ See the `dist` task in the [package.json](https://github.com/AFASSoftware/maquet
 When typescript-assistant cannot find some of its dependencies, 
 it may be required to run `npm dedupe` which makes sure all required 
 dependencies will be located directly under `node_modules` of your project
+
+## Contributing
+
+We would love to discuss the best practices that TypeScript Assistant is meant to support. 
+To start a discussion you may open an issue.
+We do not intend to make TypeScript Assistant ultimately flexible to support everyone's needs, 
+but pull requests for improvements are welcome.
