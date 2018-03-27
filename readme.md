@@ -65,7 +65,7 @@ using TypeScript
 Assistant.
 See the `dist` task in the [package.json](https://github.com/AFASSoftware/maquette/blob/master/package.json).
 
-## NOTE:
+## NOTE
 
 When typescript-assistant cannot find some of its dependencies, 
 it may be required to run `npm dedupe` which makes sure all required 
