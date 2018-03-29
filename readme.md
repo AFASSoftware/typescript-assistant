@@ -19,6 +19,8 @@ It also adds npm scripts to:
 - Run continuous integration (`npm run ci`)
 - Clean (`npm run clean`)
 
+Read about the philosophy behind TypeScript Assistant on [our blog](https://dev.afas.nl/blog-dev/typescript-assistant).
+
 ## Getting started
 
 You can try TypeScript Assistant on a new project by running
