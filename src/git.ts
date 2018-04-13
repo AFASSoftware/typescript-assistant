@@ -62,7 +62,7 @@ export let createGit = (dependencies: { taskRunner: TaskRunner, logger: Logger }
 
       // When in detached HEAD, assume it's master.
       if (currentBranchName === 'HEAD') {
-        return true;
+        return false;
       }
       return currentBranchName !== 'master';
     },
