@@ -14,11 +14,12 @@ import { createPrePushCommand } from './commands/pre-push';
 import { createFixAllCommand } from './commands/fix-all';
 import { createInitCommand } from './commands/init';
 import { createLintCommand } from './commands/lint';
+import { gte } from 'semver';
 
 /* tslint:disable:no-console */
 
-if (process.version < 'v7.0.0') {
-  console.error('Please update your version of nodejs.');
+if (gte('v7.0.0', process.version)) {
+  console.error('Please update your version of Node.');
   process.exit(1);
 }
 
