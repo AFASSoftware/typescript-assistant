@@ -3,10 +3,11 @@
     "tslint-sonarts"
   ],
   "rules": {
-    "no-identical-functions": false,
     "cognitive-complexity": false,
+    "max-union-size": false,
     "no-big-function": false,
     "no-duplicate-string": false,
+    "no-identical-functions": false,
     "no-small-switch": false,
     "parameters-max-number": false,
 
