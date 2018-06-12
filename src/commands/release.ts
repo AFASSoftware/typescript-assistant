@@ -1,4 +1,4 @@
-import { prompt } from 'inquirer';
+import { Answers, prompt } from 'inquirer';
 import { sep } from 'path';
 import { Dependencies } from '../dependencies';
 
@@ -15,7 +15,7 @@ export let createReleaseCommand = (deps: Dependencies) => {
 
       let onBranch = await git.isOnBranch();
       if (onBranch) {
-        let answers = await prompt({
+        let answers: Answers = await prompt({
           type: 'confirm',
           name: 'confirm',
           message: 'You are not on master, do you want to do a pre-release?'
@@ -25,7 +25,7 @@ export let createReleaseCommand = (deps: Dependencies) => {
         }
         await taskRunner.runTask(npm, ['version', 'prerelease'], { name: 'npm', logger }).result;
       } else {
-        let answers = await prompt({
+        let answers: Answers = await prompt({
           type: 'list',
           name: 'bump',
           message: 'What type of bump would you like to do?',
