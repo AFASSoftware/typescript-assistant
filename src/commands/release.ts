@@ -34,13 +34,14 @@ export let createReleaseCommand = (deps: Dependencies) => {
         let importance = answers['bump'] as string;
 
         // 'npm version' also does a 'git commit' and 'git tag'
-        await taskRunner.runTask(npm, ['version', importance], { name: 'npm', logger }).result;
+        await taskRunner.runTask(npm, ['version', importance, '--commit-hooks', 'false'], { name: 'npm', logger }).result;
       }
 
       await git.execute(['push', '--no-verify']);
       await git.execute(['push', '--tags', '--no-verify']);
 
       let publishArguments = onBranch ? ['publish', '--tag', 'dev'] : ['publish'];
+      publishArguments.push('--commit-hooks', 'false');
       await taskRunner.runTask(npm, publishArguments, { name: 'npm', logger }).result;
     }
   };
