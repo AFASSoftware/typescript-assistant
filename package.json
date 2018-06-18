@@ -9,6 +9,7 @@
   "scripts": {
     "prepublishOnly": "tsc -p ./src/tsconfig.json",
     "assist": "ts-node --transpileOnly src/index.ts",
+    "prerelease": "ts-node --transpileOnly src/index ci",
     "release": "ts-node --transpileOnly src/index.ts release",
     "fix": "ts-node --transpileOnly src/index fix",
     "clean": "ts-node --transpileOnly src/index clean",
