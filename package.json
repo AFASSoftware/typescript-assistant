@@ -71,10 +71,10 @@
   "dependencies": {
     "@types/chai": "4.1.4",
     "@types/mocha": "5.2.2",
-    "@types/node": "10.3.3",
+    "@types/node": "10.3.5",
     "async": "2.6.1",
     "chai": "4.1.2",
-    "chokidar": "2.0.3",
+    "chokidar": "2.0.4",
     "glob": "7.1.2",
     "handlebars": "4.0.11",
     "husky": "0.14.3",
@@ -86,14 +86,14 @@
     "source-map-support": "0.5.6",
     "tree-kill": "1.2.0",
     "ts-node": "6.1.1",
-    "tslib": "1.9.2",
+    "tslib": "1.9.3",
     "tslint": "5.10.0",
     "tslint-microsoft-contrib": "5.0.3",
     "tslint-sonarts": "1.7.0",
     "tsutils": "2.27.1",
     "typescript": "2.9.2",
     "typescript-formatter": "7.2.2",
-    "ws": "5.2.0",
+    "ws": "5.2.1",
     "yargs": "11.0.0"
   },
   "devDependencies": {
@@ -101,11 +101,11 @@
     "@types/chokidar": "1.7.5",
     "@types/glob": "5.0.35",
     "@types/handlebars": "4.0.38",
-    "@types/inquirer": "0.0.41",
+    "@types/inquirer": "0.0.42",
     "@types/semver": "5.5.0",
     "@types/sinon": "5.0.1",
     "@types/ws": "5.1.2",
     "@types/yargs": "11.0.0",
-    "sinon": "6.0.0"
+    "sinon": "6.0.1"
   }
 }
