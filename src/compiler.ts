@@ -32,7 +32,7 @@ export let createCompiler = (dependencies: { taskRunner: TaskRunner, logger: Log
       busyCompilers++;
       logger.log('compiler', 'compiling...');
       bus.signal('compile-started');
-    } else if (/Compilation complete\. Watching for file changes.$/.test(line)) {
+    } else if (/Watching for file changes.$/.test(line)) {
       busyCompilers--;
       logger.log('compiler', `ready, found ${errors.length} errors`);
       bus.signal(errors.length === 0 ? 'compile-compiled' : 'compile-errored');
