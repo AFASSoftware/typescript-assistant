@@ -106,6 +106,10 @@
     "unified-signatures": false,
 
     // Enabled non-standard rules.
+    "file-name-casing": [
+      true,
+      "kebab-case"
+    ],
     "linebreak-style": [true, "LF"],
     "no-default-export": true,
     "no-inferrable-types": true,
