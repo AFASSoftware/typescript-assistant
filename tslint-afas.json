@@ -10,7 +10,6 @@
     "align": false, // Rule is fixed, fixer/formatter is broken.
 
     // Standard tslint rules adjustments to AFAS requirements:
-    "no-unused-variable": true,
     "ban-types": {
       "options": [
         [ "Object", "Avoid using the `Object` type. Did you mean `object`?" ],
