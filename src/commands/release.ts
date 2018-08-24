@@ -1,6 +1,7 @@
 import { Answers, prompt } from 'inquirer';
 import { sep } from 'path';
 import { Dependencies } from '../dependencies';
+import { execSync } from 'child_process';
 
 export let createReleaseCommand = (deps: Dependencies) => {
   let { git, taskRunner, logger } = deps;
@@ -42,7 +43,9 @@ export let createReleaseCommand = (deps: Dependencies) => {
 
       let publishArguments = onBranch ? ['publish', '--tag', 'dev'] : ['publish'];
       publishArguments.push('--commit-hooks', 'false');
-      await taskRunner.runTask(npm, publishArguments, { name: 'npm', logger }).result;
+
+      // Using execSync to allow user interaction to do 2 factor authentication
+      execSync([npm, ...publishArguments].join(' '), { stdio: [0, 1, 2] });
     }
   };
 };
