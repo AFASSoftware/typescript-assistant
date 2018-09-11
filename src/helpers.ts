@@ -28,12 +28,11 @@ var tryNpmInstall = function() {
   const child_process = require('child_process');
   try {
     try {
-      child_process.execSync('npm install', { encoding: 'UTF-8', stdio: [0, 1, 2] });
+      child_process.execSync('npm install --no-package-lock', { encoding: 'UTF-8', stdio: [0, 1, 2] });
     } catch (installError) {
       console.error('Retrying npm install');
-      child_process.execSync('npm install', { encoding: 'UTF-8', stdio: [0, 1, 2] });
+      child_process.execSync('npm install --no-package-lock', { encoding: 'UTF-8', stdio: [0, 1, 2] });
     }
-    child_process.execSync('npm dedupe', { encoding: 'UTF-8', stdio: [0, 1, 2] });
   } catch (secondError) {
     console.error('npm install failed');
     console.log('Press enter to continue');
