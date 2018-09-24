@@ -41,9 +41,15 @@ let failIfUnsuccessful = (success: boolean) => {
   }
 };
 
-yargsModule.command(['assist', '*'], 'Watches for file changes and outputs current errors and violations', {}, (yargs) => {
+yargsModule.command(['assist', '*'], 'Watches for file changes and outputs current errors and violations', {
+  port: {
+    describe: 'the port to have the status server listen on'
+  }
+}, (yargs) => {
   if (yargs._.length === 0 || yargs._.length === 1 && yargs._[0] === 'assist') {
-    inject(createAssistCommand).execute();
+    inject(createAssistCommand).execute({
+      statusServerPort: yargs.port
+    });
   } else {
     console.error('Unknown command');
     process.exit(1);

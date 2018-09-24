@@ -7,7 +7,7 @@ import { Formatter } from './code-style/formatter';
 import { Linter } from './code-style/linter';
 
 export interface Server {
-  start(): void;
+  start(port: number): void;
 }
 
 let indexHtml = fs.readFileSync(`${__dirname}/../public/index.html`, { encoding: 'UTF8' });
@@ -18,7 +18,7 @@ export let createServer = (deps: { bus: Bus, logger: Logger, linter: Linter, for
   let lastReports: { [tool: string]: Report } = {};
 
   return {
-    start: () => {
+    start: (port) => {
       let processReport = (report: Report) => {
         lastReports[report.tool] = report;
         let data = JSON.stringify(report, undefined, 2);
@@ -37,9 +37,9 @@ export let createServer = (deps: { bus: Bus, logger: Logger, linter: Linter, for
       const wss = new WebSocket.Server({ server, path: '/ws' });
 
       server.on('listening', () => {
-        logger.log('server', 'Experimental server listening on http://localhost:4551');
+        logger.log('server', `Experimental server listening on http://localhost:${port}`);
       });
-      server.listen(4551);
+      server.listen(port);
 
       wss.on('connection', function connection(ws) {
         ws.on('message', function incoming(message) {
