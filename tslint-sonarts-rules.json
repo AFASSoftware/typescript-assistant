@@ -10,6 +10,7 @@
     "no-identical-functions": false,
     "no-small-switch": false,
     "parameters-max-number": false,
+    "prefer-optional": false,
 
     // Broken rules.
     "no-redundant-boolean": false
