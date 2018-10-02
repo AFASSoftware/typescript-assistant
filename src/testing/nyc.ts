@@ -66,7 +66,7 @@ export let createNyc = (dependencies: { taskRunner: TaskRunner, logger: Logger, 
     let task = runningTask = taskRunner.runTask(
       './node_modules/.bin/nyc',
       ('--check-coverage -- ' +
-        './node_modules/.bin/mocha --require ts-node/register/transpile-only --reporter tap test/**/*-tests.ts*').split(' '),
+        './node_modules/.bin/mocha --require ts-node/register/transpile-only --exit --reporter tap test/**/*-tests.ts*').split(' '),
       {
         name: 'nyc',
         logger,
