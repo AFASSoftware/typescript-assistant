@@ -40,7 +40,7 @@
       "text-summary"
     ],
     "cache": true,
-    "temp-directory": "./build/nyc/cache",
+    "temp-dir": "./build/nyc/cache",
     "all": true,
     "check-coverage": false,
     "report-dir": "./build/coverage",
