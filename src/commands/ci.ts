@@ -8,7 +8,7 @@ export let createCICommand = (deps: Dependencies) => {
   let { formatter, linter, compiler, nyc, git, logger } = deps;
 
   return {
-    execute: async (options: CIOptions): Promise<boolean> => {
+    execute: async (options: CIOptions = {}): Promise<boolean> => {
       let { tests = true } = options;
 
       let timestamp = new Date().getTime();
