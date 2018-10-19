@@ -76,8 +76,16 @@ yargsModule.command(['release'], 'Interactively makes a new version number, tags
   inject(createReleaseCommand).execute().then(onSuccess, onFailure);
 });
 
-yargsModule.command(['ci'], 'Runs all tools in parallel to find errors', {}, (yargs) => {
-  inject(createCICommand).execute().then(failIfUnsuccessful, onFailure);
+yargsModule.command(['ci'], 'Runs all tools in parallel to find errors', {
+  tests: {
+    describe: 'Run the test and coverage command',
+    boolean: true,
+    default: true
+  }
+}, (yargs) => {
+  inject(createCICommand).execute({
+    tests: yargs.tests
+  }).then(failIfUnsuccessful, onFailure);
 });
 
 yargsModule.command('init', 'Initialize or repair all features of typescript-assistant in your project', {}, (yargs) => {
