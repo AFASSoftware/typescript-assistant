@@ -8,10 +8,10 @@ export let createPostCheckoutCommand = (deps: { logger: Logger }) => {
       try {
         logger.log('hooks', 'postcheckout git hook running');
 
-        let gitParams = process.env.GIT_PARAMS;
+        let gitParams = process.env.HUSKY_GIT_PARAMS;
 
         if (!gitParams) {
-          throw new Error('Expected GIT_PARAMS to be set by husky');
+          throw new Error('Expected HUSKY_GIT_PARAMS to be set by husky');
         }
 
         let [previousHead] = gitParams.split(' ');
