@@ -48,7 +48,7 @@ yargsModule.command(['assist', '*'], 'Watches for file changes and outputs curre
 }, (yargs) => {
   if (yargs._.length === 0 || yargs._.length === 1 && yargs._[0] === 'assist') {
     inject(createAssistCommand).execute({
-      statusServerPort: yargs.port
+      statusServerPort: parseInt(yargs.port as string, 10) || 0
     });
   } else {
     console.error('Unknown command');
