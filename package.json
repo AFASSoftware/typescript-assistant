@@ -8,14 +8,14 @@
   },
   "scripts": {
     "prepublishOnly": "tsc -p ./src/tsconfig.json",
-    "assist": "ts-node --transpileOnly src/index.ts",
-    "prerelease": "ts-node --transpileOnly src/index ci",
-    "release": "ts-node --transpileOnly src/index.ts release",
-    "fix": "ts-node --transpileOnly src/index fix",
-    "clean": "ts-node --transpileOnly src/index clean",
+    "assist": "ts-node --transpile-only src/index.ts",
+    "prerelease": "ts-node --transpile-only src/index ci",
+    "release": "ts-node --transpile-only src/index.ts release",
+    "fix": "ts-node --transpile-only src/index fix",
+    "clean": "ts-node --transpile-only src/index clean",
     "coverage-show": "opn build/coverage/index.html",
     "tslint": "tslint --project ./src/tsconfig.json ./src/**/*.ts && tslint --project ./tsconfig.json ./test/**/*.ts",
-    "ci": "ts-node --transpileOnly src/index ci"
+    "ci": "ts-node --transpile-only src/index ci"
   },
   "author": "johan@johangorter.com",
   "license": "MIT",
@@ -67,49 +67,49 @@
   "dependencies": {
     "@types/chai": "4.1.7",
     "@types/mocha": "5.2.5",
-    "@types/node": "10.12.18",
+    "@types/node": "10.12.21",
     "async": "2.6.1",
     "chai": "4.2.0",
     "chokidar": "2.0.4",
     "glob": "7.1.3",
     "handlebars": "4.0.12",
     "husky": "1.3.1",
-    "inquirer": "6.2.1",
+    "inquirer": "6.2.2",
     "mocha": "5.2.0",
     "nyc": "13.1.0",
     "opn-cli": "4.0.0",
     "semver": "5.6.0",
     "source-map-support": "0.5.10",
     "tree-kill": "1.2.1",
-    "ts-node": "7.0.1",
+    "ts-node": "8.0.2",
     "tslib": "1.9.3",
     "tslint": "5.12.1",
     "tslint-microsoft-contrib": "6.0.0",
-    "tslint-sonarts": "1.8.0",
-    "tsutils": "3.7.0",
-    "typescript": "3.2.2",
+    "tslint-sonarts": "1.9.0",
+    "tsutils": "3.8.0",
+    "typescript": "3.3.1",
     "typescript-formatter": "7.2.2",
-    "ws": "6.1.2",
+    "ws": "6.1.3",
     "yargs": "12.0.5"
   },
   "devDependencies": {
-    "@types/async": "2.0.50",
+    "@types/async": "2.4.0",
     "@types/chokidar": "1.7.5",
     "@types/glob": "7.1.1",
     "@types/handlebars": "4.0.40",
     "@types/inquirer": "0.0.43",
     "@types/semver": "5.5.0",
-    "@types/sinon": "5.0.7",
+    "@types/sinon": "7.0.5",
     "@types/ws": "6.0.1",
-    "@types/yargs": "12.0.5",
-    "sinon": "7.2.2"
+    "@types/yargs": "12.0.8",
+    "sinon": "7.2.3"
   },
   "husky": {
     "hooks": {
-      "post-checkout": "ts-node --transpileOnly src/index post-checkout || exit 0",
-      "post-merge": "ts-node --transpileOnly src/index post-merge || exit 0",
-      "pre-commit": "ts-node --transpileOnly src/index pre-commit",
-      "pre-push": "ts-node --transpileOnly src/index pre-push"
+      "post-checkout": "ts-node --transpile-only src/index post-checkout || exit 0",
+      "post-merge": "ts-node --transpile-only src/index post-merge || exit 0",
+      "pre-commit": "ts-node --transpile-only src/index pre-commit",
+      "pre-push": "ts-node --transpile-only src/index pre-push"
     }
   }
 }
