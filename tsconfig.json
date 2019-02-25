@@ -12,6 +12,11 @@
     "strictNullChecks": true,
     "strictFunctionTypes": false
   },
+  "types":[
+    "chai",
+    "mocha",
+    "node"
+  ],
   "exclude": [
     "node_modules",
     "build",
