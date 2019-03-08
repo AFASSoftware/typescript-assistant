@@ -30,7 +30,6 @@
     "no-empty-line-after-opening-brace": true,
     "no-exec-script": true,
     "no-for-in": true,
-    "no-function-constructor-with-string-args": true,
     "no-http-string": true,
     "no-inner-html": true,
     "no-invalid-regexp": true,
@@ -38,7 +37,6 @@
     "no-regex-spaces": true,
     "no-string-based-set-immediate": true,
     "no-suspicious-comment": true,
-    "no-unnecessary-bind": true,
     "no-unnecessary-semicolons": true,
     "no-with-statement": true,
     "prefer-array-literal": true
