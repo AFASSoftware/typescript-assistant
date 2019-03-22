@@ -22,7 +22,10 @@ tools/githooks/post-merge.ts`);
   });
 
   it('can tell if package.json has changed', () => {
-    execSync.returns(`package.json`);
+    execSync.returns(`
+package.json
+package-lock.json
+`);
     expect(packageJsonChanged('ORIG_HEAD', 'HEAD')).to.be.true;
   });
 

@@ -53,7 +53,7 @@ if (!tryNpmInstall()) {
   install.unref();
 };
 
-export let packageJsonChanged = (refA: string, refB: string) => findChangedFiles(refA, refB).filter(f => f.indexOf('package.json') !== -1).length >= 1;
+export let packageJsonChanged = (refA: string, refB: string) => findChangedFiles(refA, refB).filter(f => f.indexOf('package-lock.json') !== -1).length >= 1;
 
 export let filterTsFiles = (files: string[]) => {
   return files.filter(f => f.slice(-3) === '.ts' && f.slice(-5) !== '.d.ts');
