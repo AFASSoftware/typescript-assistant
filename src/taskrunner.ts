@@ -33,7 +33,7 @@ export let createDefaultTaskRunner = (): TaskRunner => {
       logger.log(loggerCategory, `running command ${command} ${args.join(' ')}`);
       let task = spawn(command, args);
 
-      let stdout = createInterface({ input: task.stdout! });
+      let stdout = createInterface({ input: task.stdout });
       stdout.on('line', line => {
         line = strip(line);
         if (!line) {
@@ -48,7 +48,7 @@ export let createDefaultTaskRunner = (): TaskRunner => {
         }
       });
 
-      let stderr = createInterface({ input: task.stderr! });
+      let stderr = createInterface({ input: task.stderr });
       stderr.on('line', line => {
         line = strip(line);
         if (!line) {
