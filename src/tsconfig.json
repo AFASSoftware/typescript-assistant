@@ -4,7 +4,8 @@
     "outDir": "../dist",
     "rootDir": ".",
     "declaration": true,
-    "strictNullChecks": true
+    "strictNullChecks": true,
+    "inlineSources": true
   },
   "include": [
     "./**/*.ts"
