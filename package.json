@@ -67,13 +67,13 @@
   "dependencies": {
     "@types/chai": "4.1.7",
     "@types/mocha": "5.2.7",
-    "@types/node": "12.0.7",
+    "@types/node": "12.0.8",
     "async": "3.0.1",
     "chai": "4.2.0",
     "chokidar": "2.1.5",
     "glob": "7.1.4",
     "handlebars": "4.1.2",
-    "husky": "2.4.0",
+    "husky": "2.4.1",
     "inquirer": "6.3.1",
     "mocha": "6.1.4",
     "nyc": "14.1.1",
@@ -87,7 +87,7 @@
     "tslint-microsoft-contrib": "6.2.0",
     "tslint-sonarts": "1.9.0",
     "tsutils": "3.14.0",
-    "typescript": "3.5.1",
+    "typescript": "3.5.2",
     "typescript-formatter": "7.2.2",
     "ws": "7.0.0",
     "yargs": "13.2.4"
@@ -98,7 +98,7 @@
     "@types/glob": "7.1.1",
     "@types/inquirer": "0.0.44",
     "@types/semver": "6.0.0",
-    "@types/sinon": "7.0.12",
+    "@types/sinon": "7.0.13",
     "@types/ws": "6.0.1",
     "@types/yargs": "12.0.10",
     "sinon": "7.3.2"
