@@ -10,7 +10,7 @@ import { createPreCommitCommand } from './commands/pre-commit';
 import { createCICommand } from './commands/ci';
 import * as yargsModule from 'yargs';
 import { createDependencyInjector } from './dependency-injector';
-import { createPrePushCommand } from './commands/pre-push';
+import { createPrePushCommand, PrePushCommandOptions } from './commands/pre-push';
 import { createFixAllCommand } from './commands/fix-all';
 import { createInitCommand } from './commands/init';
 import { createLintCommand } from './commands/lint';
@@ -104,8 +104,10 @@ yargsModule.command('post-merge', 'Post-merge git hook for husky', {}, (yargs) =
   inject(createPostMergeCommand).execute();
 });
 
-yargsModule.command('pre-push', 'Pre-push git hook for husky', {}, (yargs) => {
-  inject(createPrePushCommand).execute().then(failIfUnsuccessful, onFailure);
+yargsModule.command('pre-push', 'Pre-push git hook for husky', (yargs) => yargs.array('disable'), (yargs) => {
+  inject(createPrePushCommand).execute({
+    disabledProjects: yargs.disable as string[]
+  }).then(failIfUnsuccessful, onFailure);
 });
 
 yargsModule.strict().argv;

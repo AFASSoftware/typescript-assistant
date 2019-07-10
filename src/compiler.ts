@@ -9,7 +9,7 @@ import * as fs from 'fs';
 export interface Compiler {
   start(): void;
   stop(): void;
-  runOnce(tscArgs: string[]): Promise<boolean>;
+  runOnce(tscArgs: string[], disabledProjects?: string[]): Promise<boolean>;
 }
 
 type TaskFunctionCallback = () => void;
@@ -61,13 +61,15 @@ export let createCompiler = (dependencies: { taskRunner: TaskRunner, logger: Log
   let taskFunctions: TaskFunction[] = [];
 
   return {
-    runOnce: () => {
+    runOnce: (tscArgs, disabledProjects = []) => {
       return new Promise((resolve, reject) => {
         glob('**/tsconfig.json', { ignore: '**/node_modules/**' }, (error: Error | null, tsConfigFiles: string[]) => {
           if (error) {
             reject(error);
           }
-          tsConfigFiles.forEach(file => {
+          tsConfigFiles.filter(file => {
+            return !disabledProjects.includes(file.split('/')[0]);
+          }).forEach(file => {
             let args = ['-p', file];
             let taskFunction = (callback: TaskFunctionCallback) => {
               let task = taskRunner.runTask(`./node_modules/.bin/tsc`, args, {
