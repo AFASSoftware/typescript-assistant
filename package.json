@@ -65,12 +65,12 @@
     }
   },
   "dependencies": {
-    "@types/chai": "4.2.2",
+    "@types/chai": "4.2.3",
     "@types/mocha": "5.2.7",
-    "@types/node": "12.7.4",
+    "@types/node": "12.7.5",
     "async": "3.1.0",
     "chai": "4.2.0",
-    "chokidar": "3.0.2",
+    "chokidar": "3.1.1",
     "glob": "7.1.4",
     "handlebars": "4.2.0",
     "husky": "3.0.5",
@@ -87,7 +87,7 @@
     "tslint-microsoft-contrib": "6.2.0",
     "tslint-sonarts": "1.9.0",
     "tsutils": "3.17.1",
-    "typescript": "3.6.2",
+    "typescript": "3.6.3",
     "typescript-formatter": "7.2.2",
     "ws": "7.1.2",
     "yargs": "14.0.0"
