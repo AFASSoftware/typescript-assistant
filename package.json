@@ -67,13 +67,13 @@
   "dependencies": {
     "@types/chai": "4.2.7",
     "@types/mocha": "5.2.7",
-    "@types/node": "13.1.4",
+    "@types/node": "13.1.6",
     "async": "3.1.0",
     "chai": "4.2.0",
     "chokidar": "3.3.1",
     "glob": "7.1.6",
-    "handlebars": "4.5.3",
-    "husky": "3.1.0",
+    "handlebars": "4.7.1",
+    "husky": "4.0.7",
     "inquirer": "6.5.1",
     "mocha": "7.0.0",
     "nyc": "15.0.0",
@@ -101,7 +101,7 @@
     "@types/sinon": "7.5.1",
     "@types/ws": "6.0.4",
     "@types/yargs": "13.0.4",
-    "sinon": "8.0.3"
+    "sinon": "8.0.4"
   },
   "husky": {
     "hooks": {
