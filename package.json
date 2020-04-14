@@ -13,7 +13,7 @@
     "release": "ts-node --transpile-only src/index.ts release",
     "fix": "ts-node --transpile-only src/index fix",
     "clean": "ts-node --transpile-only src/index clean",
-    "coverage-show": "opn build/coverage/index.html",
+    "coverage-show": "open-cli build/coverage/index.html",
     "tslint": "tslint --project ./src/tsconfig.json ./src/**/*.ts && tslint --project ./tsconfig.json ./test/**/*.ts",
     "ci": "ts-node --transpile-only src/index ci"
   },
@@ -67,18 +67,18 @@
   "dependencies": {
     "@types/chai": "4.2.11",
     "@types/mocha": "7.0.2",
-    "@types/node": "13.9.1",
+    "@types/node": "13.11.1",
     "async": "3.2.0",
     "chai": "4.2.0",
     "chokidar": "3.3.1",
     "glob": "7.1.6",
-    "handlebars": "4.7.3",
-    "husky": "4.2.3",
-    "inquirer": "6.5.1",
-    "mocha": "7.1.0",
-    "nyc": "15.0.0",
-    "open-cli": "5.0.0",
-    "semver": "7.1.3",
+    "handlebars": "4.7.6",
+    "husky": "4.2.5",
+    "inquirer": "7.1.0",
+    "mocha": "7.1.1",
+    "nyc": "15.0.1",
+    "open-cli": "6.0.1",
+    "semver": "7.3.0",
     "source-map-support": "0.5.16",
     "tree-kill": "1.2.2",
     "ts-node": "7.0.1",
@@ -90,18 +90,18 @@
     "typescript": "3.8.3",
     "typescript-formatter": "7.2.2",
     "ws": "7.2.3",
-    "yargs": "14.2.0"
+    "yargs": "15.3.1"
   },
   "devDependencies": {
-    "@types/async": "3.0.8",
+    "@types/async": "3.2.0",
     "@types/chokidar": "2.1.3",
     "@types/glob": "7.1.1",
     "@types/inquirer": "6.5.0",
     "@types/semver": "7.1.0",
-    "@types/sinon": "7.5.2",
-    "@types/ws": "7.2.2",
+    "@types/sinon": "9.0.0",
+    "@types/ws": "7.2.4",
     "@types/yargs": "15.0.4",
-    "sinon": "9.0.1"
+    "sinon": "9.0.2"
   },
   "husky": {
     "hooks": {
