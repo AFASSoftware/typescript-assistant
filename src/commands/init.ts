@@ -8,7 +8,7 @@ export let createInitCommand = (dependencies: { logger: Logger }) => {
   let addLinesToFile = (filePath: string, linesToAdd: { line: string, ifNotExists: RegExp }[]) => {
     let lines: string[] = [];
     if (fs.existsSync(filePath)) {
-      lines = fs.readFileSync(filePath, { encoding: 'UTF8' }).split('\n');
+      lines = fs.readFileSync(filePath, { encoding: 'utf-8' }).split('\n');
     }
     let count = 0;
     linesToAdd.forEach(lineToAdd => {
@@ -18,13 +18,13 @@ export let createInitCommand = (dependencies: { logger: Logger }) => {
       }
     });
     if (count > 0) {
-      fs.writeFileSync(filePath, lines.join('\n'), { encoding: 'UTF8' });
+      fs.writeFileSync(filePath, lines.join('\n'), { encoding: 'utf-8' });
       log(`Added ${count} instructions to '${filePath}'`);
     }
   };
 
   let addPackageJsonScripts = (scripts: { [index: string]: string }): void => {
-    let packageJson = fs.readFileSync('package.json', { encoding: 'UTF8' });
+    let packageJson = fs.readFileSync('package.json', { encoding: 'utf-8' });
     let data = JSON.parse(packageJson);
     data.scripts = data.scripts || {};
     let count = 0;
@@ -35,23 +35,23 @@ export let createInitCommand = (dependencies: { logger: Logger }) => {
       }
     }
     if (count > 0) {
-      fs.writeFileSync('package.json', JSON.stringify(data, undefined, 2), { encoding: 'UTF8' });
+      fs.writeFileSync('package.json', JSON.stringify(data, undefined, 2), { encoding: 'utf-8' });
       log(`Added ${count} script entries to package.json`);
     }
   };
 
   let addPackageJsonSectionFromTemplate = (sectionName: string, templateData: any): void => {
-    let packageJson = fs.readFileSync('package.json', { encoding: 'UTF8' });
+    let packageJson = fs.readFileSync('package.json', { encoding: 'utf-8' });
     let data = JSON.parse(packageJson);
     if (!data[sectionName]) {
       let template = fs.readFileSync(
         `${__dirname}/../../templates/package-json/${sectionName}.hbs`,
-        { encoding: 'UTF8' }
+        { encoding: 'utf-8' }
       );
       let result = JSON.parse(handlebarsCompile(template)(templateData));
       data[sectionName] = result;
 
-      fs.writeFileSync('package.json', JSON.stringify(data, undefined, 2), { encoding: 'UTF8' });
+      fs.writeFileSync('package.json', JSON.stringify(data, undefined, 2), { encoding: 'utf-8' });
 
       log(`Added section ${sectionName} to package.json`);
     }
@@ -63,10 +63,10 @@ export let createInitCommand = (dependencies: { logger: Logger }) => {
     }
     let template = fs.readFileSync(
       `${__dirname}/../../templates/${filePath.replace(/\//, '-')}.hbs`,
-      { encoding: 'UTF8' }
+      { encoding: 'utf-8' }
     );
     let result = handlebarsCompile(template)(info);
-    fs.writeFileSync(filePath, result, { encoding: 'UTF8' });
+    fs.writeFileSync(filePath, result, { encoding: 'utf-8' });
     log(`Wrote '${filePath}'`);
   };
 

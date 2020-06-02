@@ -64,7 +64,7 @@ process.on('message', (msg: LinterCommand) => {
     }
 
     let linter = new Linter(msg.fix ? fixOptions : options, currentProgram);
-    let contents = readFileSync(fileName, 'utf8');
+    let contents = readFileSync(fileName, 'utf-8');
     try {
       linter.lint(fileName, contents, configuration);
       let results = linter.getResult();

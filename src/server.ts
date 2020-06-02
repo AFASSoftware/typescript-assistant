@@ -10,7 +10,7 @@ export interface Server {
   start(port: number): void;
 }
 
-let indexHtml = fs.readFileSync(`${__dirname}/../public/index.html`, { encoding: 'UTF8' });
+let indexHtml = fs.readFileSync(`${__dirname}/../public/index.html`, { encoding: 'utf-8' });
 
 export let createServer = (deps: { bus: Bus, logger: Logger, linter: Linter, formatter: Formatter }): Server => {
   let { logger, bus, linter, formatter } = deps;
@@ -28,7 +28,7 @@ export let createServer = (deps: { bus: Bus, logger: Logger, linter: Linter, for
       bus.register('report', processReport);
 
       let server = http.createServer((req, res) => {
-        indexHtml = fs.readFileSync(`${__dirname}/../public/index.html`, { encoding: 'UTF8' });
+        indexHtml = fs.readFileSync(`${__dirname}/../public/index.html`, { encoding: 'utf-8' });
 
         res.writeHead(200, { type: 'text/html' });
         res.write(indexHtml);

@@ -9,7 +9,7 @@ export let findChangedFiles = (refA?: string, refB?: string) => {
     refB = '';
   }
 
-  let output = execSync(`git diff --name-only --diff-filter=ACMR ${refA} ${refB}`, { encoding: 'utf8' });
+  let output = execSync(`git diff --name-only --diff-filter=ACMR ${refA} ${refB}`, { encoding: 'utf-8' });
   return output.split('\n').filter(fileName => fileName.length > 0);
 };
 
