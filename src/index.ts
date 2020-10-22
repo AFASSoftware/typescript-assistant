@@ -1,20 +1,20 @@
 #!/usr/bin/env node
 
-import { createFixCommand } from './commands/fix';
-import { createCleanCommand } from './commands/clean';
-import { createReleaseCommand } from './commands/release';
-import { createAssistCommand } from './commands/assist';
-import { createPostCheckoutCommand } from './commands/post-checkout';
-import { createPostMergeCommand } from './commands/post-merge';
-import { createPreCommitCommand } from './commands/pre-commit';
-import { createCICommand } from './commands/ci';
+import { gte } from 'semver';
 import * as yargsModule from 'yargs';
-import { createDependencyInjector } from './dependency-injector';
-import { createPrePushCommand, PrePushCommandOptions } from './commands/pre-push';
+import { createAssistCommand } from './commands/assist';
+import { createCICommand } from './commands/ci';
+import { createCleanCommand } from './commands/clean';
+import { createFixCommand } from './commands/fix';
 import { createFixAllCommand } from './commands/fix-all';
 import { createInitCommand } from './commands/init';
 import { createLintCommand } from './commands/lint';
-import { gte } from 'semver';
+import { createPostCheckoutCommand } from './commands/post-checkout';
+import { createPostMergeCommand } from './commands/post-merge';
+import { createPreCommitCommand } from './commands/pre-commit';
+import { createPrePushCommand } from './commands/pre-push';
+import { createReleaseCommand } from './commands/release';
+import { createDependencyInjector } from './dependency-injector';
 
 /* tslint:disable:no-console */
 
@@ -92,9 +92,20 @@ yargsModule.command('init', 'Initialize or repair all features of typescript-ass
   inject(createInitCommand).execute(true);
 });
 
-yargsModule.command('pre-commit', 'Pre-commit git hook for husky', {}, (yargs) => {
-  inject(createPreCommitCommand).execute().then(onSuccess, onFailure);
-});
+yargsModule.command(
+  'pre-commit',
+  'Pre-commit git hook for husky',
+  (yargs) => {
+    return yargs
+      .boolean('format')
+      .default('format', true);
+  },
+  (yargs) => {
+    inject(createPreCommitCommand).execute({
+      format: yargs.format
+    }).then(onSuccess, onFailure);
+  }
+);
 
 yargsModule.command('post-checkout', 'Post-checkout git hook for husky', {}, (yargs) => {
   inject(createPostCheckoutCommand).execute();
@@ -104,11 +115,16 @@ yargsModule.command('post-merge', 'Post-merge git hook for husky', {}, (yargs) =
   inject(createPostMergeCommand).execute();
 });
 
-yargsModule.command('pre-push', 'Pre-push git hook for husky', (yargs) => yargs.array('disable'), (yargs) => {
-  inject(createPrePushCommand).execute({
-    disabledProjects: yargs.disable as string[]
-  }).then(failIfUnsuccessful, onFailure);
-});
+yargsModule.command(
+  'pre-push',
+  'Pre-push git hook for husky',
+  (yargs) => yargs.array('disable'),
+  (yargs) => {
+    inject(createPrePushCommand).execute({
+      disabledProjects: yargs.disable as string[]
+    }).then(failIfUnsuccessful, onFailure);
+  }
+);
 
 yargsModule.strict().argv;
 

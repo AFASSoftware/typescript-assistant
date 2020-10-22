@@ -7,28 +7,36 @@
 
 /* tslint:disable no-null-keyword */
 import * as tsfmt from 'typescript-formatter';
-import { Bus } from '../bus';
-import { Linter } from '../code-style/linter';
-import { Logger } from '../logger';
+import { Dependencies } from '../dependencies';
 import { isTypescriptFile } from '../util';
-import { Git } from '../git';
 
-export interface PostCheckoutDependencies {
-  logger: Logger;
-  bus: Bus;
-  linter: Linter;
-  git: Git;
+export interface PreCommitCommandOptions {
+  format?: boolean;
 }
 
-export let createPreCommitCommand = (deps: PostCheckoutDependencies) => {
+export let createPreCommitCommand = (deps: Dependencies) => {
   let { logger, linter, git } = deps;
   return {
-    execute: async () => {
+    execute: async (options: PreCommitCommandOptions = {}) => {
+      let { format = true } = options;
+
       let files = (await git.findChangedFiles()).filter(isTypescriptFile);
 
       let lintFiles = () => {
         return linter.lintOnce(false, files);
       };
+
+      if (!format) {
+        return lintFiles().then(result => {
+          if (result) {
+            logger.log('hooks', `All ${files.length} files were linted`);
+            process.exit(0);
+          } else {
+            logger.log('hooks', `There were linting errors`);
+            process.exit(1);
+          }
+        });
+      }
 
       return tsfmt.processFiles(files, {
         verify: true, replace: false, verbose: false, baseDir: process.cwd(), editorconfig: true, tslint: true, tsfmt: true, tsconfig: true,
