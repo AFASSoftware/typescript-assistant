@@ -2,6 +2,7 @@ import { Dependencies } from '../dependencies';
 
 export interface CIOptions {
   tests?: boolean;
+  format?: boolean;
 }
 
 export let createCICommand = (deps: Dependencies) => {
@@ -9,13 +10,13 @@ export let createCICommand = (deps: Dependencies) => {
 
   return {
     execute: async (options: CIOptions = {}): Promise<boolean> => {
-      let { tests = true } = options;
+      let { tests = true, format = true } = options;
 
       let timestamp = new Date().getTime();
       let allTypescriptFiles = await git.findAllTypescriptFiles();
       let results = await Promise.all([
         compiler.runOnce([]),
-        formatter.verifyFiles(allTypescriptFiles),
+        format ? formatter.verifyFiles(allTypescriptFiles) : Promise.resolve(true),
         linter.lintOnce(false, allTypescriptFiles),
         tests ? nyc.run() : Promise.resolve(true)
       ]);
