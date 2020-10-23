@@ -98,7 +98,8 @@ yargsModule.command(['ci'], 'Runs all tools in parallel to find errors', {
   }
 }, (yargs) => {
   inject(createCICommand).execute({
-    tests: yargs.tests
+    tests: yargs.tests,
+    format: yargs.format
   }).then(failIfUnsuccessful, onFailure);
 });
 
