@@ -41,20 +41,29 @@ let failIfUnsuccessful = (success: boolean) => {
   }
 };
 
-yargsModule.command(['assist', '*'], 'Watches for file changes and outputs current errors and violations', {
-  port: {
-    describe: 'the port to have the status server listen on'
-  }
-}, (yargs) => {
-  if (yargs._.length === 0 || yargs._.length === 1 && yargs._[0] === 'assist') {
-    inject(createAssistCommand).execute({
-      statusServerPort: parseInt(yargs.port as string, 10) || 0
-    });
-  } else {
-    console.error('Unknown command');
-    process.exit(1);
-  }
-});
+yargsModule.command(
+  ['assist', '*'],
+  'Watches for file changes and outputs current errors and violations',
+  {
+    port: {
+      describe: 'the port to have the status server listen on'
+    },
+    format: {
+      describe: 'check formatting during assist',
+      default: true,
+      boolean: true
+    }
+  }, (yargs) => {
+    if (yargs._.length === 0 || yargs._.length === 1 && yargs._[0] === 'assist') {
+      inject(createAssistCommand).execute({
+        statusServerPort: parseInt(yargs.port as string, 10) || 0,
+        format: yargs.format
+      });
+    } else {
+      console.error('Unknown command');
+      process.exit(1);
+    }
+  });
 
 yargsModule.command(['lint'], 'Lints', {}, yargs => {
   inject(createLintCommand).execute().then(onSuccess, onFailure);
