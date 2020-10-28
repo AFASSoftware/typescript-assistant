@@ -95,7 +95,7 @@ export let createCompiler = (dependencies: { taskRunner: TaskRunner, logger: Log
       const tsConfigFiles = ['./tsconfig.json', './src/tsconfig.json']; // Watching all **/tsconfig.json files has proven to cost too much CPU
       tsConfigFiles.forEach(tsconfigFile => {
         if (fs.existsSync(tsconfigFile)) {
-          let task = taskRunner.runTask('./node_modules/.bin/tsc', ['-p', tsconfigFile, '--watch', '--noEmit'], {
+          let task = taskRunner.runTask('./node_modules/.bin/tsc', ['-p', tsconfigFile, '--watch', '--noEmit', '--preserveWatchOutput'], {
             name: `tsc -p ${tsconfigFile} --watch`,
             logger,
             handleOutput
