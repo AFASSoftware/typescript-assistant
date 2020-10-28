@@ -6,7 +6,7 @@ export interface AssistOptions {
 }
 
 export let createAssistCommand = (deps: Dependencies) => {
-  let { formatter, linter, compiler, nyc, server, watcher, logger } = deps;
+  let { formatter, linter, compiler, nyc, server, watcher } = deps;
 
   return {
     execute: (options: AssistOptions = {}) => {
@@ -18,10 +18,10 @@ export let createAssistCommand = (deps: Dependencies) => {
       }
       if (format) {
         formatter.startVerifying(['source-files-changed']);
+        linter.start('format-verified');
       } else {
-        logger.log('formatter', 'disabled');
+        linter.start('source-files-changed', true);
       }
-      linter.start('format-verified');
       nyc.start(['source-files-changed']);
       compiler.start();
     }

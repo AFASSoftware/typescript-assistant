@@ -1,3 +1,4 @@
+import * as fs from 'fs';
 import { Bus, EventType } from '../bus';
 import { Git } from '../git';
 import { Logger } from '../logger';
@@ -6,7 +7,7 @@ import { absolutePath, isTypescriptFile } from '../util';
 import { ChildProcess, fork } from 'child_process';
 
 export interface Linter {
-  start(trigger: EventType): void;
+  start(trigger: EventType, coldStart?: boolean): void;
   stop(): void;
   lintOnce(fix: boolean, files?: string[]): Promise<boolean>;
 }
@@ -20,6 +21,12 @@ export interface LinterCommand {
 }
 
 export interface LinterResponse {
+  violationSummary?: {
+    message: string;
+    errorCount: number;
+    warningCount: number;
+    fixableCount: number;
+  };
   violation?: {
     fileName: string;
     message: string;
@@ -79,7 +86,8 @@ export let createLinter = (dependencies: { taskRunner: TaskRunner, logger: Logge
   };
 
   let startProcess = () => {
-    lintProcess = fork(`${__dirname}/linter-process`, [], {
+    let modulePath = fs.existsSync(`${process.cwd()}/tslint.json`) ? 'linter-process-tslint' : 'linter-process-eslint';
+    lintProcess = fork(`${__dirname}/${modulePath}`, [], {
       execArgv: process.execArgv.filter(arg => !arg.includes('inspect'))
     });
     lintProcess.on('close', (code: number) => {
@@ -88,6 +96,12 @@ export let createLinter = (dependencies: { taskRunner: TaskRunner, logger: Logge
       }
     });
     lintProcess.on('message', (response: LinterResponse) => {
+      if (response.violationSummary) {
+        let { message, errorCount, warningCount, fixableCount } = response.violationSummary;
+        logger.log('linter', message);
+        errors = errorCount + warningCount;
+        fixable = fixableCount;
+      }
       if (response.violation) {
         let { fileName, line, column, message, hasFix } = response.violation;
         errors++;
@@ -121,9 +135,12 @@ export let createLinter = (dependencies: { taskRunner: TaskRunner, logger: Logge
   let lintCallback = () => lint();
 
   return {
-    start: (trigger: EventType) => {
+    start: (trigger: EventType, coldStart = false) => {
       startProcess();
       bus.register(trigger, lintCallback);
+      if (coldStart) {
+        lintCallback();
+      }
     },
     stop: () => {
       bus.unregister(lintCallback);
