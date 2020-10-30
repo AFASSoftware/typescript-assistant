@@ -28,7 +28,7 @@ process.on('message', (msg: LinterCommand) => {
   }).then(success => {
     process.send?.(<LinterResponse>{ finished: { success } });
   }).catch(err => {
-    // tslint:disable-next-line:no-console
+    // eslint-disable-next-line no-console
     console.error(err);
   });
 });

@@ -3,7 +3,7 @@ export interface Logger {
   error(category: string, message: string): void;
 }
 
-/* tslint:disable:no-console */
+/* eslint-disable no-console */
 export let createConsoleLogger = (): Logger => {
   let currentCategory: string;
   let setCategory = (category: string) => {

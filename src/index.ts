@@ -16,7 +16,7 @@ import { createPrePushCommand } from './commands/pre-push';
 import { createReleaseCommand } from './commands/release';
 import { createDependencyInjector } from './dependency-injector';
 
-/* tslint:disable:no-console */
+/* eslint-disable no-console */
 
 if (gte('v7.0.0', process.version)) {
   console.error('Please update your version of Node.');
@@ -25,7 +25,6 @@ if (gte('v7.0.0', process.version)) {
 
 let inject = createDependencyInjector();
 
-/* tslint:disable:no-console */
 let onSuccess = () => {
   process.exit(0);
 };
@@ -142,5 +141,3 @@ yargsModule.command(
 );
 
 yargsModule.strict().argv;
-
-/* tslint:enable:no-console */

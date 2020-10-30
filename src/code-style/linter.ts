@@ -1,10 +1,9 @@
-import * as fs from 'fs';
+import { ChildProcess, fork } from 'child_process';
 import { Bus, EventType } from '../bus';
 import { Git } from '../git';
 import { Logger } from '../logger';
 import { TaskRunner } from '../taskrunner';
 import { absolutePath, isTypescriptFile } from '../util';
-import { ChildProcess, fork } from 'child_process';
 
 export interface Linter {
   start(trigger: EventType, coldStart?: boolean): void;
@@ -86,8 +85,7 @@ export let createLinter = (dependencies: { taskRunner: TaskRunner, logger: Logge
   };
 
   let startProcess = () => {
-    let modulePath = fs.existsSync(`${process.cwd()}/tslint.json`) ? 'linter-process-tslint' : 'linter-process-eslint';
-    lintProcess = fork(`${__dirname}/${modulePath}`, [], {
+    lintProcess = fork(`${__dirname}/linter-process-eslint`, [], {
       execArgv: process.execArgv.filter(arg => !arg.includes('inspect'))
     });
     lintProcess.on('close', (code: number) => {

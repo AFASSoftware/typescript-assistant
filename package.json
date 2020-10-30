@@ -67,9 +67,12 @@
   "dependencies": {
     "@types/chai": "4.2.14",
     "@types/mocha": "8.0.3",
+    "@typescript-eslint/eslint-plugin": "4.6.0",
+    "@typescript-eslint/parser": "4.6.0",
     "async": "3.2.0",
     "chai": "4.2.0",
     "chokidar": "3.4.3",
+    "eslint": "7.12.1",
     "glob": "7.1.6",
     "handlebars": "4.7.6",
     "husky": "4.3.0",
@@ -105,14 +108,8 @@
     "hooks": {
       "post-checkout": "ts-node --transpile-only src/index post-checkout || exit 0",
       "post-merge": "ts-node --transpile-only src/index post-merge || exit 0",
-      "pre-commit": "ts-node --transpile-only src/index pre-commit",
+      "pre-commit": "ts-node --transpile-only src/index pre-commit --no-format",
       "pre-push": "ts-node --transpile-only src/index pre-push"
     }
-  },
-  "optionalDependencies": {
-    "eslint": "^7.12.1",
-    "tslint": "^6.1.3",
-    "tslint-microsoft-contrib": "^6.2.0",
-    "tslint-sonarts": "^1.9.0"
   }
 }

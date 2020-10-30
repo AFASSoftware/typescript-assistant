@@ -36,6 +36,7 @@ export let createDependencyInjector = (): <T>(createFunction: (dependencies: Par
   Object.defineProperty(dependencies, 'server', {
     get: () => {
       if (!server) {
+        // eslint-disable-next-line @typescript-eslint/no-var-requires
         server = inject(require('./server').createServer);
       }
       return server;
