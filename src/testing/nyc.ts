@@ -107,17 +107,17 @@ export let createNyc = (dependencies: { taskRunner: TaskRunner, logger: Logger, 
     });
   };
 
-  let callback: any;
+  let callback: (() => Promise<boolean>) | undefined;
 
   return {
     run: (withCoverage?: boolean) => startNyc(withCoverage).catch(() => false),
     start: (triggers: EventType[], withCoverage) => {
       callback = () => startNyc(withCoverage);
       bus.registerAll(triggers, callback);
-      startNyc().catch(() => false);
+      callback().catch(() => false);
     },
     stop: () => {
-      bus.unregister(callback);
+      bus.unregister(callback!);
     }
   };
 };

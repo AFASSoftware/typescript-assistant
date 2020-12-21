@@ -51,12 +51,18 @@ yargsModule.command(
       describe: 'check formatting during assist',
       default: true,
       boolean: true
+    },
+    coverage: {
+      describe: 'run tests with coverage',
+      boolean: true,
+      default: true
     }
   }, (yargs) => {
     if (yargs._.length === 0 || yargs._.length === 1 && yargs._[0] === 'assist') {
       inject(createAssistCommand).execute({
         statusServerPort: parseInt(yargs.port as string, 10) || 0,
-        format: yargs.format
+        format: yargs.format,
+        coverage: yargs.coverage
       });
     } else {
       console.error('Unknown command');
