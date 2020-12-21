@@ -1,7 +1,6 @@
 import { Task, TaskRunner } from '../taskrunner';
 import { Logger } from '../logger';
 import { Bus, EventType } from '../bus';
-import { absolutePath } from '../util';
 import { Git } from '../git';
 
 export interface NYC {
@@ -34,25 +33,19 @@ export let createNyc = (dependencies: { taskRunner: TaskRunner, logger: Logger, 
       bus.report({ tool: 'test', status: 'busy' });
       bus.report({ tool: 'coverage', status: 'busy' });
     }
-    let errorLine = '';
     let lastLineWasNotOk = false;
     let handleOutput = (line: string) => {
       if (task === runningTask) {
-        if (lastLineWasNotOk) {
-          errorLine = line;
-          lastLineWasNotOk = false;
-        }
-        // For extra debug info:
-        // if (!/^ok \d+ (.*)/.exec(line)) { logger.log('nyc', '  [ ' + line); }
         let notOk = /^not ok \d+ (.*)/.exec(line);
-        let contextIt = /^(} )?at Context\.\S+ \(([^)]+)\)/.exec(line);
+        let ok = /^ok \d+ (.*)/.exec(line);
         if (notOk) {
           lastLineWasNotOk = true;
           logger.log('nyc', `FAILED: ${notOk[1]}`);
           hasFailingTest = true;
-        } else if (contextIt) {
-          logger.log('nyc', `${absolutePath(contextIt[2])} ${errorLine}`);
-          errorLine = '';
+        } else if (ok) {
+          lastLineWasNotOk = false;
+        } else if (lastLineWasNotOk) {
+          logger.log('nyc', line);
         }
       }
       return true;
@@ -90,7 +83,7 @@ export let createNyc = (dependencies: { taskRunner: TaskRunner, logger: Logger, 
     return runningTask.result.then(() => {
       if (task === runningTask) {
         runningTask = undefined;
-        logger.log('nyc', 'code coverage OK');
+        logger.log('nyc', withCoverage ? 'code coverage OK' : 'tests ok');
         bus.report({ tool: 'test', status: 'ready', errors: 0 });
         bus.report({ tool: 'coverage', status: 'ready', errors: 0 });
       }
