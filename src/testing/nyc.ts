@@ -5,9 +5,9 @@ import { absolutePath } from '../util';
 import { Git } from '../git';
 
 export interface NYC {
-  start(triggers: EventType[]): void;
+  start(triggers: EventType[], withCoverage: boolean): void;
   stop(): void;
-  run(): Promise<boolean>;
+  run(withCoverage?: boolean): Promise<boolean>;
 }
 
 let delay = (ms: number): Promise<void> => new Promise((resolve) => setTimeout(resolve, ms));
@@ -17,7 +17,7 @@ export let createNyc = (dependencies: { taskRunner: TaskRunner, logger: Logger, 
   let runningTask: Task | undefined;
   let coolingDown: Promise<void> | undefined;
 
-  let startNyc = async (): Promise<boolean> => {
+  let startNyc = async (withCoverage?: boolean): Promise<boolean> => {
     let hasFailingTest = false;
     let myCoolingDown = delay(100);
     coolingDown = myCoolingDown;
@@ -63,16 +63,30 @@ export let createNyc = (dependencies: { taskRunner: TaskRunner, logger: Logger, 
       }
       return true;
     };
-    let task = runningTask = taskRunner.runTask(
-      './node_modules/.bin/nyc',
-      ('--check-coverage -- ' +
-        './node_modules/.bin/mocha --require ts-node/register/transpile-only --exit --reporter tap test/**/*-tests.ts*').split(' '),
-      {
-        name: 'nyc',
-        logger,
-        handleOutput,
-        handleError
-      });
+    if (withCoverage === false) {
+      logger.log('nyc', 'running tests without coverage');
+      runningTask = taskRunner.runTask(
+        './node_modules/.bin/mocha',
+        ('--require ts-node/register/transpile-only --exit --reporter tap test/**/*-tests.ts*').split(' '),
+        {
+          name: 'nyc',
+          logger,
+          handleOutput,
+          handleError
+        });
+    } else {
+      runningTask = taskRunner.runTask(
+        './node_modules/.bin/nyc',
+        ('--check-coverage -- ' +
+          './node_modules/.bin/mocha --require ts-node/register/transpile-only --exit --reporter tap test/**/*-tests.ts*').split(' '),
+        {
+          name: 'nyc',
+          logger,
+          handleOutput,
+          handleError
+        });
+    }
+    let task = runningTask;
     return runningTask.result.then(() => {
       if (task === runningTask) {
         runningTask = undefined;
@@ -93,14 +107,17 @@ export let createNyc = (dependencies: { taskRunner: TaskRunner, logger: Logger, 
     });
   };
 
+  let callback: any;
+
   return {
-    run: () => startNyc().catch(() => false),
-    start: (triggers: EventType[]) => {
-      bus.registerAll(triggers, startNyc);
+    run: (withCoverage?: boolean) => startNyc(withCoverage).catch(() => false),
+    start: (triggers: EventType[], withCoverage) => {
+      callback = () => startNyc(withCoverage);
+      bus.registerAll(triggers, callback);
       startNyc().catch(() => false);
     },
     stop: () => {
-      bus.unregister(startNyc);
+      bus.unregister(callback);
     }
   };
 };

@@ -3,6 +3,7 @@ import { Dependencies } from '../dependencies';
 export interface AssistOptions {
   statusServerPort?: number;
   format?: boolean;
+  coverage?: boolean;
 }
 
 export let createAssistCommand = (deps: Dependencies) => {
@@ -10,7 +11,7 @@ export let createAssistCommand = (deps: Dependencies) => {
 
   return {
     execute: (options: AssistOptions = {}) => {
-      const { format = true } = options;
+      const { format = true, coverage = true } = options;
 
       watcher.watchSourceFileChanged();
       if (options.statusServerPort) {
@@ -22,7 +23,7 @@ export let createAssistCommand = (deps: Dependencies) => {
       } else {
         linter.start('source-files-changed', true);
       }
-      nyc.start(['source-files-changed']);
+      nyc.start(['source-files-changed'], coverage);
       compiler.start();
     }
   };

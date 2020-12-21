@@ -3,6 +3,7 @@ import { Dependencies } from '../dependencies';
 export interface CIOptions {
   tests?: boolean;
   format?: boolean;
+  coverage?: boolean;
 }
 
 export let createCICommand = (deps: Dependencies) => {
@@ -10,7 +11,7 @@ export let createCICommand = (deps: Dependencies) => {
 
   return {
     execute: async (options: CIOptions = {}): Promise<boolean> => {
-      let { tests = true, format = true } = options;
+      let { tests = true, format = true, coverage = true } = options;
 
       let timestamp = new Date().getTime();
       let allTypescriptFiles = await git.findAllTypescriptFiles();
@@ -18,7 +19,7 @@ export let createCICommand = (deps: Dependencies) => {
         compiler.runOnce([]),
         format ? formatter.verifyFiles(allTypescriptFiles) : Promise.resolve(true),
         linter.lintOnce(false, allTypescriptFiles),
-        tests ? nyc.run() : Promise.resolve(true)
+        tests ? nyc.run(coverage) : Promise.resolve(true)
       ]);
       let toolErrors = results.filter(result => result === false).length;
       logger.log('ci', `CI tasks took ${Math.round((new Date().getTime() - timestamp) / 1000)} seconds`);

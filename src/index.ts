@@ -94,11 +94,17 @@ yargsModule.command(['ci'], 'Runs all tools in parallel to find errors', {
     describe: 'check formatting during command',
     boolean: true,
     default: true
+  },
+  coverage: {
+    describe: 'run tests with coverage',
+    boolean: true,
+    default: true
   }
 }, (yargs) => {
   inject(createCICommand).execute({
     tests: yargs.tests,
-    format: yargs.format
+    format: yargs.format,
+    coverage: yargs.coverage
   }).then(failIfUnsuccessful, onFailure);
 });
 
