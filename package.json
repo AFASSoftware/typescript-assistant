@@ -88,7 +88,7 @@
     "tsutils": "3.21.0",
     "typescript": "4.2.4",
     "typescript-formatter": "7.2.2",
-    "ws": "7.4.5",
+    "ws": "7.4.6",
     "yargs": "15.4.1"
   },
   "devDependencies": {
