@@ -19,12 +19,24 @@ module.exports = {
   ],
   rules: { // See https://eslint.org/docs/rules/
     // Additional rules:
-    'no-console': 'error',
     'eqeqeq': 'error',
+    'no-console': 'error',
     'no-return-await': 'error',
+    'prefer-template': 'error',
+    '@typescript-eslint/no-shadow': 'error',
+    '@typescript-eslint/no-unused-vars': ['warn', { args: 'none' }],
+
+    // Should be enabled by recommended...
+    'no-unreachable': 'error',
+
+    // Additional config for rules:
+    'quotes': ['warn', 'single', { 'avoidEscape': true }],
+    '@typescript-eslint/explicit-module-boundary-types': ['error', { 'allowArgumentsExplicitlyTypedAsAny': true }],
 
     // Disabled rules:
     'prefer-const': 'off',
+    'no-shadow': 'off', // Replaced with '@typescript-eslint/no-shadow'.
+    'no-unused-vars': 'off', // Replaced with '@typescript-eslint/no-unused-vars'.
     '@typescript-eslint/no-non-null-assertion': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
     '@typescript-eslint/no-unsafe-member-access': 'off',
@@ -33,19 +45,12 @@ module.exports = {
     '@typescript-eslint/ban-ts-comment': 'off',
 
     // Rules to be enabled:
-    'no-prototype-builtins': 'off',
-    'no-useless-escape': 'off',
-    'no-extra-boolean-cast': 'off',
     '@typescript-eslint/ban-types': 'off',
     '@typescript-eslint/no-unsafe-assignment': 'off',
     '@typescript-eslint/no-unsafe-return': 'off',
-    '@typescript-eslint/no-unused-vars': 'off',
-    '@typescript-eslint/no-misused-promises': 'off',
     '@typescript-eslint/no-unsafe-call': 'off',
-    '@typescript-eslint/explicit-module-boundary-types': 'off',
     '@typescript-eslint/restrict-template-expressions': 'off',
     '@typescript-eslint/no-non-null-asserted-optional-chain': 'off',
-    '@typescript-eslint/no-unnecessary-type-assertion': 'off',
 
     // Rules to be discussed:
     'prefer-spread': 'off',

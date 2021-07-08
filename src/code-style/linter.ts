@@ -41,8 +41,8 @@ export interface LinterResponse {
   };
 }
 
-export let createLinter = (dependencies: { taskRunner: TaskRunner, logger: Logger, bus: Bus, git: Git }): Linter => {
-  let { logger, bus, git } = dependencies;
+export function createLinter(dependencies: { taskRunner: TaskRunner, logger: Logger, bus: Bus, git: Git }): Linter {
+  const { logger, bus, git } = dependencies;
 
   let logError = (err: any) => logger.error('linter', `error: ${err}`);
 
@@ -74,7 +74,7 @@ export let createLinter = (dependencies: { taskRunner: TaskRunner, logger: Logge
     lintProcess!.send(command);
   };
 
-  let lint = (files?: string[]) => {
+  function lint(files?: string[]) {
     if (rescheduled) {
       return;
     } else if (running) {
@@ -82,9 +82,9 @@ export let createLinter = (dependencies: { taskRunner: TaskRunner, logger: Logge
     } else {
       startLint(files).catch(logError);
     }
-  };
+  }
 
-  let startProcess = () => {
+  function startProcess() {
     lintProcess = fork(`${__dirname}/linter-process-eslint`, [], {
       execArgv: process.execArgv.filter(arg => !arg.includes('inspect'))
     });
@@ -128,31 +128,31 @@ export let createLinter = (dependencies: { taskRunner: TaskRunner, logger: Logge
         logger.error('linter', response.error.message);
       }
     });
-  };
+  }
 
   let lintCallback = () => lint();
 
   return {
-    start: (trigger: EventType, coldStart = false) => {
+    start(trigger: EventType, coldStart = false) {
       startProcess();
       bus.register(trigger, lintCallback);
       if (coldStart) {
         lintCallback();
       }
     },
-    stop: () => {
+    stop() {
       bus.unregister(lintCallback);
       lintProcess!.kill();
       lintProcess = undefined;
     },
-    lintOnce: (fixOnce: boolean, files?: string[]) => {
+    lintOnce(fixOnce: boolean, files?: string[]) {
       fix = fixOnce;
       let isRunning = lintProcess !== undefined;
       if (!isRunning) {
         startProcess();
       }
       return new Promise((resolve) => {
-        let ready = () => {
+        function ready() {
           bus.unregister(linted);
           bus.unregister(errored);
           fix = false;
@@ -160,19 +160,22 @@ export let createLinter = (dependencies: { taskRunner: TaskRunner, logger: Logge
             lintProcess!.kill();
             lintProcess = undefined;
           }
-        };
-        let linted = () => {
+        }
+
+        function linted() {
           ready();
           resolve(true);
-        };
-        let errored = () => {
+        }
+
+        function errored() {
           ready();
           resolve(false);
-        };
+        }
+
         bus.register('lint-linted', linted);
         bus.register('lint-errored', errored);
         lint(files);
       });
     }
   };
-};
+}

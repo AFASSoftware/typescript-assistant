@@ -1,6 +1,7 @@
 import { Formatter } from '../code-style/formatter';
 import { Linter } from '../code-style/linter';
 import { Git } from '../git';
+import { Command } from './command';
 
 export interface FixAllCommandDependencies {
   formatter: Formatter;
@@ -8,10 +9,11 @@ export interface FixAllCommandDependencies {
   git: Git;
 }
 
-export let createFixAllCommand = (deps: FixAllCommandDependencies) => {
-  let { formatter, linter, git } = deps;
+export function createFixAllCommand(deps: FixAllCommandDependencies): Command<void> {
+  const { formatter, linter, git } = deps;
+
   return {
-    execute: async () => {
+    async execute() {
       let allFiles = (await git.findAllTypescriptFiles());
       let success = await formatter.formatFiles(allFiles);
       if (success) {
@@ -20,4 +22,4 @@ export let createFixAllCommand = (deps: FixAllCommandDependencies) => {
       return success;
     }
   };
-};
+}

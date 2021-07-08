@@ -14,8 +14,8 @@
     "fix": "ts-node --transpile-only src/index fix",
     "clean": "ts-node --transpile-only src/index clean",
     "coverage-show": "open-cli build/coverage/index.html",
-    "tslint": "tslint --project ./src/tsconfig.json ./src/**/*.ts && tslint --project ./tsconfig.json ./test/**/*.ts",
-    "ci": "ts-node --transpile-only src/index ci --no-format"
+    "ci": "ts-node --transpile-only src/index ci --no-format",
+    "lint": "eslint . --ext .ts"
   },
   "author": "johan@johangorter.com",
   "license": "MIT",

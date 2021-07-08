@@ -1,7 +1,8 @@
 import * as fs from 'fs';
 import * as glob from 'glob';
+import { Command } from './command';
 
-let deleteFolderRecursive = (path: string) => {
+function deleteFolderRecursive(path: string) {
   if (fs.existsSync(path)) {
     fs.readdirSync(path).forEach((file, index) => {
       let curPath = `${path}/${file}`;
@@ -13,15 +14,17 @@ let deleteFolderRecursive = (path: string) => {
     });
     fs.rmdirSync(path);
   }
-};
+}
 
-export let createCleanCommand = () => {
+export function createCleanCommand(): Command<void> {
   return {
-    execute: () => {
+    execute() {
       deleteFolderRecursive('./build');
       deleteFolderRecursive('./dist');
       let rogueFiles = glob.sync('{src,test}/**/*.js{,.map}', {});
       rogueFiles.forEach((file) => fs.unlinkSync(file));
+
+      return Promise.resolve(true);
     }
   };
-};
+}

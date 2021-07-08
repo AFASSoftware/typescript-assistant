@@ -1,7 +1,7 @@
 import { execSync, spawn } from 'child_process';
 import { writeFileSync } from 'fs';
 
-export let findChangedFiles = (refA?: string, refB?: string) => {
+export function findChangedFiles(refA?: string, refB?: string): string[] {
   if (refA === undefined) {
     refA = 'HEAD';
   }
@@ -11,9 +11,9 @@ export let findChangedFiles = (refA?: string, refB?: string) => {
 
   let output = execSync(`git diff --name-only --diff-filter=ACMR ${refA} ${refB}`, { encoding: 'utf-8' });
   return output.split('\n').filter(fileName => fileName.length > 0);
-};
+}
 
-export let npmInstall = () => {
+export function npmInstall(): void {
   let scriptPath = `${process.cwd()}/build/npm-install.js`;
   let currentDir = process.cwd().replace(/\\/g, '\\\\');
 
@@ -51,10 +51,13 @@ if (!tryNpmInstall()) {
 `);
   let install = spawn('node', ['./build/npm-install.js'], { stdio: 'ignore', shell: true, detached: true, cwd: currentDir });
   install.unref();
-};
+}
 
-export let packageJsonChanged = (refA: string, refB: string) => findChangedFiles(refA, refB).filter(f => f.indexOf('package-lock.json') !== -1).length >= 1;
+export function packageJsonChanged(refA: string, refB: string): boolean {
+  return findChangedFiles(refA, refB)
+    .filter(f => f.indexOf('package-lock.json') !== -1).length >= 1;
+}
 
-export let filterTsFiles = (files: string[]) => {
+export function filterTsFiles(files: string[]): string[] {
   return files.filter(f => f.slice(-3) === '.ts' && f.slice(-5) !== '.d.ts');
-};
+}

@@ -1,14 +1,15 @@
 import { Dependencies } from '../dependencies';
+import { Command } from './command';
 
 export interface PrePushCommandOptions {
   disabledProjects?: string[];
 }
 
-export let createPrePushCommand = (deps: Dependencies) => {
-  let { compiler, nyc, git, logger } = deps;
+export function createPrePushCommand(deps: Dependencies): Command<PrePushCommandOptions> {
+  const { compiler, nyc, git, logger } = deps;
 
   return {
-    execute: async (options: PrePushCommandOptions = {}): Promise<boolean> => {
+    async execute(options: PrePushCommandOptions = {}): Promise<boolean> {
       let timestamp = new Date().getTime();
       let pristine = await git.isPristine();
       if (!pristine) {
@@ -26,4 +27,4 @@ export let createPrePushCommand = (deps: Dependencies) => {
       return toolErrors === 0;
     }
   };
-};
+}

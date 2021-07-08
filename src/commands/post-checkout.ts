@@ -1,10 +1,12 @@
 import { Logger } from '../logger';
 import { npmInstall, packageJsonChanged } from '../helpers';
+import { Command } from './command';
 
-export let createPostCheckoutCommand = (deps: { logger: Logger }) => {
-  let { logger } = deps;
+export function createPostCheckoutCommand(deps: { logger: Logger }): Command<void> {
+  const { logger } = deps;
+
   return {
-    execute: () => {
+    execute() {
       try {
         logger.log('hooks', 'postcheckout git hook running');
 
@@ -28,6 +30,8 @@ export let createPostCheckoutCommand = (deps: { logger: Logger }) => {
       } catch (error) {
         logger.error('hooks', `post-checkout hook failed, continuing anyway ${error.message}`);
       }
+
+      return Promise.resolve(true);
     }
   };
-};
+}

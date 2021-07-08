@@ -59,7 +59,7 @@ yargsModule.command(
     }
   }, (yargs) => {
     if (yargs._.length === 0 || yargs._.length === 1 && yargs._[0] === 'assist') {
-      inject(createAssistCommand).execute({
+      void inject(createAssistCommand).execute({
         statusServerPort: parseInt(yargs.port as string, 10) || 0,
         format: yargs.format,
         coverage: yargs.coverage
@@ -83,7 +83,7 @@ yargsModule.command(['fixall'], 'Formats all files and applies tslint fixes', {}
 });
 
 yargsModule.command(['clean', 'c'], 'Deletes all output files and intermediate files', {}, (yargs) => {
-  inject(createCleanCommand).execute();
+  void inject(createCleanCommand).execute();
 });
 
 yargsModule.command(['release'], 'Interactively makes a new version number, tags, pushes and publishes to npm', {}, (yargs) => {
@@ -115,7 +115,7 @@ yargsModule.command(['ci'], 'Runs all tools in parallel to find errors', {
 });
 
 yargsModule.command('init', 'Initialize or repair all features of typescript-assistant in your project', {}, (yargs) => {
-  inject(createInitCommand).execute(true);
+  void inject(createInitCommand).execute(true);
 });
 
 yargsModule.command(
@@ -134,11 +134,11 @@ yargsModule.command(
 );
 
 yargsModule.command('post-checkout', 'Post-checkout git hook for husky', {}, (yargs) => {
-  inject(createPostCheckoutCommand).execute();
+  void inject(createPostCheckoutCommand).execute();
 });
 
 yargsModule.command('post-merge', 'Post-merge git hook for husky', {}, (yargs) => {
-  inject(createPostMergeCommand).execute();
+  void inject(createPostMergeCommand).execute();
 });
 
 yargsModule.command(

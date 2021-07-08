@@ -2,12 +2,13 @@ import { Answers, prompt } from 'inquirer';
 import { sep } from 'path';
 import { Dependencies } from '../dependencies';
 import { execSync } from 'child_process';
+import { Command } from './command';
 
-export let createReleaseCommand = (deps: Dependencies) => {
-  let { git, taskRunner, logger } = deps;
+export function createReleaseCommand(deps: Dependencies): Command<void> {
+  const { git, taskRunner, logger } = deps;
 
   return {
-    execute: async () => {
+    async execute() {
       let pristine = await git.isPristine();
       if (!pristine) {
         throw new Error('There are uncommitted changes in the working tree');
@@ -22,7 +23,7 @@ export let createReleaseCommand = (deps: Dependencies) => {
           message: 'You are not on master, do you want to do a pre-release?'
         });
         if (!answers['confirm']) {
-          return;
+          return true;
         }
         await taskRunner.runTask(npm, ['version', 'prerelease'], { name: 'npm', logger }).result;
       } else {
@@ -46,6 +47,8 @@ export let createReleaseCommand = (deps: Dependencies) => {
 
       // Using execSync to allow user interaction to do 2 factor authentication
       execSync([npm, ...publishArguments].join(' '), { stdio: [0, 1, 2] });
+
+      return true;
     }
   };
-};
+}

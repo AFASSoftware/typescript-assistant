@@ -9,15 +9,17 @@
 import * as tsfmt from 'typescript-formatter';
 import { Dependencies } from '../dependencies';
 import { isTypescriptFile } from '../util';
+import { Command } from './command';
 
 export interface PreCommitCommandOptions {
   format?: boolean;
 }
 
-export let createPreCommitCommand = (deps: Dependencies) => {
-  let { logger, linter, git } = deps;
+export function createPreCommitCommand(deps: Dependencies): Command<PreCommitCommandOptions> {
+  const { logger, linter, git } = deps;
+
   return {
-    execute: async (options: PreCommitCommandOptions = {}) => {
+    async execute(options: PreCommitCommandOptions = {}) {
       let { format = true } = options;
 
       let files = (await git.findChangedFiles()).filter(isTypescriptFile);
@@ -32,7 +34,7 @@ export let createPreCommitCommand = (deps: Dependencies) => {
             logger.log('hooks', `All ${files.length} files were linted`);
             process.exit(0);
           } else {
-            logger.log('hooks', `There were linting errors`);
+            logger.log('hooks', 'There were linting errors');
             process.exit(1);
           }
         });
@@ -55,7 +57,7 @@ export let createPreCommitCommand = (deps: Dependencies) => {
             logger.log('hooks', `All ${files.length} files were linted`);
             process.exit(0);
           } else {
-            logger.log('hooks', `There were linting errors`);
+            logger.log('hooks', 'There were linting errors');
             process.exit(1);
           }
         } else {
@@ -68,5 +70,4 @@ export let createPreCommitCommand = (deps: Dependencies) => {
       });
     }
   };
-};
-
+}

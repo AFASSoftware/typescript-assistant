@@ -2,13 +2,15 @@
 
 import { npmInstall, packageJsonChanged } from '../helpers';
 import { Logger } from '../logger';
+import { Command } from './command';
 
 /* tslint:disable:no-console */
 
-export let createPostMergeCommand = (deps: { logger: Logger }) => {
-  let { logger } = deps;
+export function createPostMergeCommand(deps: { logger: Logger }): Command<void> {
+  const { logger } = deps;
+
   return {
-    execute: () => {
+    execute() {
       logger.log('hooks', 'postmerge git hook running');
 
       try {
@@ -21,6 +23,8 @@ export let createPostMergeCommand = (deps: { logger: Logger }) => {
       } catch (error) {
         logger.error('hooks', `post-merge hook failed, continuing anyway ${error.message}`);
       }
+
+      return Promise.resolve(true);
     }
   };
-};
+}

@@ -1,11 +1,12 @@
 import * as fs from 'fs';
 import { Logger } from '../logger';
 import { compile as handlebarsCompile } from 'handlebars';
+import { Command } from './command';
 
-export let createInitCommand = (dependencies: { logger: Logger }) => {
-  let log = (msg: string) => dependencies.logger.log('init', msg);
+export function createInitCommand(dependencies: { logger: Logger }): Command<boolean> {
+  function log(msg: string) { return dependencies.logger.log('init', msg); }
 
-  let addLinesToFile = (filePath: string, linesToAdd: { line: string, ifNotExists: RegExp }[]) => {
+  function addLinesToFile(filePath: string, linesToAdd: { line: string, ifNotExists: RegExp }[]) {
     let lines: string[] = [];
     if (fs.existsSync(filePath)) {
       lines = fs.readFileSync(filePath, { encoding: 'utf-8' }).split('\n');
@@ -21,9 +22,9 @@ export let createInitCommand = (dependencies: { logger: Logger }) => {
       fs.writeFileSync(filePath, lines.join('\n'), { encoding: 'utf-8' });
       log(`Added ${count} instructions to '${filePath}'`);
     }
-  };
+  }
 
-  let addPackageJsonScripts = (scripts: { [index: string]: string }): void => {
+  function addPackageJsonScripts(scripts: { [index: string]: string }): void {
     let packageJson = fs.readFileSync('package.json', { encoding: 'utf-8' });
     let data = JSON.parse(packageJson);
     data.scripts = data.scripts || {};
@@ -38,9 +39,9 @@ export let createInitCommand = (dependencies: { logger: Logger }) => {
       fs.writeFileSync('package.json', JSON.stringify(data, undefined, 2), { encoding: 'utf-8' });
       log(`Added ${count} script entries to package.json`);
     }
-  };
+  }
 
-  let addPackageJsonSectionFromTemplate = (sectionName: string, templateData: any): void => {
+  function addPackageJsonSectionFromTemplate(sectionName: string, templateData: any): void {
     let packageJson = fs.readFileSync('package.json', { encoding: 'utf-8' });
     let data = JSON.parse(packageJson);
     if (!data[sectionName]) {
@@ -55,9 +56,9 @@ export let createInitCommand = (dependencies: { logger: Logger }) => {
 
       log(`Added section ${sectionName} to package.json`);
     }
-  };
+  }
 
-  let writeFromTemplateIfNotExists = (filePath: string, info: any) => {
+  function writeFromTemplateIfNotExists(filePath: string, info: any) {
     if (fs.existsSync(filePath)) {
       return;
     }
@@ -68,10 +69,10 @@ export let createInitCommand = (dependencies: { logger: Logger }) => {
     let result = handlebarsCompile(template)(info);
     fs.writeFileSync(filePath, result, { encoding: 'utf-8' });
     log(`Wrote '${filePath}'`);
-  };
+  }
 
   return {
-    execute: (library: boolean) => {
+    execute(library: boolean) {
       addLinesToFile('.gitignore', [
         { line: '/build', ifNotExists: /\/?build/ },
         { line: '/dest', ifNotExists: /\/?dest/ },
@@ -106,12 +107,14 @@ insert_final_newline = true`,
       writeFromTemplateIfNotExists('package.json', templateData);
 
       if (library) {
-        addLinesToFile('.npmignore', [{
-          line: `/**/*
+        addLinesToFile('.npmignore', [
+          {
+            line: `/**/*
 !/dist/**/*
 !/README.md`,
-          ifNotExists: /.*dist.*/
-        }]);
+            ifNotExists: /.*dist.*/
+          }
+        ]);
       }
 
       addPackageJsonScripts({
@@ -151,6 +154,8 @@ insert_final_newline = true`,
       writeFromTemplateIfNotExists('tslint.json', templateData);
 
       writeFromTemplateIfNotExists('tslint.editor.json', templateData);
+
+      return Promise.resolve(true);
     }
   };
-};
+}

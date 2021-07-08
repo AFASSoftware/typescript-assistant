@@ -9,9 +9,11 @@ export interface NYC {
   run(withCoverage?: boolean): Promise<boolean>;
 }
 
-let delay = (ms: number): Promise<void> => new Promise((resolve) => setTimeout(resolve, ms));
+function delay(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
 
-export let createNyc = (dependencies: { taskRunner: TaskRunner, logger: Logger, bus: Bus, git: Git }): NYC => {
+export function createNyc(dependencies: { taskRunner: TaskRunner, logger: Logger, bus: Bus, git: Git }): NYC {
   let { taskRunner, logger, bus, git } = dependencies;
   let runningTask: Task | undefined;
   let coolingDown: Promise<void> | undefined;
@@ -103,14 +105,14 @@ export let createNyc = (dependencies: { taskRunner: TaskRunner, logger: Logger, 
   let callback: (() => Promise<boolean>) | undefined;
 
   return {
-    run: (withCoverage?: boolean) => startNyc(withCoverage).catch(() => false),
-    start: (triggers: EventType[], withCoverage) => {
+    run(withCoverage?: boolean) { return startNyc(withCoverage).catch(() => false); },
+    start(triggers: EventType[], withCoverage) {
       callback = () => startNyc(withCoverage);
-      bus.registerAll(triggers, callback);
+      bus.registerAll(triggers, callback as () => void);
       callback().catch(() => false);
     },
-    stop: () => {
-      bus.unregister(callback!);
+    stop() {
+      bus.unregister(callback as () => void);
     }
   };
-};
+}

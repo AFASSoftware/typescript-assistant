@@ -1,4 +1,5 @@
 import { Dependencies } from '../dependencies';
+import { Command } from './command';
 
 export interface CIOptions {
   tests?: boolean;
@@ -6,11 +7,11 @@ export interface CIOptions {
   coverage?: boolean;
 }
 
-export let createCICommand = (deps: Dependencies) => {
-  let { formatter, linter, compiler, nyc, git, logger } = deps;
+export function createCICommand(deps: Dependencies): Command<CIOptions> {
+  const { formatter, linter, compiler, nyc, git, logger } = deps;
 
   return {
-    execute: async (options: CIOptions = {}): Promise<boolean> => {
+    async execute(options: CIOptions = {}): Promise<boolean> {
       let { tests = true, format = true, coverage = true } = options;
 
       let timestamp = new Date().getTime();
@@ -30,4 +31,4 @@ export let createCICommand = (deps: Dependencies) => {
       return true;
     }
   };
-};
+}

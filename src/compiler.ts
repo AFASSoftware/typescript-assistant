@@ -17,8 +17,8 @@ type TaskFunction = (callback: TaskFunctionCallback) => void;
 
 let runningTasks: Task[] = [];
 
-export let createCompiler = (dependencies: { taskRunner: TaskRunner, logger: Logger, bus: Bus }): Compiler => {
-  let { taskRunner, logger, bus } = dependencies;
+export function createCompiler(dependencies: { taskRunner: TaskRunner, logger: Logger, bus: Bus }): Compiler {
+  const { taskRunner, logger, bus } = dependencies;
 
   let busyCompilers = 0;
   let errors: string[] = [];
@@ -72,7 +72,7 @@ export let createCompiler = (dependencies: { taskRunner: TaskRunner, logger: Log
           }).forEach(file => {
             let args = ['-p', file];
             let taskFunction = (callback: TaskFunctionCallback) => {
-              let task = taskRunner.runTask(`./node_modules/.bin/tsc`, args, {
+              let task = taskRunner.runTask('./node_modules/.bin/tsc', args, {
                 name: `tsc -p ${file}`,
                 logger,
                 handleOutput
@@ -116,4 +116,4 @@ export let createCompiler = (dependencies: { taskRunner: TaskRunner, logger: Log
       runningTasks = [];
     }
   };
-};
+}

@@ -1,4 +1,5 @@
 import { Dependencies } from '../dependencies';
+import { Command } from './command';
 
 export interface AssistOptions {
   statusServerPort?: number;
@@ -6,11 +7,11 @@ export interface AssistOptions {
   coverage?: boolean;
 }
 
-export let createAssistCommand = (deps: Dependencies) => {
-  let { formatter, linter, compiler, nyc, server, watcher } = deps;
+export function createAssistCommand(deps: Dependencies): Command<AssistOptions> {
+  const { formatter, linter, compiler, nyc, server, watcher } = deps;
 
   return {
-    execute: (options: AssistOptions = {}) => {
+    execute(options: AssistOptions = {}) {
       const { format = true, coverage = true } = options;
 
       watcher.watchSourceFileChanged();
@@ -25,6 +26,8 @@ export let createAssistCommand = (deps: Dependencies) => {
       }
       nyc.start(['source-files-changed'], coverage);
       compiler.start();
+
+      return Promise.resolve(true);
     }
   };
-};
+}

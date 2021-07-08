@@ -1,10 +1,11 @@
 import { Dependencies } from '../dependencies';
+import { Command } from './command';
 
-export let createLintCommand = (deps: Dependencies) => {
-  let { linter, git, logger } = deps;
+export function createLintCommand(deps: Dependencies): Command<void> {
+  const { linter, git, logger } = deps;
 
   return {
-    execute: async (): Promise<boolean> => {
+    async execute(): Promise<boolean> {
       let timestamp = new Date().getTime();
       let allTypescriptFiles = await git.findAllTypescriptFiles();
       let results = await Promise.all([
@@ -19,4 +20,4 @@ export let createLintCommand = (deps: Dependencies) => {
       return true;
     }
   };
-};
+}

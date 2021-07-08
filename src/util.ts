@@ -1,9 +1,9 @@
 import { resolve } from 'path';
 
-export let absolutePath = (path: string) => {
+export function absolutePath(path: string): string {
   return resolve(process.cwd(), path);
-};
+}
 
-export let isTypescriptFile = (fileName: string) => {
+export function isTypescriptFile(fileName: string): boolean {
   return fileName.substr(fileName.length - 3) === '.ts';
-};
+}
