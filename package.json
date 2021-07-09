@@ -7,6 +7,7 @@
     "tsa": "./dist/index.js"
   },
   "scripts": {
+    "prepare": "npm run fix:hooks",
     "prepublishOnly": "tsc -p ./src/tsconfig.json",
     "assist": "ts-node --transpile-only src/index.ts",
     "prerelease": "ts-node --transpile-only src/index ci --no-format",
@@ -16,7 +17,8 @@
     "clean": "ts-node --transpile-only src/index clean",
     "coverage-show": "open-cli build/coverage/index.html",
     "ci": "ts-node --transpile-only src/index ci --no-format",
-    "lint": "eslint . --ext .ts"
+    "lint": "eslint . --ext .ts",
+    "fix:hooks": "node ./node_modules/husky/husky.js install"
   },
   "author": "johan@johangorter.com",
   "license": "MIT",
