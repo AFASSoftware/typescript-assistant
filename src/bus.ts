@@ -1,19 +1,19 @@
 export type EventType =
-  'compile-started' |
-  'compile-compiled' |
-  'compile-errored' |
-  'lint-linted' |
-  'lint-errored' |
-  'format-verified' |
-  'format-errored' |
-  'source-files-changed' |
-  'report';
+  | "compile-started"
+  | "compile-compiled"
+  | "compile-errored"
+  | "lint-linted"
+  | "lint-errored"
+  | "format-verified"
+  | "format-errored"
+  | "source-files-changed"
+  | "report";
 
 export type Callback = (info?: Report) => void;
 
 export interface Report {
-  tool: 'format' | 'lint' | 'test' | 'coverage' | 'compiler';
-  status: 'ready' | 'busy';
+  tool: "format" | "lint" | "test" | "coverage" | "compiler";
+  status: "ready" | "busy";
   errors?: number;
   fixable?: number;
 }
@@ -32,13 +32,13 @@ export let createBus = (): Bus => {
     signal: (eventType) => {
       let subscribers = allSubscribers[eventType];
       if (subscribers) {
-        subscribers.forEach(s => s());
+        subscribers.forEach((s) => s());
       }
     },
     report: (report: Report) => {
-      let subscribers = allSubscribers['report'];
+      let subscribers = allSubscribers["report"];
       if (subscribers) {
-        subscribers.forEach(s => s(report));
+        subscribers.forEach((s) => s(report));
       }
     },
     register: (type, callback) => {
@@ -49,17 +49,17 @@ export let createBus = (): Bus => {
       subscribers.push(callback);
     },
     registerAll: (types: EventType[], callback) => {
-      types.forEach(type => bus.register(type, callback));
+      types.forEach((type) => bus.register(type, callback));
     },
     unregister: (callback) => {
-      Object.keys(allSubscribers).forEach(eventType => {
+      Object.keys(allSubscribers).forEach((eventType) => {
         let subscribers = allSubscribers[eventType];
         let index = subscribers.indexOf(callback);
         if (index >= 0) {
           subscribers.splice(index, 1);
         }
       });
-    }
+    },
   };
   return bus;
 };

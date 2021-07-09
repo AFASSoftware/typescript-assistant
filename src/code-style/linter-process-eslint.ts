@@ -1,34 +1,50 @@
-import { LinterCommand, LinterResponse } from './linter';
-import { ESLint } from 'eslint';
+import { ESLint } from "eslint";
+
+import { LinterCommand, LinterResponse } from "./linter";
 
 let eslint = new ESLint({});
 
-process.on('message', (msg: LinterCommand) => {
-  eslint.lintFiles(msg.filesToLint).then(async (results) => {
-    let formatter = await eslint.loadFormatter('stylish');
-    let resultText = formatter.format(results);
+process.on("message", (msg: LinterCommand) => {
+  eslint
+    .lintFiles(msg.filesToLint)
+    .then(async (results) => {
+      let formatter = await eslint.loadFormatter("stylish");
+      let resultText = formatter.format(results);
 
-    if (resultText) {
+      if (resultText) {
+        process.send?.(<LinterResponse>{
+          violationSummary: {
+            message: resultText,
+            errorCount: results.reduce(
+              (count, err) => count + err.errorCount,
+              0
+            ),
+            warningCount: results.reduce(
+              (count, err) => count + err.warningCount,
+              0
+            ),
+            fixableCount: results.reduce(
+              (count, err) =>
+                count + err.fixableErrorCount + err.fixableWarningCount,
+              0
+            ),
+          },
+        });
+        return false;
+      }
+      return true;
+    })
+    .catch((err) => {
       process.send?.(<LinterResponse>{
-        violationSummary: {
-          message: resultText,
-          errorCount: results.reduce((count, err) => count + err.errorCount, 0),
-          warningCount: results.reduce((count, err) => count + err.warningCount, 0),
-          fixableCount: results.reduce((count, err) => count + err.fixableErrorCount + err.fixableWarningCount, 0)
-        }
+        error: { message: err.message },
       });
       return false;
-    }
-    return true;
-  }).catch(err => {
-    process.send?.(<LinterResponse>{
-      error: { message: err.message }
+    })
+    .then((success) => {
+      process.send?.(<LinterResponse>{ finished: { success } });
+    })
+    .catch((err) => {
+      // eslint-disable-next-line no-console
+      console.error(err);
     });
-    return false;
-  }).then(success => {
-    process.send?.(<LinterResponse>{ finished: { success } });
-  }).catch(err => {
-    // eslint-disable-next-line no-console
-    console.error(err);
-  });
 });

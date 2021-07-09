@@ -20,7 +20,7 @@ export let createConsoleLogger = (): Logger => {
     error: (category, message) => {
       setCategory(category);
       console.error(`! ${message}`);
-    }
+    },
   };
 };
 /* tslint:enable:no-console */

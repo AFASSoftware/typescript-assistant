@@ -1,9 +1,10 @@
-import { ChildProcess, fork } from 'child_process';
-import { Bus, EventType } from '../bus';
-import { Git } from '../git';
-import { Logger } from '../logger';
-import { TaskRunner } from '../taskrunner';
-import { absolutePath, isTypescriptFile } from '../util';
+import { ChildProcess, fork } from "child_process";
+
+import { Bus, EventType } from "../bus";
+import { Git } from "../git";
+import { Logger } from "../logger";
+import { TaskRunner } from "../taskrunner";
+import { absolutePath, isTypescriptFile } from "../util";
 
 export interface Linter {
   start(trigger: EventType, coldStart?: boolean): void;
@@ -41,10 +42,15 @@ export interface LinterResponse {
   };
 }
 
-export function createLinter(dependencies: { taskRunner: TaskRunner, logger: Logger, bus: Bus, git: Git }): Linter {
+export function createLinter(dependencies: {
+  taskRunner: TaskRunner;
+  logger: Logger;
+  bus: Bus;
+  git: Git;
+}): Linter {
   const { logger, bus, git } = dependencies;
 
-  let logError = (err: any) => logger.error('linter', `error: ${err}`);
+  let logError = (err: any) => logger.error("linter", `error: ${err}`);
 
   let lintProcess: ChildProcess | undefined;
 
@@ -58,18 +64,18 @@ export function createLinter(dependencies: { taskRunner: TaskRunner, logger: Log
     rescheduled = false;
     running = true;
     bus.report({
-      tool: 'lint',
-      status: 'busy'
+      tool: "lint",
+      status: "busy",
     });
     if (!files) {
       files = (await git.findChangedFiles()).filter(isTypescriptFile);
     }
-    logger.log('linter', `Linting ${files.length} files...`);
+    logger.log("linter", `Linting ${files.length} files...`);
     errors = 0;
     fixable = 0;
     let command: LinterCommand = {
       fix: fix,
-      filesToLint: files
+      filesToLint: files,
     };
     lintProcess!.send(command);
   };
@@ -86,17 +92,18 @@ export function createLinter(dependencies: { taskRunner: TaskRunner, logger: Log
 
   function startProcess() {
     lintProcess = fork(`${__dirname}/linter-process-eslint`, [], {
-      execArgv: process.execArgv.filter(arg => !arg.includes('inspect'))
+      execArgv: process.execArgv.filter((arg) => !arg.includes("inspect")),
     });
-    lintProcess.on('close', (code: number) => {
+    lintProcess.on("close", (code: number) => {
       if (code !== 0 && code !== null) {
-        logger.log('linter', `linting process exited with code ${code}`);
+        logger.log("linter", `linting process exited with code ${code}`);
       }
     });
-    lintProcess.on('message', (response: LinterResponse) => {
+    lintProcess.on("message", (response: LinterResponse) => {
       if (response.violationSummary) {
-        let { message, errorCount, warningCount, fixableCount } = response.violationSummary;
-        logger.log('linter', message);
+        let { message, errorCount, warningCount, fixableCount } =
+          response.violationSummary;
+        logger.log("linter", message);
         errors = errorCount + warningCount;
         fixable = fixableCount;
       }
@@ -106,26 +113,34 @@ export function createLinter(dependencies: { taskRunner: TaskRunner, logger: Log
         if (hasFix) {
           fixable++;
         }
-        logger.log('linter', `${absolutePath(fileName)}:${line}:${column} ${message}`);
+        logger.log(
+          "linter",
+          `${absolutePath(fileName)}:${line}:${column} ${message}`
+        );
       }
       if (response.finished) {
         running = false;
-        logger.log('linter', response.finished.success
-          ? 'All files are ok'
-          : `${errors} Linting problems found, ${fixable} ${fix ? 'fixed' : 'fixable'}`);
-        bus.signal(response.finished.success ? 'lint-linted' : 'lint-errored');
+        logger.log(
+          "linter",
+          response.finished.success
+            ? "All files are ok"
+            : `${errors} Linting problems found, ${fixable} ${
+                fix ? "fixed" : "fixable"
+              }`
+        );
+        bus.signal(response.finished.success ? "lint-linted" : "lint-errored");
         bus.report({
-          tool: 'lint',
-          status: 'ready',
+          tool: "lint",
+          status: "ready",
           errors: errors,
-          fixable: fixable
+          fixable: fixable,
         });
         if (rescheduled) {
           startLint().catch(logError);
         }
       }
       if (response.error) {
-        logger.error('linter', response.error.message);
+        logger.error("linter", response.error.message);
       }
     });
   }
@@ -172,10 +187,10 @@ export function createLinter(dependencies: { taskRunner: TaskRunner, logger: Log
           resolve(false);
         }
 
-        bus.register('lint-linted', linted);
-        bus.register('lint-errored', errored);
+        bus.register("lint-linted", linted);
+        bus.register("lint-errored", errored);
         lint(files);
       });
-    }
+    },
   };
 }

@@ -12,6 +12,7 @@
     "prerelease": "ts-node --transpile-only src/index ci --no-format",
     "release": "ts-node --transpile-only src/index.ts release",
     "fix": "ts-node --transpile-only src/index fix",
+    "fixall": "ts-node --transpile-only src/index fixall",
     "clean": "ts-node --transpile-only src/index clean",
     "coverage-show": "open-cli build/coverage/index.html",
     "ci": "ts-node --transpile-only src/index ci --no-format",

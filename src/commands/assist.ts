@@ -1,5 +1,5 @@
-import { Dependencies } from '../dependencies';
-import { Command } from './command';
+import { Dependencies } from "../dependencies";
+import { Command } from "./command";
 
 export interface AssistOptions {
   statusServerPort?: number;
@@ -7,7 +7,9 @@ export interface AssistOptions {
   coverage?: boolean;
 }
 
-export function createAssistCommand(deps: Dependencies): Command<AssistOptions> {
+export function createAssistCommand(
+  deps: Dependencies
+): Command<AssistOptions> {
   const { formatter, linter, compiler, nyc, server, watcher } = deps;
 
   return {
@@ -19,15 +21,15 @@ export function createAssistCommand(deps: Dependencies): Command<AssistOptions> 
         server.start(options.statusServerPort);
       }
       if (format) {
-        formatter.startVerifying(['source-files-changed']);
-        linter.start('format-verified');
+        formatter.startVerifying(["source-files-changed"]);
+        linter.start("format-verified");
       } else {
-        linter.start('source-files-changed', true);
+        linter.start("source-files-changed", true);
       }
-      nyc.start(['source-files-changed'], coverage);
+      nyc.start(["source-files-changed"], coverage);
       compiler.start();
 
       return Promise.resolve(true);
-    }
+    },
   };
 }

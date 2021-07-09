@@ -1,5 +1,5 @@
-import { Dependencies } from '../dependencies';
-import { Command } from './command';
+import { Dependencies } from "../dependencies";
+import { Command } from "./command";
 
 export interface CIOptions {
   tests?: boolean;
@@ -18,17 +18,27 @@ export function createCICommand(deps: Dependencies): Command<CIOptions> {
       let allTypescriptFiles = await git.findAllTypescriptFiles();
       let results = await Promise.all([
         compiler.runOnce([]),
-        format ? formatter.verifyFiles(allTypescriptFiles) : Promise.resolve(true),
+        format
+          ? formatter.verifyFiles(allTypescriptFiles)
+          : Promise.resolve(true),
         linter.lintOnce(false, allTypescriptFiles),
-        tests ? nyc.run(coverage) : Promise.resolve(true)
+        tests ? nyc.run(coverage) : Promise.resolve(true),
       ]);
-      let toolErrors = results.filter(result => result === false).length;
-      logger.log('ci', `CI tasks took ${Math.round((new Date().getTime() - timestamp) / 1000)} seconds`);
+      let toolErrors = results.filter((result) => result === false).length;
+      logger.log(
+        "ci",
+        `CI tasks took ${Math.round(
+          (new Date().getTime() - timestamp) / 1000
+        )} seconds`
+      );
       if (toolErrors !== 0) {
-        logger.error('ci', `${toolErrors} tool${toolErrors === 1 ? '' : 's'} reported errors`);
+        logger.error(
+          "ci",
+          `${toolErrors} tool${toolErrors === 1 ? "" : "s"} reported errors`
+        );
         return false;
       }
       return true;
-    }
+    },
   };
 }

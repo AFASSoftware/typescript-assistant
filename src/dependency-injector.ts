@@ -1,24 +1,30 @@
-import { Dependencies } from './dependencies';
-import { createWatcher } from './watcher';
-import { createNyc } from './testing/nyc';
-import { createLinter } from './code-style/linter';
-import { createFormatter } from './code-style/formatter';
-import { createGit } from './git';
-import { createCompiler } from './compiler';
-import { createInjector } from './injector';
-import { createBus } from './bus';
-import { createDefaultTaskRunner, createWindowsTaskRunner } from './taskrunner';
-import { sep } from 'path';
-import { createConsoleLogger } from './logger';
-import { Server } from './server';
+import { sep } from "path";
 
-export let createDependencyInjector = (): <T>(createFunction: (dependencies: Partial<Dependencies>) => T) => T => {
+import { createBus } from "./bus";
+import { createFormatter } from "./code-style/formatter";
+import { createLinter } from "./code-style/linter";
+import { createCompiler } from "./compiler";
+import { Dependencies } from "./dependencies";
+import { createGit } from "./git";
+import { createInjector } from "./injector";
+import { createConsoleLogger } from "./logger";
+import { Server } from "./server";
+import { createDefaultTaskRunner, createWindowsTaskRunner } from "./taskrunner";
+import { createNyc } from "./testing/nyc";
+import { createWatcher } from "./watcher";
+
+export let createDependencyInjector = (): (<T>(
+  createFunction: (dependencies: Partial<Dependencies>) => T
+) => T) => {
   let logger = createConsoleLogger();
-  let taskRunner = sep === '\\' ? createWindowsTaskRunner() : createDefaultTaskRunner();
+  let taskRunner =
+    sep === "\\" ? createWindowsTaskRunner() : createDefaultTaskRunner();
   let bus = createBus();
 
   let dependencies: Partial<Dependencies> = {
-    bus, logger, taskRunner
+    bus,
+    logger,
+    taskRunner,
   };
 
   let { inject } = createInjector(dependencies);
@@ -33,14 +39,14 @@ export let createDependencyInjector = (): <T>(createFunction: (dependencies: Par
 
   // Server is created lazily, because not all of its dependencies may be present
   let server: Server | undefined;
-  Object.defineProperty(dependencies, 'server', {
+  Object.defineProperty(dependencies, "server", {
     get: () => {
       if (!server) {
         // eslint-disable-next-line @typescript-eslint/no-var-requires
-        server = inject(require('./server').createServer);
+        server = inject(require("./server").createServer);
       }
       return server;
-    }
+    },
   });
 
   return dependencies.inject;

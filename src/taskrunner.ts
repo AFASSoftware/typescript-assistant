@@ -1,7 +1,9 @@
-import { spawn } from 'child_process';
-import { Logger } from './logger';
-import { createInterface } from 'readline';
-import * as kill from 'tree-kill';
+import { spawn } from "child_process";
+import { createInterface } from "readline";
+
+import * as kill from "tree-kill";
+
+import { Logger } from "./logger";
 
 export interface Task {
   result: Promise<void>;
@@ -30,11 +32,14 @@ export let createDefaultTaskRunner = (): TaskRunner => {
       let loggerCategory = config.name;
       let logger = config.logger;
 
-      logger.log(loggerCategory, `running command ${command} ${args.join(' ')}`);
+      logger.log(
+        loggerCategory,
+        `running command ${command} ${args.join(" ")}`
+      );
       let task = spawn(command, args);
 
       let stdout = createInterface({ input: task.stdout });
-      stdout.on('line', line => {
+      stdout.on("line", (line) => {
         line = strip(line);
         if (!line) {
           return;
@@ -49,7 +54,7 @@ export let createDefaultTaskRunner = (): TaskRunner => {
       });
 
       let stderr = createInterface({ input: task.stderr });
-      stderr.on('line', line => {
+      stderr.on("line", (line) => {
         line = strip(line);
         if (!line) {
           return;
@@ -64,7 +69,7 @@ export let createDefaultTaskRunner = (): TaskRunner => {
       });
 
       let result = new Promise<void>((resolve, reject) => {
-        task.on('close', (code: number) => {
+        task.on("close", (code: number) => {
           if (code === 0 || code === null) {
             resolve();
           } else {
@@ -77,24 +82,24 @@ export let createDefaultTaskRunner = (): TaskRunner => {
         result,
         kill: () => {
           kill(task.pid);
-        }
+        },
       };
-    }
+    },
   };
 };
 
 export let createWindowsTaskRunner = (): TaskRunner => {
   let delegate = createDefaultTaskRunner();
   let translateToWindows = (command: string) => {
-    if (command.charAt(0) === '.') {
+    if (command.charAt(0) === ".") {
       // we just assume it is something from the ./node_modules/.bin/ folder
-      command += '.cmd';
+      command += ".cmd";
     }
-    return command.replace(/\//g, '\\');
+    return command.replace(/\//g, "\\");
   };
   return {
     runTask: (command: string, args: string[], config: TaskConfig) => {
       return delegate.runTask(translateToWindows(command), args, config);
-    }
+    },
   };
 };
