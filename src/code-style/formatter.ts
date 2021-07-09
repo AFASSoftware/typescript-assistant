@@ -50,7 +50,7 @@ export let createFormatter = (dependencies: {
         }
         return true;
       } else {
-        let result = check(file, options ?? undefined);
+        let result = check(text, options ?? undefined);
         if (!result) {
           logger.log("formatter", `Not formatted ${absolutePath(file)}`);
         }
@@ -108,7 +108,8 @@ export let createFormatter = (dependencies: {
       if (!files) {
         files = (await git.findChangedFiles()).filter(isTypescriptFile);
       }
-      return runFormatterOn(files, true);
+      await runFormatterOn(files, true);
+      return true;
     },
     startVerifying: (triggers: EventType[]) => {
       bus.registerAll(triggers, verifyFormat);
