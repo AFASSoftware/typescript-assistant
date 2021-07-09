@@ -42,7 +42,7 @@ export let createFormatter = (dependencies: {
     async function runFile(file: string): Promise<boolean> {
       let text = await readFile(file, "utf8");
       if (write) {
-        let newText = await format(text, options ?? undefined);
+        let newText = format(text, options ?? undefined);
         if (text !== newText) {
           await writeFile(file, newText);
           logger.log("formatter", `Fixed ${absolutePath(file)}`);
