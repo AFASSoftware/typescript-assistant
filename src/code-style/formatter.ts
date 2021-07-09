@@ -1,42 +1,15 @@
-/* tslint:disable no-null-keyword */
-import { Bus, EventType } from '../bus';
-import { Git } from '../git';
-import { Logger } from '../logger';
-import { absolutePath, isTypescriptFile } from '../util';
+import * as fs from "fs";
+import { promisify } from "util";
 
-import { Options, processFiles, ResultMap } from 'typescript-formatter';
+import { check, format, resolveConfig } from "prettier";
 
-let replaceOptions: Options = {
-  replace: true,
-  verbose: false,
-  baseDir: process.cwd(),
-  editorconfig: true,
-  tslint: true,
-  tsfmt: true,
-  verify: false,
-  tsconfig: false,
-  tsconfigFile: null,
-  tslintFile: null,
-  tsfmtFile: null,
-  vscode: false,
-  vscodeFile: null
-};
+import { Bus, EventType } from "../bus";
+import { Git } from "../git";
+import { Logger } from "../logger";
+import { absolutePath, isTypescriptFile } from "../util";
 
-let verifyOptions: Options = {
-  replace: false,
-  verbose: false,
-  baseDir: process.cwd(),
-  editorconfig: true,
-  tslint: true,
-  tsfmt: true,
-  verify: true,
-  tsconfig: false,
-  tsconfigFile: null,
-  tslintFile: null,
-  tsfmtFile: null,
-  vscode: false,
-  vscodeFile: null
-};
+let readFile = promisify(fs.readFile);
+let writeFile = promisify(fs.writeFile);
 
 export interface Formatter {
   formatFiles(files: string[] | undefined): Promise<boolean>;
@@ -45,35 +18,51 @@ export interface Formatter {
   stopVerifying(): void;
 }
 
-export let createFormatter = (dependencies: { logger: Logger, git: Git, bus: Bus }): Formatter => {
+export let createFormatter = (dependencies: {
+  logger: Logger;
+  git: Git;
+  bus: Bus;
+}): Formatter => {
   let { logger, bus, git } = dependencies;
 
   let runningFormatter: Promise<void> | undefined;
   let rescheduled = false;
 
-  let logError = (err: any) => logger.error('formatter', `error: ${err}`);
+  let logError = (err: any) => logger.error("formatter", `error: ${err}`);
 
-  let runFormatterOn = (files: string[], options: Options): Promise<boolean> => {
-    logger.log('formatter', `checking ${files.length} files...`);
-    return processFiles(files, options).then((resultMap: ResultMap) => {
-      let success = true;
-      Object.keys(resultMap).forEach((fileName: string) => {
-        let result = resultMap[fileName];
-        if (result.error) {
-          success = false;
+  let runFormatterOn = async (
+    files: string[],
+    write: boolean
+  ): Promise<boolean> => {
+    logger.log("formatter", `checking ${files.length} files...`);
+    let options = await resolveConfig(process.cwd());
+    let checks = await Promise.all(files.map(runFile));
+    return !checks.some((c) => !c);
+
+    async function runFile(file: string): Promise<boolean> {
+      let text = await readFile(file, "utf8");
+      if (write) {
+        let newText = await format(text, options ?? undefined);
+        if (text !== newText) {
+          await writeFile(file, newText);
+          logger.log("formatter", `Fixed ${absolutePath(file)}`);
+          return false;
         }
-        if (result.message) {
-          logger.log('formatter', `${options.replace ? 'Fixed ' : ''}${absolutePath(fileName)}: ${result.message}`);
+        return true;
+      } else {
+        let result = check(file, options ?? undefined);
+        if (!result) {
+          logger.log("formatter", `Not formatted ${absolutePath(file)}`);
         }
-      });
-      return success;
-    });
+        return result;
+      }
+    }
   };
 
-  let runFormatter = (options: Options) => {
+  let runFormatter = (write: boolean) => {
     return git.findChangedFiles().then((files: string[]) => {
       files = files.filter(isTypescriptFile);
-      return runFormatterOn(files, options);
+      return runFormatterOn(files, write);
     });
   };
 
@@ -82,37 +71,44 @@ export let createFormatter = (dependencies: { logger: Logger, git: Git, bus: Bus
       rescheduled = true;
     } else {
       bus.report({
-        tool: 'format',
-        status: 'busy'
+        tool: "format",
+        status: "busy",
       });
-      runningFormatter = runFormatter(verifyOptions).then((success) => {
-        logger.log('formatter', success ? 'all files formatted' : 'unformatted files found');
-        bus.signal(success ? 'format-verified' : 'format-errored');
-        bus.report({
-          tool: 'format',
-          status: 'ready',
-          errors: success ? 0 : 1,
-          fixable: success ? 0 : 1
-        });
-      }).catch(logError).then(() => {
-        runningFormatter = undefined;
-        if (rescheduled) {
-          rescheduled = false;
-          verifyFormat();
-        }
-      }).catch(logError);
+      runningFormatter = runFormatter(false)
+        .then((success) => {
+          logger.log(
+            "formatter",
+            success ? "all files formatted" : "unformatted files found"
+          );
+          bus.signal(success ? "format-verified" : "format-errored");
+          bus.report({
+            tool: "format",
+            status: "ready",
+            errors: success ? 0 : 1,
+            fixable: success ? 0 : 1,
+          });
+        })
+        .catch(logError)
+        .then(() => {
+          runningFormatter = undefined;
+          if (rescheduled) {
+            rescheduled = false;
+            verifyFormat();
+          }
+        })
+        .catch(logError);
     }
   };
 
   return {
     verifyFiles: (files) => {
-      return runFormatterOn(files, verifyOptions);
+      return runFormatterOn(files, false);
     },
     formatFiles: async (files) => {
       if (!files) {
         files = (await git.findChangedFiles()).filter(isTypescriptFile);
       }
-      return runFormatterOn(files, replaceOptions);
+      return runFormatterOn(files, true);
     },
     startVerifying: (triggers: EventType[]) => {
       bus.registerAll(triggers, verifyFormat);
@@ -120,6 +116,6 @@ export let createFormatter = (dependencies: { logger: Logger, git: Git, bus: Bus
     },
     stopVerifying: () => {
       bus.unregister(verifyFormat);
-    }
+    },
   };
 };

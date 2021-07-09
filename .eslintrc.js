@@ -5,10 +5,6 @@ module.exports = {
   },
   root: true,
   parser: '@typescript-eslint/parser',
-  parserOptions: {
-    tsconfigRootDir: __dirname,
-    project: './tsconfig.json'
-  },
   plugins: [
     '@typescript-eslint'
   ],
@@ -30,7 +26,7 @@ module.exports = {
     'no-unreachable': 'error',
 
     // Additional config for rules:
-    'quotes': ['warn', 'single', { 'avoidEscape': true }],
+    'quotes': ['warn', 'double', { 'avoidEscape': true }],
     '@typescript-eslint/explicit-module-boundary-types': ['error', { 'allowArgumentsExplicitlyTypedAsAny': true }],
 
     // Disabled rules:

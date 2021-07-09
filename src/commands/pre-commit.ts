@@ -6,17 +6,18 @@
 // - This prevents small formatting/linting fix commits
 
 /* tslint:disable no-null-keyword */
-import * as tsfmt from 'typescript-formatter';
-import { Dependencies } from '../dependencies';
-import { isTypescriptFile } from '../util';
-import { Command } from './command';
+import { Dependencies } from "../dependencies";
+import { isTypescriptFile } from "../util";
+import { Command } from "./command";
 
 export interface PreCommitCommandOptions {
   format?: boolean;
 }
 
-export function createPreCommitCommand(deps: Dependencies): Command<PreCommitCommandOptions> {
-  const { logger, linter, git } = deps;
+export function createPreCommitCommand(
+  deps: Dependencies
+): Command<PreCommitCommandOptions> {
+  const { logger, linter, git, formatter } = deps;
 
   return {
     async execute(options: PreCommitCommandOptions = {}) {
@@ -28,46 +29,27 @@ export function createPreCommitCommand(deps: Dependencies): Command<PreCommitCom
         return linter.lintOnce(false, files);
       };
 
-      if (!format) {
-        return lintFiles().then(result => {
-          if (result) {
-            logger.log('hooks', `All ${files.length} files were linted`);
-            process.exit(0);
-          } else {
-            logger.log('hooks', 'There were linting errors');
-            process.exit(1);
-          }
-        });
-      }
-
-      return tsfmt.processFiles(files, {
-        verify: true, replace: false, verbose: false, baseDir: process.cwd(), editorconfig: true, tslint: true, tsfmt: true, tsconfig: true,
-        tsconfigFile: null, tslintFile: null, tsfmtFile: null, vscode: false, vscodeFile: null
-      }).then(async (resultList: tsfmt.ResultMap) => {
-        let unformattedFiles: string[] = [];
-        Object.keys(resultList).forEach((key) => {
-          let result = resultList[key];
-          if (result.error) {
-            unformattedFiles.push(result.fileName);
-          }
-        });
-        if (unformattedFiles.length === 0) {
-          logger.log('hooks', `All ${files.length} files were formatted`);
-          if (await lintFiles()) {
-            logger.log('hooks', `All ${files.length} files were linted`);
-            process.exit(0);
-          } else {
-            logger.log('hooks', 'There were linting errors');
-            process.exit(1);
-          }
-        } else {
-          logger.error(
-            'hooks',
-            `The following files were not formatted:\r\n  ${unformattedFiles.join('\r\n  ')}\r\nHint: this can be fixed by running 'npm run fix'`
+      if (format) {
+        if (!(await formatter.verifyFiles(files))) {
+          logger.log(
+            "hooks",
+            "Not all files were formatted, Hint: run `npm run fix`"
           );
           process.exit(1);
+        } else {
+          logger.log("hooks", "All files were formatted");
         }
-      });
-    }
+      }
+
+      let result = await lintFiles();
+
+      if (result) {
+        logger.log("hooks", `All ${files.length} files were linted`);
+        process.exit(0);
+      } else {
+        logger.log("hooks", "There were linting errors");
+        process.exit(1);
+      }
+    },
   };
 }
