@@ -84,6 +84,7 @@
     "chokidar": "3.5.2",
     "eslint": "7.30.0",
     "eslint-config-prettier": "8.3.0",
+    "eslint-plugin-unused-imports": "1.1.2",
     "glob": "7.1.7",
     "handlebars": "4.7.7",
     "husky": "4.3.8",

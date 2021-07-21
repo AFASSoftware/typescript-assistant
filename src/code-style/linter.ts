@@ -4,7 +4,7 @@ import { Bus, EventType } from "../bus";
 import { Git } from "../git";
 import { Logger } from "../logger";
 import { TaskRunner } from "../taskrunner";
-import { absolutePath, isTypescriptFile } from "../util";
+import { isTypescriptFile } from "../util";
 
 export interface Linter {
   start(trigger: EventType, coldStart?: boolean): void;
@@ -21,18 +21,12 @@ export interface LinterCommand {
 }
 
 export interface LinterResponse {
-  violationSummary?: {
+  summary?: {
     message: string;
     errorCount: number;
     warningCount: number;
     fixableCount: number;
-  };
-  violation?: {
-    fileName: string;
-    message: string;
-    line: number;
-    column: number;
-    hasFix: boolean;
+    fixCount: number;
   };
   finished?: {
     success: boolean;
@@ -100,23 +94,17 @@ export function createLinter(dependencies: {
       }
     });
     lintProcess.on("message", (response: LinterResponse) => {
-      if (response.violationSummary) {
-        let { message, errorCount, warningCount, fixableCount } =
-          response.violationSummary;
-        logger.log("linter", message);
+      if (response.summary) {
+        let { message, errorCount, warningCount, fixableCount, fixCount } =
+          response.summary;
+        if (fixCount > 0) {
+          logger.log("linter", `Fixed ${fixCount} files`);
+        }
+        if (message) {
+          logger.log("linter", message);
+        }
         errors = errorCount + warningCount;
         fixable = fixableCount;
-      }
-      if (response.violation) {
-        let { fileName, line, column, message, hasFix } = response.violation;
-        errors++;
-        if (hasFix) {
-          fixable++;
-        }
-        logger.log(
-          "linter",
-          `${absolutePath(fileName)}:${line}:${column} ${message}`
-        );
       }
       if (response.finished) {
         running = false;

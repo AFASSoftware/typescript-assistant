@@ -109,6 +109,7 @@ export let createFormatter = (dependencies: {
         files = (await git.findChangedFiles()).filter(isTypescriptFile);
       }
       await runFormatterOn(files, true);
+      logger.log("formatter", "Done");
       return true;
     },
     startVerifying: (triggers: EventType[]) => {
