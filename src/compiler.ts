@@ -76,7 +76,7 @@ export function createCompiler(dependencies: {
   let taskFunctions: TaskFunction[] = [];
 
   return {
-    runOnce: (tscArgs, disabledProjects = []) => {
+    runOnce(tscArgs, disabledProjects = []) {
       return new Promise((resolve, reject) => {
         glob(
           "**/tsconfig.json",
@@ -119,35 +119,24 @@ export function createCompiler(dependencies: {
         );
       });
     },
-    start: () => {
-      const tsConfigFiles = ["./tsconfig.json", "./src/tsconfig.json"]; // Watching all **/tsconfig.json files has proven to cost too much CPU
-      tsConfigFiles.forEach((tsconfigFile) => {
-        if (fs.existsSync(tsconfigFile)) {
-          let task = taskRunner.runTask(
-            "./node_modules/.bin/tsc",
-            [
-              "-p",
-              tsconfigFile,
-              "--watch",
-              "--noEmit",
-              "--preserveWatchOutput",
-            ],
-            {
-              name: `tsc -p ${tsconfigFile} --watch`,
-              logger,
-              handleOutput,
-            }
-          );
-          runningTasks.push(task);
-          busyCompilers++;
-          task.result.catch((err) => {
-            logger.error("compiler", err.message);
-            process.exit(1);
-          });
-        }
+    start() {
+      let tsConfigFiles = ['./tsconfig.json', './src/tsconfig.json']; // Watching all **/tsconfig.json files has proven to cost too much CPU
+      tsConfigFiles = tsConfigFiles.filter(tsconfigFile => fs.existsSync(tsconfigFile)).map(file => file.replace('tsconfig.json', ''));
+
+      let task = taskRunner.runTask('./node_modules/.bin/tsc', ['--build', ...tsConfigFiles, '--watch', '--preserveWatchOutput'], {
+        name: `tsc --build ${tsConfigFiles.join(' ')} --watch`,
+        logger,
+        handleOutput
       });
+      runningTasks.push(task);
+      busyCompilers++;
+      task.result.catch(err => {
+        logger.error('compiler', err.message);
+        process.exit(1);
+      });
+
     },
-    stop: () => {
+    stop() {
       runningTasks.forEach((task) => {
         task.kill();
       });
