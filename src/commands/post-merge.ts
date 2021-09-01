@@ -25,7 +25,7 @@ export function createPostMergeCommand(deps: {
       } catch (error) {
         logger.error(
           "hooks",
-          `post-merge hook failed, continuing anyway ${error.message}`
+          `post-merge hook failed, continuing anyway ${(error as Error).message}`
         );
       }
 

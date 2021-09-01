@@ -32,7 +32,7 @@ export function createPostCheckoutCommand(deps: {
       } catch (error) {
         logger.error(
           "hooks",
-          `post-checkout hook failed, continuing anyway ${error.message}`
+          `post-checkout hook failed, continuing anyway ${(error as Error).message}`
         );
       }
 
