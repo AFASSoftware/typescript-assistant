@@ -2,23 +2,23 @@ import { npmInstall, packageJsonChanged } from "../helpers";
 import { Logger } from "../logger";
 import { Command } from "./command";
 
+export interface PostCheckoutOptions {
+  previousHead: string;
+  newHead: string;
+  isBranch?: boolean;
+}
+
 export function createPostCheckoutCommand(deps: {
   logger: Logger;
-}): Command<void> {
+}): Command<PostCheckoutOptions> {
   const { logger } = deps;
 
   return {
-    execute() {
+    execute(options: PostCheckoutOptions) {
       try {
         logger.log("hooks", "postcheckout git hook running");
 
-        let gitParams = process.env.HUSKY_GIT_PARAMS;
-
-        if (!gitParams) {
-          throw new Error("Expected HUSKY_GIT_PARAMS to be set by husky");
-        }
-
-        let [previousHead] = gitParams.split(" ");
+        let { previousHead } = options;
         if (previousHead === "%1") {
           previousHead = "ORIG_HEAD";
         }
@@ -32,7 +32,9 @@ export function createPostCheckoutCommand(deps: {
       } catch (error) {
         logger.error(
           "hooks",
-          `post-checkout hook failed, continuing anyway ${(error as Error).message}`
+          `post-checkout hook failed, continuing anyway ${
+            (error as Error).message
+          }`
         );
       }
 

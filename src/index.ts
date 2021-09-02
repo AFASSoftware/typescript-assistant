@@ -174,9 +174,29 @@ yargsModule.command(
 yargsModule.command(
   "post-checkout",
   "Post-checkout git hook for husky",
-  {},
+  {
+    previous: {
+      describe: "The previous checkout head",
+      string: true,
+      demandOption: true,
+    },
+    new: {
+      describe: "The new checkout head",
+      string: true,
+      demandOption: true,
+    },
+    branch: {
+      coerce(arg) {
+        return arg === 1;
+      },
+    },
+  },
   (yargs) => {
-    void inject(createPostCheckoutCommand).execute();
+    void inject(createPostCheckoutCommand).execute({
+      previousHead: yargs.previous,
+      newHead: yargs.new,
+      isBranch: yargs.branch,
+    });
   }
 );
 
