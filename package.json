@@ -18,7 +18,7 @@
     "coverage-show": "open-cli build/coverage/index.html",
     "ci": "ts-node --transpile-only src/index ci --no-format",
     "lint": "eslint . --ext .ts",
-    "fix:hooks": "node ./node_modules/husky/husky.js install"
+    "fix:hooks": "husky install"
   },
   "author": "johan@johangorter.com",
   "license": "MIT",
@@ -87,7 +87,7 @@
     "eslint-plugin-unused-imports": "1.1.4",
     "glob": "7.1.7",
     "handlebars": "4.7.7",
-    "husky": "4.3.8",
+    "husky": "7.0.2",
     "import-sort-style-module": "6.0.0",
     "inquirer": "7.3.3",
     "mocha": "9.1.1",
@@ -117,13 +117,5 @@
     "@types/ws": "7.4.7",
     "@types/yargs": "15.0.12",
     "sinon": "11.1.2"
-  },
-  "husky": {
-    "hooks": {
-      "post-checkout": "ts-node --transpile-only src/index post-checkout || exit 0",
-      "post-merge": "ts-node --transpile-only src/index post-merge || exit 0",
-      "pre-commit": "ts-node --transpile-only src/index pre-commit --no-format",
-      "pre-push": "ts-node --transpile-only src/index pre-push"
-    }
   }
 }
