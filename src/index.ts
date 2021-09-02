@@ -19,7 +19,7 @@ import { createDependencyInjector } from "./dependency-injector";
 
 /* eslint-disable no-console */
 
-if (gte("v7.0.0", process.version)) {
+if (gte("v12.0.0", process.version)) {
   console.error("Please update your version of Node.");
   process.exit(1);
 }
