@@ -1,4 +1,5 @@
-import * as childProcess from "child_process";
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+let childProcess = require("child_process");
 
 import { expect } from "chai";
 import { SinonStub, stub } from "sinon";
