@@ -1,7 +1,8 @@
 {
   "extends": "ts-node/node12/tsconfig.json",
   "ts-node": {
-    "transpileOnly": true
+    "transpileOnly": true,
+    "transpiler": "ts-node/transpilers/swc-experimental"
   },
   "compilerOptions": {
     "noImplicitAny": true,
