@@ -1,4 +1,4 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
-npx --no-install ts-node --transpile-only src/index post-checkout --previous=$1 --new=$2 --branch=$3 || exit 0
+npx --no-install ts-node src/index post-checkout --previous=$1 --new=$2 --branch=$3 || exit 0
