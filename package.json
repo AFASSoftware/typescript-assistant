@@ -1,22 +1,25 @@
 {
   "name": "typescript-assistant",
-  "version": "0.53.0",
+  "version": "0.52.0",
   "description": "Combines and integrates professional Typescript tools into your project",
   "main": "dist/index.js",
   "bin": {
     "tsa": "./dist/index.js"
   },
+  "engines": {
+    "node": ">=12"
+  },
   "scripts": {
     "prepare": "npm run fix:hooks",
     "prepublishOnly": "tsc -b ./src/tsconfig.json",
-    "assist": "ts-node --transpile-only src/index.ts",
-    "prerelease": "ts-node --transpile-only src/index ci --no-format",
-    "release": "ts-node --transpile-only src/index.ts release",
-    "fix": "ts-node --transpile-only src/index fix",
-    "fixall": "ts-node --transpile-only src/index fixall",
-    "clean": "ts-node --transpile-only src/index clean",
+    "assist": "ts-node src/index.ts",
+    "prerelease": "ts-node src/index ci --no-format",
+    "release": "ts-node src/index.ts release",
+    "fix": "ts-node src/index fix",
+    "fixall": "ts-node src/index fixall",
+    "clean": "ts-node src/index clean",
     "coverage-show": "open-cli build/coverage/index.html",
-    "ci": "ts-node --transpile-only src/index ci --no-format",
+    "ci": "ts-node src/index ci --no-format",
     "lint": "eslint . --ext .ts",
     "fix:hooks": "husky install"
   },
@@ -98,7 +101,7 @@
     "semver": "7.3.5",
     "source-map-support": "0.5.20",
     "tree-kill": "1.2.2",
-    "ts-node": "7.0.1",
+    "ts-node": "10.2.1",
     "tslib": "2.3.1",
     "tsutils": "3.21.0",
     "typescript": "4.4.3",

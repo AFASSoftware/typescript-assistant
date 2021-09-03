@@ -1,7 +1,7 @@
 import * as fs from "fs";
 
 import { parallelLimit } from "async";
-import * as glob from "glob";
+import { glob } from "glob";
 
 import { Bus } from "./bus";
 import { Logger } from "./logger";

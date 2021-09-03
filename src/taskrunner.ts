@@ -2,7 +2,7 @@ import { spawn } from "child_process";
 import * as path from "path";
 import { createInterface } from "readline";
 
-import * as kill from "tree-kill";
+import treeKill from "tree-kill";
 
 import { Logger } from "./logger";
 
@@ -86,7 +86,7 @@ export let createDefaultTaskRunner = (): TaskRunner => {
       return {
         result,
         kill: () => {
-          kill(task.pid);
+          treeKill(task.pid);
         },
       };
     },
