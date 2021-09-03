@@ -77,6 +77,8 @@
     }
   },
   "dependencies": {
+    "@swc/core": "1.2.84",
+    "@swc/helpers": "0.2.13",
     "@types/chai": "4.2.21",
     "@types/mocha": "9.0.0",
     "@types/prettier": "2.3.2",
