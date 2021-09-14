@@ -8,7 +8,7 @@
   },
   "scripts": {
     "prepare": "npm run fix:hooks",
-    "prepublishOnly": "tsc -p ./src/tsconfig.json",
+    "prepublishOnly": "tsc -b ./src/tsconfig.json",
     "assist": "ts-node --transpile-only src/index.ts",
     "prerelease": "ts-node --transpile-only src/index ci --no-format",
     "release": "ts-node --transpile-only src/index.ts release",
@@ -79,7 +79,6 @@
     "@types/prettier": "2.3.2",
     "@typescript-eslint/eslint-plugin": "4.30.0",
     "@typescript-eslint/parser": "4.30.0",
-    "async": "3.2.1",
     "chai": "4.3.4",
     "chokidar": "3.5.2",
     "eslint": "7.32.0",
