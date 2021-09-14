@@ -1,6 +1,5 @@
 import * as fs from "fs";
 
-import { parallelLimit } from "async";
 import * as glob from "glob";
 
 import { Bus } from "./bus";
@@ -14,9 +13,6 @@ export interface Compiler {
   runOnce(tscArgs: string[], disabledProjects?: string[]): Promise<boolean>;
 }
 
-type TaskFunctionCallback = () => void;
-type TaskFunction = (callback: TaskFunctionCallback) => void;
-
 let runningTasks: Task[] = [];
 
 export function createCompiler(dependencies: {
@@ -29,7 +25,7 @@ export function createCompiler(dependencies: {
   let busyCompilers = 0;
   let errors: string[] = [];
 
-  let handleOutput = (line: string) => {
+  function handleOutput(line: string) {
     if (/Starting incremental compilation...$/.test(line)) {
       if (busyCompilers === 0) {
         bus.report({ tool: "compiler", status: "busy" });
@@ -71,12 +67,10 @@ export function createCompiler(dependencies: {
       }
     }
     return true;
-  };
-
-  let taskFunctions: TaskFunction[] = [];
+  }
 
   return {
-    runOnce: (tscArgs, disabledProjects = []) => {
+    runOnce(tscArgs, disabledProjects = []) {
       return new Promise((resolve, reject) => {
         glob(
           "**/tsconfig.json",
@@ -85,69 +79,62 @@ export function createCompiler(dependencies: {
             if (error) {
               reject(error);
             }
-            tsConfigFiles
-              .filter((file) => {
-                return !disabledProjects.includes(file.split("/")[0]);
+            let files = tsConfigFiles.filter(
+              (file) => !disabledProjects.includes(file.split("/")[0])
+            );
+
+            let task = taskRunner.runTask(
+              "./node_modules/.bin/tsc",
+              ["--build", ...files],
+              {
+                name: `tsc --build ${files.join(" ")}`,
+                logger,
+                handleOutput,
+              }
+            );
+            runningTasks.push(task);
+            busyCompilers++;
+            task.result
+              .then(() => {
+                busyCompilers--;
+                runningTasks.splice(runningTasks.indexOf(task), 1);
               })
-              .forEach((file) => {
-                let args = ["-p", file];
-                let taskFunction = (callback: TaskFunctionCallback) => {
-                  let task = taskRunner.runTask(
-                    "./node_modules/.bin/tsc",
-                    args,
-                    {
-                      name: `tsc -p ${file}`,
-                      logger,
-                      handleOutput,
-                    }
-                  );
-                  runningTasks.push(task);
-                  task.result
-                    .then(() => {
-                      runningTasks.splice(runningTasks.indexOf(task), 1);
-                    })
-                    .then(callback)
-                    .catch(reject);
-                };
-
-                taskFunctions.push(taskFunction);
+              .catch((err) => {
+                logger.error("compiler", err.message);
+                process.exit(1);
               });
-
-            let limit = 2;
-            parallelLimit(taskFunctions, limit, resolve);
           }
         );
       });
     },
-    start: () => {
-      const tsConfigFiles = ["./tsconfig.json", "./src/tsconfig.json"]; // Watching all **/tsconfig.json files has proven to cost too much CPU
-      tsConfigFiles.forEach((tsconfigFile) => {
-        if (fs.existsSync(tsconfigFile)) {
-          let task = taskRunner.runTask(
-            "./node_modules/.bin/tsc",
-            [
-              "-p",
-              tsconfigFile,
-              "--watch",
-              "--noEmit",
-              "--preserveWatchOutput",
-            ],
-            {
-              name: `tsc -p ${tsconfigFile} --watch`,
-              logger,
-              handleOutput,
-            }
-          );
-          runningTasks.push(task);
-          busyCompilers++;
-          task.result.catch((err) => {
-            logger.error("compiler", err.message);
-            process.exit(1);
-          });
+    start() {
+      let tsConfigFiles = ["./tsconfig.json", "./src/tsconfig.json"]; // Watching all **/tsconfig.json files has proven to cost too much CPU
+      tsConfigFiles = tsConfigFiles.filter((tsconfigFile) =>
+        fs.existsSync(tsconfigFile)
+      );
+
+      let task = taskRunner.runTask(
+        "./node_modules/.bin/tsc",
+        ["--build", ...tsConfigFiles, "--watch", "--preserveWatchOutput"],
+        {
+          name: `tsc --build ${tsConfigFiles.join(" ")} --watch`,
+          logger,
+          handleOutput,
         }
-      });
+      );
+      runningTasks.push(task);
+      busyCompilers++;
+      task.result
+        .then(() => {
+          busyCompilers--;
+          runningTasks.splice(runningTasks.indexOf(task), 1);
+        })
+        .catch((err) => {
+          logger.error("compiler", err.message);
+          process.exit(1);
+        });
     },
-    stop: () => {
+    stop() {
       runningTasks.forEach((task) => {
         task.kill();
       });

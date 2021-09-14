@@ -15,15 +15,16 @@ export interface Git {
   isPristine(): Promise<boolean>;
   execute(args: string[]): Promise<string[]>;
   isOnBranch(): Promise<boolean>;
+  getBranchName(): Promise<string>;
 }
 
-export let createGit = (dependencies: {
+export function createGit(dependencies: {
   taskRunner: TaskRunner;
   logger: Logger;
-}): Git => {
-  let { taskRunner, logger } = dependencies;
+}): Git {
+  const { taskRunner, logger } = dependencies;
 
-  let findAllTypescriptFiles = (): Promise<string[]> => {
+  function findAllTypescriptFiles(): Promise<string[]> {
     // Not using this mechanism anymore but a blacklist to allow multiple tsconfig files.
     // let tsConfig = JSON.parse(readFileSync(join(process.cwd(), 'tsconfig.json'), 'UTF-8'));
     // let globs: string[] = tsConfig && tsConfig.include ? tsConfig.include : ['src/**/*.ts', 'test/**/*.ts'];
@@ -44,10 +45,10 @@ export let createGit = (dependencies: {
         }
       });
     });
-  };
+  }
 
   let git: Git = {
-    findChangedFiles: (sinceLastPush) => {
+    findChangedFiles(sinceLastPush) {
       let args = sinceLastPush
         ? ["diff", "--name-only", "--diff-filter=ACMR", "origin/HEAD", "HEAD"]
         : ["diff", "--name-only", "--diff-filter=ACMR", "HEAD"];
@@ -55,14 +56,14 @@ export let createGit = (dependencies: {
         return files;
       });
     },
-    isPristine: () => {
+    isPristine() {
       return git.execute(["status", "--porcelain"]).then((modifiedFiles) => {
         return modifiedFiles.length === 0;
       });
     },
-    findChangedFilesOrAllTypescriptFiles: async (
+    async findChangedFilesOrAllTypescriptFiles(
       sinceLastPush
-    ): Promise<string[]> => {
+    ): Promise<string[]> {
       return git
         .findChangedFiles(sinceLastPush)
         .then((files) =>
@@ -70,21 +71,19 @@ export let createGit = (dependencies: {
         ) // no changed files found => All TS Files
         .catch(findAllTypescriptFiles); // If not inside a git repository
     },
-
     findAllTypescriptFiles,
-
-    isOnBranch: async () => {
+    async isOnBranch() {
+      let currentBranchName = await git.getBranchName();
+      return currentBranchName !== "master";
+    },
+    async getBranchName() {
       let [stdout] = await git.execute(["rev-parse", "--abbrev-ref", "HEAD"]);
       let currentBranchName = stdout.toString().trim();
 
       // When in detached HEAD, assume it's master.
-      if (currentBranchName === "HEAD") {
-        return false;
-      }
-      return currentBranchName !== "master";
+      return currentBranchName === "HEAD" ? "master" : currentBranchName;
     },
-
-    execute: (args: string[]) => {
+    execute(args: string[]) {
       let lines: string[] = [];
       return taskRunner
         .runTask("git", args, {
@@ -101,4 +100,4 @@ export let createGit = (dependencies: {
     },
   };
   return git;
-};
+}

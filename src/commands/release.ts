@@ -27,10 +27,15 @@ export function createReleaseCommand(deps: Dependencies): Command<void> {
         if (!answers["confirm"]) {
           return true;
         }
-        await taskRunner.runTask(npm, ["version", "prerelease"], {
-          name: "npm",
-          logger,
-        }).result;
+        let tag = await git.getBranchName();
+        await taskRunner.runTask(
+          npm,
+          ["version", "prerelease", "--preid", tag],
+          {
+            name: "npm",
+            logger,
+          }
+        ).result;
       } else {
         let answers: Answers = await prompt({
           type: "list",

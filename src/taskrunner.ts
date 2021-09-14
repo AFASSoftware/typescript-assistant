@@ -1,4 +1,5 @@
 import { spawn } from "child_process";
+import * as path from "path";
 import { createInterface } from "readline";
 
 import * as kill from "tree-kill";
@@ -32,9 +33,14 @@ export let createDefaultTaskRunner = (): TaskRunner => {
       let loggerCategory = config.name;
       let logger = config.logger;
 
+      let readableCommand = command.replace(
+        `.${path.sep}node_modules${path.sep}.bin${path.sep}`,
+        ""
+      );
+
       logger.log(
         loggerCategory,
-        `running command ${command} ${args.join(" ")}`
+        `running command ${readableCommand} ${args.join(" ")}`
       );
       let task = spawn(command, args);
 
