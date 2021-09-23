@@ -1,5 +1,6 @@
 import * as fs from "fs";
 
+import { parallelLimit } from "async";
 import * as glob from "glob";
 
 import { Bus } from "./bus";
@@ -12,6 +13,9 @@ export interface Compiler {
   stop(): void;
   runOnce(tscArgs: string[], disabledProjects?: string[]): Promise<boolean>;
 }
+
+type TaskFunctionCallback = () => void;
+type TaskFunction = (callback: TaskFunctionCallback) => void;
 
 let runningTasks: Task[] = [];
 
@@ -69,6 +73,8 @@ export function createCompiler(dependencies: {
     return true;
   }
 
+  let taskFunctions: TaskFunction[] = [];
+
   return {
     runOnce(tscArgs, disabledProjects = []) {
       return new Promise((resolve, reject) => {
@@ -79,60 +85,62 @@ export function createCompiler(dependencies: {
             if (error) {
               reject(error);
             }
-            let files = tsConfigFiles.filter(
-              (file) => !disabledProjects.includes(file.split("/")[0])
-            );
 
-            let task = taskRunner.runTask(
-              "./node_modules/.bin/tsc",
-              ["--build", ...files],
-              {
-                name: `tsc --build ${files.join(" ")}`,
-                logger,
-                handleOutput,
-              }
-            );
-            runningTasks.push(task);
-            busyCompilers++;
-            task.result
-              .then(() => {
-                busyCompilers--;
-                runningTasks.splice(runningTasks.indexOf(task), 1);
+            tsConfigFiles
+              .filter((file) => {
+                return !disabledProjects.includes(file.split("/")[0]);
               })
-              .catch((err) => {
-                logger.error("compiler", err.message);
-                process.exit(1);
+              .forEach((file) => {
+                let args = ["--build", file];
+                let taskFunction = (callback: TaskFunctionCallback) => {
+                  let task = taskRunner.runTask(
+                    "./node_modules/.bin/tsc",
+                    args,
+                    {
+                      name: `tsc --build ${file}`,
+                      logger,
+                      handleOutput,
+                    }
+                  );
+                  runningTasks.push(task);
+                  task.result
+                    .then(() => {
+                      runningTasks.splice(runningTasks.indexOf(task), 1);
+                    })
+                    .then(callback)
+                    .catch(reject);
+                };
+
+                taskFunctions.push(taskFunction);
               });
+
+            let limit = 2;
+            parallelLimit(taskFunctions, limit, resolve);
           }
         );
       });
     },
     start() {
-      let tsConfigFiles = ["./tsconfig.json", "./src/tsconfig.json"]; // Watching all **/tsconfig.json files has proven to cost too much CPU
-      tsConfigFiles = tsConfigFiles.filter((tsconfigFile) =>
-        fs.existsSync(tsconfigFile)
-      );
-
-      let task = taskRunner.runTask(
-        "./node_modules/.bin/tsc",
-        ["--build", ...tsConfigFiles, "--watch", "--preserveWatchOutput"],
-        {
-          name: `tsc --build ${tsConfigFiles.join(" ")} --watch`,
-          logger,
-          handleOutput,
+      const tsConfigFiles = ["./tsconfig.json", "./src/tsconfig.json"]; // Watching all **/tsconfig.json files has proven to cost too much CPU
+      tsConfigFiles.forEach((tsconfigFile) => {
+        if (fs.existsSync(tsconfigFile)) {
+          let task = taskRunner.runTask(
+            "./node_modules/.bin/tsc",
+            ["-b", tsconfigFile, "--watch", "--preserveWatchOutput"],
+            {
+              name: `tsc -b ${tsconfigFile} --watch`,
+              logger,
+              handleOutput,
+            }
+          );
+          runningTasks.push(task);
+          busyCompilers++;
+          task.result.catch((err) => {
+            logger.error("compiler", err.message);
+            process.exit(1);
+          });
         }
-      );
-      runningTasks.push(task);
-      busyCompilers++;
-      task.result
-        .then(() => {
-          busyCompilers--;
-          runningTasks.splice(runningTasks.indexOf(task), 1);
-        })
-        .catch((err) => {
-          logger.error("compiler", err.message);
-          process.exit(1);
-        });
+      });
     },
     stop() {
       runningTasks.forEach((task) => {
