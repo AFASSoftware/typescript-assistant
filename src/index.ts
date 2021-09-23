@@ -58,7 +58,7 @@ yargsModule.command(
       boolean: true,
       default: true,
     },
-    config: {
+    project: {
       describe: "provide tsconfigs to watch",
       string: true,
       type: "array",
@@ -73,7 +73,7 @@ yargsModule.command(
         statusServerPort: parseInt(yargs.port as string, 10) || 0,
         format: yargs.format,
         coverage: yargs.coverage,
-        configs: yargs.config,
+        projects: yargs.project,
       });
     } else {
       console.error("Unknown command");
