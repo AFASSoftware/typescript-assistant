@@ -9,7 +9,7 @@ import { Task, TaskRunner } from "./taskrunner";
 import { absolutePath } from "./util";
 
 export interface Compiler {
-  start(): void;
+  start(configs?: string[]): void;
   stop(): void;
   runOnce(tscArgs: string[], disabledProjects?: string[]): Promise<boolean>;
 }
@@ -120,26 +120,34 @@ export function createCompiler(dependencies: {
         );
       });
     },
-    start() {
-      const tsConfigFiles = ["./tsconfig.json", "./src/tsconfig.json"]; // Watching all **/tsconfig.json files has proven to cost too much CPU
+    /**
+     * Watching all tsconfig.json files has proven to cost too much CPU.
+     */
+    start(tsConfigFiles = ["./tsconfig.json", "./src/tsconfig.json"]) {
+      tsConfigFiles = tsConfigFiles.map((config) =>
+        config.replace(/\\\\/g, "/")
+      );
+
       tsConfigFiles.forEach((tsconfigFile) => {
-        if (fs.existsSync(tsconfigFile)) {
-          let task = taskRunner.runTask(
-            "./node_modules/.bin/tsc",
-            ["-b", tsconfigFile, "--watch", "--preserveWatchOutput"],
-            {
-              name: `tsc -b ${tsconfigFile} --watch`,
-              logger,
-              handleOutput,
-            }
-          );
-          runningTasks.push(task);
-          busyCompilers++;
-          task.result.catch((err) => {
-            logger.error("compiler", err.message);
-            process.exit(1);
-          });
+        if (!fs.existsSync(tsconfigFile)) {
+          throw new Error(`File does not exist: ${tsconfigFile}`);
         }
+      });
+
+      let task = taskRunner.runTask(
+        "./node_modules/.bin/tsc",
+        ["-b", ...tsConfigFiles, "--watch", "--preserveWatchOutput"],
+        {
+          name: `tsc --build ${tsConfigFiles.join(" ")} --watch`,
+          logger,
+          handleOutput,
+        }
+      );
+      runningTasks.push(task);
+      busyCompilers++;
+      task.result.catch((err) => {
+        logger.error("compiler", err.message);
+        process.exit(1);
       });
     },
     stop() {

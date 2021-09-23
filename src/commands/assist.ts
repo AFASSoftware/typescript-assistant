@@ -5,6 +5,7 @@ export interface AssistOptions {
   statusServerPort?: number;
   format?: boolean;
   coverage?: boolean;
+  configs?: string[];
 }
 
 export function createAssistCommand(
@@ -14,7 +15,7 @@ export function createAssistCommand(
 
   return {
     execute(options: AssistOptions = {}) {
-      const { format = true, coverage = true } = options;
+      const { format = true, coverage = true, configs } = options;
 
       watcher.watchSourceFileChanged();
       if (options.statusServerPort) {
@@ -27,7 +28,7 @@ export function createAssistCommand(
         linter.start("source-files-changed", true);
       }
       nyc.start(["source-files-changed"], coverage);
-      compiler.start();
+      compiler.start(configs);
 
       return Promise.resolve(true);
     },

@@ -58,6 +58,11 @@ yargsModule.command(
       boolean: true,
       default: true,
     },
+    config: {
+      describe: "provide tsconfigs to watch",
+      string: true,
+      type: "array",
+    },
   },
   (yargs) => {
     if (
@@ -68,6 +73,7 @@ yargsModule.command(
         statusServerPort: parseInt(yargs.port as string, 10) || 0,
         format: yargs.format,
         coverage: yargs.coverage,
+        configs: yargs.config,
       });
     } else {
       console.error("Unknown command");
