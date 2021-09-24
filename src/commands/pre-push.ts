@@ -1,7 +1,9 @@
 import { Dependencies } from "../dependencies";
+import { AssistOptions } from "./assist";
 import { Command } from "./command";
 
-export interface PrePushCommandOptions {
+export interface PrePushCommandOptions
+  extends Pick<AssistOptions, "testConfig" | "testsGlob"> {
   disabledProjects?: string[];
 }
 
@@ -12,6 +14,8 @@ export function createPrePushCommand(
 
   return {
     async execute(options: PrePushCommandOptions = {}): Promise<boolean> {
+      const { disabledProjects, testConfig, testsGlob } = options;
+
       let timestamp = new Date().getTime();
       let pristine = await git.isPristine();
       if (!pristine) {
@@ -27,8 +31,8 @@ export function createPrePushCommand(
         return false;
       }
       let results = await Promise.all([
-        compiler.runOnce([], options.disabledProjects),
-        nyc.run(),
+        compiler.runOnce([], disabledProjects),
+        nyc.run(true, testConfig, testsGlob),
       ]);
       let toolErrors = results.filter((result) => result === false).length;
       logger.log(

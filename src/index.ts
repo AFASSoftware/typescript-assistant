@@ -63,6 +63,14 @@ yargsModule.command(
       string: true,
       type: "array",
     },
+    testConfig: {
+      describe: "path to nyc config file",
+      string: true,
+    },
+    testsGlob: {
+      describe: "glob for test files",
+      string: true,
+    },
   },
   (yargs) => {
     if (
@@ -74,6 +82,8 @@ yargsModule.command(
         format: yargs.format,
         coverage: yargs.coverage,
         projects: yargs.project,
+        testConfig: yargs.testConfig,
+        testsGlob: yargs.testsGlob,
       });
     } else {
       console.error("Unknown command");
@@ -218,11 +228,26 @@ yargsModule.command(
 yargsModule.command(
   "pre-push",
   "Pre-push git hook for husky",
-  (yargs) => yargs.array("disable"),
+  {
+    disable: {
+      string: true,
+      type: "array",
+    },
+    testConfig: {
+      describe: "path to nyc config file",
+      string: true,
+    },
+    testsGlob: {
+      describe: "glob for test files",
+      string: true,
+    },
+  },
   (yargs) => {
     inject(createPrePushCommand)
       .execute({
-        disabledProjects: yargs.disable as string[],
+        disabledProjects: yargs.disable,
+        testConfig: yargs.testConfig,
+        testsGlob: yargs.testsGlob,
       })
       .then(failIfUnsuccessful, onFailure);
   }
