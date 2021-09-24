@@ -4,9 +4,18 @@ import { Logger } from "../logger";
 import { Task, TaskRunner } from "../taskrunner";
 
 export interface NYC {
-  start(triggers: EventType[], withCoverage: boolean): void;
+  start(
+    triggers: EventType[],
+    withCoverage: boolean,
+    config?: string,
+    testsGlob?: string
+  ): void;
   stop(): void;
-  run(withCoverage?: boolean): Promise<boolean>;
+  run(
+    withCoverage?: boolean,
+    config?: string,
+    testsGlob?: string
+  ): Promise<boolean>;
 }
 
 function delay(ms: number): Promise<void> {
@@ -19,11 +28,15 @@ export function createNyc(dependencies: {
   bus: Bus;
   git: Git;
 }): NYC {
-  let { taskRunner, logger, bus, git } = dependencies;
+  const { taskRunner, logger, bus, git } = dependencies;
   let runningTask: Task | undefined;
   let coolingDown: Promise<void> | undefined;
 
-  let startNyc = async (withCoverage?: boolean): Promise<boolean> => {
+  async function startNyc(
+    withCoverage = true,
+    config?: string,
+    testsGlob = "test/**/*-tests.ts*"
+  ): Promise<boolean> {
     let hasFailingTest = false;
     let myCoolingDown = delay(100);
     coolingDown = myCoolingDown;
@@ -41,7 +54,8 @@ export function createNyc(dependencies: {
       bus.report({ tool: "coverage", status: "busy" });
     }
     let lastLineWasNotOk = false;
-    let handleOutput = (line: string) => {
+
+    function handleOutput(line: string) {
       if (task === runningTask) {
         let notOk = /^not ok \d+ (.*)/.exec(line);
         let ok = /^ok \d+ (.*)/.exec(line);
@@ -56,20 +70,27 @@ export function createNyc(dependencies: {
         }
       }
       return true;
-    };
-    let handleError = (line: string) => {
+    }
+
+    function handleError(line: string) {
       if (task === runningTask && !line.startsWith("ERROR: Coverage for")) {
         logger.error("nyc", line);
       }
       return true;
-    };
-    if (withCoverage === false) {
-      logger.log("nyc", "running tests without coverage");
+    }
+
+    if (withCoverage) {
       runningTask = taskRunner.runTask(
-        "./node_modules/.bin/mocha",
-        "--require ts-node/register/transpile-only --exit --reporter tap test/**/*-tests.ts*".split(
-          " "
-        ),
+        "./node_modules/.bin/nyc",
+        [
+          config ? `--nycrc-path ${config}` : "",
+          "--check-coverage",
+          "-- mocha --require ts-node/register/transpile-only --exit --reporter tap",
+          `"${testsGlob}"`,
+        ]
+          .join(" ")
+          .trim()
+          .split(" "),
         {
           name: "nyc",
           logger,
@@ -78,12 +99,15 @@ export function createNyc(dependencies: {
         }
       );
     } else {
+      logger.log("nyc", "running tests without coverage");
       runningTask = taskRunner.runTask(
-        "./node_modules/.bin/nyc",
-        (
-          "--check-coverage -- " +
-          "./node_modules/.bin/mocha --require ts-node/register/transpile-only --exit --reporter tap test/**/*-tests.ts*"
-        ).split(" "),
+        "./node_modules/.bin/mocha",
+        [
+          "--require ts-node/register/transpile-only --exit --reporter tap",
+          `"${testsGlob}"`,
+        ]
+          .join(" ")
+          .split(" "),
         {
           name: "nyc",
           logger,
@@ -117,16 +141,21 @@ export function createNyc(dependencies: {
         let isOnBranch = await git.isOnBranch();
         return isOnBranch && !hasFailingTest;
       });
-  };
+  }
 
   let callback: (() => Promise<boolean>) | undefined;
 
   return {
-    run(withCoverage?: boolean) {
-      return startNyc(withCoverage).catch(() => false);
+    run(withCoverage?: boolean, config?: string, testsGlob?: string) {
+      return startNyc(withCoverage, config, testsGlob).catch(() => false);
     },
-    start(triggers: EventType[], withCoverage) {
-      callback = () => startNyc(withCoverage);
+    start(
+      triggers: EventType[],
+      withCoverage,
+      config?: string,
+      testsGlob?: string
+    ) {
+      callback = () => startNyc(withCoverage, config, testsGlob);
       bus.registerAll(triggers, callback as () => void);
       callback().catch(() => false);
     },

@@ -33,10 +33,9 @@ export let createDefaultTaskRunner = (): TaskRunner => {
       let loggerCategory = config.name;
       let logger = config.logger;
 
-      let readableCommand = command.replace(
-        `.${path.sep}node_modules${path.sep}.bin${path.sep}`,
-        ""
-      );
+      let readableCommand = command
+        .replace(`.${path.sep}node_modules${path.sep}.bin${path.sep}`, "")
+        .replace(".cmd", "");
 
       logger.log(
         loggerCategory,
