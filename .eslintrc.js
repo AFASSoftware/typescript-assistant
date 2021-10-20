@@ -17,7 +17,8 @@ module.exports = {
 
   plugins: [
     "@typescript-eslint",
-    "unused-imports"
+    "unused-imports",
+    "es"
   ],
   extends: [
     "eslint:recommended",
@@ -33,6 +34,7 @@ module.exports = {
     "@typescript-eslint/no-shadow": "error",
     "@typescript-eslint/no-unused-vars": ["warn", { args: "none" }],
     "unused-imports/no-unused-imports": "warn",
+    'es/no-regexp-lookbehind-assertions': 'error', // Still not supported in Safari in 2021
 
     // Should be enabled by recommended...
     "no-unreachable": "error",
