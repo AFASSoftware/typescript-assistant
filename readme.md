@@ -25,7 +25,7 @@ Read about the philosophy behind TypeScript Assistant on [our blog](https://dev.
 
 You can try TypeScript Assistant on a new project by running
 ```
-git init && npm init && npm install typescript-assistant && ./node_modules/.bin/tsa init
+git init && npm init && npm install typescript-assistant --save-dev -E && ./node_modules/.bin/tsa init
 ```
 
 On existing TypeScript projects, you can just run

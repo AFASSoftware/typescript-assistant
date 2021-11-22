@@ -90,7 +90,7 @@ export function createInitCommand(dependencies: {
     execute(library: boolean) {
       addLinesToFile(".gitignore", [
         { line: "/build", ifNotExists: /\/?build/ },
-        { line: "/dest", ifNotExists: /\/?dest/ },
+        { line: "/dist", ifNotExists: /\/?dist/ },
         { line: "node_modules", ifNotExists: /\/?node_modules/ },
         { line: "/.idea", ifNotExists: /\/?.idea/ },
         { line: "/.vscode", ifNotExists: /\/?.vscode/ },
@@ -160,14 +160,11 @@ insert_final_newline = true`,
         writeFromTemplateIfNotExists("test/example-tests.ts", templateData);
       }
 
+      writeFromTemplateIfNotExists(".prettierignore", templateData);
+      writeFromTemplateIfNotExists("prettierrc.json", templateData);
       writeFromTemplateIfNotExists("tsconfig.json", templateData);
-
       writeFromTemplateIfNotExists("src/tsconfig.json", templateData);
-
-      writeFromTemplateIfNotExists("tsfmt.json", templateData);
-
       writeFromTemplateIfNotExists("tslint.json", templateData);
-
       writeFromTemplateIfNotExists("tslint.editor.json", templateData);
 
       return Promise.resolve(true);

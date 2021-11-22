@@ -86,7 +86,7 @@ export let createDefaultTaskRunner = (): TaskRunner => {
       return {
         result,
         kill: () => {
-          kill(task.pid);
+          kill(task.pid!);
         },
       };
     },
