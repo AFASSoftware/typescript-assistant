@@ -53,6 +53,7 @@ module.exports = {
     "@typescript-eslint/unbound-method": "off",
     "@typescript-eslint/no-empty-interface": "off",
     "@typescript-eslint/ban-ts-comment": "off",
+    "@typescript-eslint/no-unsafe-argument": "off",
 
     // Rules to be enabled:
     "@typescript-eslint/ban-types": "off",
