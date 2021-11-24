@@ -160,8 +160,12 @@ insert_final_newline = true`,
         writeFromTemplateIfNotExists("test/example-tests.ts", templateData);
       }
 
+      writeFromTemplateIfNotExists(".eslintignore", templateData);
+      writeFromTemplateIfNotExists(".eslintrc.js", templateData);
+
       writeFromTemplateIfNotExists(".prettierignore", templateData);
-      writeFromTemplateIfNotExists("prettierrc.json", templateData);
+      writeFromTemplateIfNotExists(".prettierrc.json", templateData);
+
       writeFromTemplateIfNotExists("tsconfig.json", templateData);
       writeFromTemplateIfNotExists("src/tsconfig.json", templateData);
       writeFromTemplateIfNotExists("tslint.json", templateData);
