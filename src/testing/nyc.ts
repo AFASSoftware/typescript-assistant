@@ -138,8 +138,8 @@ export function createNyc(dependencies: {
           });
           bus.report({ tool: "coverage", status: "ready", errors: 1 });
         }
-        let isOnBranch = await git.isOnBranch();
-        return isOnBranch && !hasFailingTest;
+        let isOnMasterOrRelease = await git.isOnMasterOrReleaseBranch();
+        return !isOnMasterOrRelease && !hasFailingTest;
       });
   }
 

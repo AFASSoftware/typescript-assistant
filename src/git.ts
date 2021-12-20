@@ -14,6 +14,7 @@ export interface Git {
   findAllTypescriptFiles(): Promise<string[]>;
   isPristine(): Promise<boolean>;
   execute(args: string[]): Promise<string[]>;
+  isOnMasterOrReleaseBranch(): Promise<boolean>;
   isOnBranch(): Promise<boolean>;
   getBranchName(): Promise<string>;
 }
@@ -72,6 +73,10 @@ export function createGit(dependencies: {
         .catch(findAllTypescriptFiles); // If not inside a git repository
     },
     findAllTypescriptFiles,
+    async isOnMasterOrReleaseBranch() {
+      let branchName = await git.getBranchName();
+      return branchName === "master" || branchName.startsWith("release");
+    },
     async isOnBranch() {
       let currentBranchName = await git.getBranchName();
       return currentBranchName !== "master";
