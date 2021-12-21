@@ -86,33 +86,48 @@ export function createCompiler(dependencies: {
               reject(error);
             }
 
-            tsConfigFiles
+            tsConfigFiles = tsConfigFiles
               .filter((file) => {
                 return !disabledProjects.includes(file.split("/")[0]);
               })
-              .forEach((file) => {
-                let args = ["--build", file];
-                let taskFunction = (callback: TaskFunctionCallback) => {
-                  let task = taskRunner.runTask(
-                    "./node_modules/.bin/tsc",
-                    args,
-                    {
-                      name: `tsc --build ${file}`,
-                      logger,
-                      handleOutput,
-                    }
-                  );
-                  runningTasks.push(task);
-                  task.result
-                    .then(() => {
-                      runningTasks.splice(runningTasks.indexOf(task), 1);
-                    })
-                    .then(callback)
-                    .catch(reject);
-                };
-
-                taskFunctions.push(taskFunction);
+              .sort((a, b) => {
+                if (a.includes("test") && !b.includes("test")) {
+                  return 1;
+                }
+                if (!a.includes("test") && b.includes("test")) {
+                  return -1;
+                }
+                return 0;
               });
+
+            let groupedConfigs = tsConfigFiles.reduce((result, file) => {
+              let key = file.replace("/test", "");
+
+              result[key] ??= [];
+              result[key].push(file);
+
+              return result;
+            }, <Record<string, string[]>>{});
+
+            Object.values(groupedConfigs).forEach((files) => {
+              let args = ["--build", ...files];
+              let taskFunction = (callback: TaskFunctionCallback) => {
+                let task = taskRunner.runTask("./node_modules/.bin/tsc", args, {
+                  name: `tsc --build ${files.join(" ")}`,
+                  logger,
+                  handleOutput,
+                });
+                runningTasks.push(task);
+                task.result
+                  .then(() => {
+                    runningTasks.splice(runningTasks.indexOf(task), 1);
+                  })
+                  .then(callback)
+                  .catch(reject);
+              };
+
+              taskFunctions.push(taskFunction);
+            });
 
             let limit = 2;
             parallelLimit(taskFunctions, limit, resolve);
