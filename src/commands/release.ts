@@ -6,11 +6,17 @@ import { Answers, prompt } from "inquirer";
 import { Dependencies } from "../dependencies";
 import { Command } from "./command";
 
-export function createReleaseCommand(deps: Dependencies): Command<void> {
+export interface ReleaseCommandOptions {
+  otp?: string;
+}
+
+export function createReleaseCommand(
+  deps: Dependencies
+): Command<ReleaseCommandOptions> {
   const { git, taskRunner, logger } = deps;
 
   return {
-    async execute() {
+    async execute(options = {}) {
       let pristine = await git.isPristine();
       if (!pristine) {
         throw new Error("There are uncommitted changes in the working tree");
@@ -59,6 +65,10 @@ export function createReleaseCommand(deps: Dependencies): Command<void> {
         ? ["publish", "--tag", "dev"]
         : ["publish"];
       publishArguments.push("--commit-hooks", "false");
+
+      if (options.otp) {
+        publishArguments.push("--otp", options.otp);
+      }
 
       // Using execSync to allow user interaction to do 2 factor authentication
       execSync([npm, ...publishArguments].join(" "), { stdio: [0, 1, 2] });

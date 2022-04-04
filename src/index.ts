@@ -126,9 +126,17 @@ yargsModule.command(
 yargsModule.command(
   ["release"],
   "Interactively makes a new version number, tags, pushes and publishes to npm",
-  {},
+  {
+    otp: {
+      describe: "one time password for the release",
+      string: true,
+      optional: true,
+    },
+  },
   (yargs) => {
-    inject(createReleaseCommand).execute().then(onSuccess, onFailure);
+    inject(createReleaseCommand)
+      .execute({ otp: yargs.otp })
+      .then(onSuccess, onFailure);
   }
 );
 
