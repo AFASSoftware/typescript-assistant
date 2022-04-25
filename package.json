@@ -1,6 +1,6 @@
 {
   "name": "typescript-assistant",
-  "version": "0.55.11",
+  "version": "0.55.12",
   "description": "Combines and integrates professional Typescript tools into your project",
   "main": "dist/index.js",
   "bin": {
