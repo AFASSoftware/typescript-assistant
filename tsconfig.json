@@ -10,7 +10,8 @@
     "newLine": "LF",
     "strict": true,
     "strictNullChecks": true,
-    "strictFunctionTypes": false
+    "strictFunctionTypes": false,
+    "skipLibCheck": true
   },
   "types":[
     "chai",
