@@ -159,6 +159,10 @@ yargsModule.command(
       boolean: true,
       default: true,
     },
+    disable: {
+      string: true,
+      type: "array",
+    },
   },
   (yargs) => {
     inject(createCICommand)
@@ -166,6 +170,7 @@ yargsModule.command(
         tests: yargs.tests,
         format: yargs.format,
         coverage: yargs.coverage,
+        disabledProjects: yargs.disable,
       })
       .then(failIfUnsuccessful, onFailure);
   }

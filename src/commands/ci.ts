@@ -5,6 +5,8 @@ export interface CIOptions {
   tests?: boolean;
   format?: boolean;
   coverage?: boolean;
+
+  disabledProjects?: string[];
 }
 
 export function createCICommand(deps: Dependencies): Command<CIOptions> {
@@ -12,12 +14,17 @@ export function createCICommand(deps: Dependencies): Command<CIOptions> {
 
   return {
     async execute(options: CIOptions = {}): Promise<boolean> {
-      let { tests = true, format = true, coverage = true } = options;
+      let {
+        tests = true,
+        format = true,
+        coverage = true,
+        disabledProjects,
+      } = options;
 
       let timestamp = new Date().getTime();
       let allTypescriptFiles = await git.findAllTypescriptFiles();
       let results = await Promise.all([
-        compiler.runOnce([]),
+        compiler.runOnce([], disabledProjects),
         format
           ? formatter.verifyFiles(allTypescriptFiles)
           : Promise.resolve(true),
