@@ -88,7 +88,7 @@ export function createCompiler(dependencies: {
 
             tsConfigFiles = tsConfigFiles
               .filter((file) => {
-                return !disabledProjects.includes(file.split("/")[0]);
+                return !disabledProjects.some((match) => file.includes(match));
               })
               .sort((a, b) => {
                 if (a.includes("test") && !b.includes("test")) {
