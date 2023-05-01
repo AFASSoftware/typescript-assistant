@@ -99,7 +99,7 @@
     "semver": "7.5.0",
     "source-map-support": "0.5.21",
     "tree-kill": "1.2.2",
-    "ts-node": "7.0.1",
+    "ts-node": "10.9.1",
     "tslib": "2.5.0",
     "tsutils": "3.21.0",
     "typescript": "5.0.4",
