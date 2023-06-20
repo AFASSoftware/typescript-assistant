@@ -1,6 +1,6 @@
 // post-checkout and post-merge are used to run 'npm install' if needed
 
-import { npmInstall, packageJsonChanged } from "../helpers";
+import { updateDependencies } from "../helpers";
 import { Logger } from "../logger";
 import { Command } from "./command";
 
@@ -12,16 +12,11 @@ export function createPostMergeCommand(deps: {
   const { logger } = deps;
 
   return {
-    execute() {
+    async execute() {
       logger.log("hooks", "postmerge git hook running");
 
       try {
-        if (packageJsonChanged("ORIG_HEAD", "HEAD")) {
-          logger.log("hooks", "Running npm install...");
-          npmInstall();
-        } else {
-          logger.log("hooks", "No need to run npm install");
-        }
+        await updateDependencies(logger, "ORIG_HEAD");
       } catch (error) {
         logger.error(
           "hooks",

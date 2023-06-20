@@ -1,4 +1,4 @@
-import { npmInstall, packageJsonChanged } from "../helpers";
+import { updateDependencies } from "../helpers";
 import { Logger } from "../logger";
 import { Command } from "./command";
 
@@ -14,7 +14,7 @@ export function createPostCheckoutCommand(deps: {
   const { logger } = deps;
 
   return {
-    execute(options: PostCheckoutOptions) {
+    async execute(options: PostCheckoutOptions) {
       try {
         logger.log("hooks", "postcheckout git hook running");
 
@@ -23,12 +23,7 @@ export function createPostCheckoutCommand(deps: {
           previousHead = "ORIG_HEAD";
         }
 
-        if (packageJsonChanged(previousHead, "HEAD")) {
-          logger.log("hooks", "Running npm install...");
-          npmInstall();
-        } else {
-          logger.log("hooks", "No need to run npm install");
-        }
+        await updateDependencies(logger, previousHead);
       } catch (error) {
         logger.error(
           "hooks",

@@ -1,5 +1,6 @@
 import { execSync, spawn } from "child_process";
 import { writeFileSync } from "fs";
+import { Logger } from "./logger";
 
 export function findChangedFiles(refA?: string, refB?: string): string[] {
   if (refA === undefined) {
@@ -16,7 +17,41 @@ export function findChangedFiles(refA?: string, refB?: string): string[] {
   return output.split("\n").filter((fileName) => fileName.length > 0);
 }
 
-export function npmInstall(): void {
+export async function updateDependencies(
+  logger: Logger,
+  previousHead: string
+): Promise<void> {
+  if (pnpmLockFileChanged(previousHead, "HEAD")) {
+    logger.log("hooks", "Running pnpm install...");
+    await pnpmInstall();
+  } else {
+    if (npmLockFileChanged(previousHead, "HEAD")) {
+      logger.log("hooks", "Running npm install...");
+      npmInstall();
+    } else {
+      logger.log("hooks", "No need to run (p)npm install");
+    }
+  }
+}
+
+async function pnpmInstall(): Promise<void> {
+  const child_process = await import("child_process");
+  try {
+    child_process.execSync("pnpm install --frozen-lockfile", {
+      encoding: "utf-8",
+      stdio: [0, 1, 2],
+    });
+  } catch (installError) {
+    // eslint-disable-next-line no-console
+    console.error("pnpm install failed");
+    // eslint-disable-next-line no-console
+    console.log("Retrying with npm install");
+
+    npmInstall();
+  }
+}
+
+function npmInstall(): void {
   let scriptPath = `${process.cwd()}/build/npm-install.js`;
   let currentDir = process.cwd().replace(/\\/g, "\\\\");
 
@@ -64,7 +99,15 @@ if (!tryNpmInstall()) {
   install.unref();
 }
 
-export function packageJsonChanged(refA: string, refB: string): boolean {
+export function pnpmLockFileChanged(refA: string, refB: string): boolean {
+  return (
+    findChangedFiles(refA, refB).filter(
+      (f) => f.indexOf("pnpm-lock.yaml") !== -1
+    ).length >= 1
+  );
+}
+
+export function npmLockFileChanged(refA: string, refB: string): boolean {
   return (
     findChangedFiles(refA, refB).filter(
       (f) => f.indexOf("package-lock.json") !== -1

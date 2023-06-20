@@ -3,7 +3,7 @@ import * as childProcess from "child_process";
 import { expect } from "chai";
 import { SinonStub, stub } from "sinon";
 
-import { findChangedFiles, packageJsonChanged } from "../src/helpers";
+import { findChangedFiles, npmLockFileChanged } from "../src/helpers";
 
 describe("git-helper", () => {
   let execSync: SinonStub;
@@ -32,6 +32,6 @@ tools/githooks/post-merge.ts`);
 package.json
 package-lock.json
 `);
-    expect(packageJsonChanged("ORIG_HEAD", "HEAD")).to.be.true;
+    expect(npmLockFileChanged("ORIG_HEAD", "HEAD")).to.be.true;
   });
 });
