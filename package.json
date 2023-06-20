@@ -6,6 +6,10 @@
   "bin": {
     "tsa": "./dist/index.js"
   },
+  "engines": {
+    "node": ">=18.0.0",
+    "pnpm": ">=7.0.0"
+  },
   "scripts": {
     "prepare": "npm run fix:hooks",
     "prepublishOnly": "tsc -b ./src/tsconfig.json",
