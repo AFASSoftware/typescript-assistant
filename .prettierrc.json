@@ -3,5 +3,8 @@
   "printWidth": 80,
   "singleQuote": false,
   "trailingComma": "es5",
-  "parser": "typescript"
+  "parser": "typescript",
+  "plugins": [
+    "@trivago/prettier-plugin-sort-imports"
+  ]
 }
