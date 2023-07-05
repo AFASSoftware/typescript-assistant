@@ -21,7 +21,19 @@ export async function updateDependencies(
   logger: Logger,
   previousHead: string
 ): Promise<void> {
-  if (pnpmLockFileChanged(previousHead, "HEAD")) {
+  let pnpmInstalled = false;
+  try {
+    const child_process = await import("child_process");
+    child_process.execSync("pnpm --version", {
+      encoding: "utf-8",
+      stdio: "ignore",
+    });
+    pnpmInstalled = true;
+  } catch {
+    // pnpm is not installed.
+  }
+
+  if (pnpmInstalled && pnpmLockFileChanged(previousHead, "HEAD")) {
     logger.log("hooks", "Running pnpm install...");
     await pnpmInstall();
   } else {
