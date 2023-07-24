@@ -1,4 +1,5 @@
 import { execSync, spawn } from "child_process";
+
 import { writeFileSync } from "fs";
 import { Logger } from "./logger";
 
@@ -49,7 +50,7 @@ export async function updateDependencies(
 async function pnpmInstall(): Promise<void> {
   const child_process = await import("child_process");
   try {
-    child_process.execSync("pnpm install --frozen-lockfile", {
+    child_process.execSync("pnpm install", {
       encoding: "utf-8",
       stdio: [0, 1, 2],
     });
