@@ -25,11 +25,14 @@ export interface TaskRunner {
   runTask(command: string, args: string[], config: TaskConfig): Task;
 }
 
-let strip = (line: string) => /^\s*(.*?)\s*$/m.exec(line)![1];
+function strip(line: string) {
+  return /^\s*(.*?)\s*$/m.exec(line)![1];
+}
 
-export let createDefaultTaskRunner = (): TaskRunner => {
+export function createDefaultTaskRunner(): TaskRunner {
   return {
-    runTask: (command: string, args: string[], config: TaskConfig) => {
+    runTask(command: string, args: string[], config: TaskConfig) {
+      let start = performance.now();
       let loggerCategory = config.name;
       let logger = config.logger;
 
@@ -75,6 +78,15 @@ export let createDefaultTaskRunner = (): TaskRunner => {
 
       let result = new Promise<void>((resolve, reject) => {
         task.on("close", (code: number) => {
+          let end = performance.now();
+          let elapsedTime = (end - start) / 1000;
+          logger.log(
+            loggerCategory,
+            `command ${readableCommand} ${args.join(
+              " "
+            )} took ${elapsedTime.toFixed(1)}s`
+          );
+
           if (code === 0 || code === null) {
             resolve();
           } else {
@@ -85,13 +97,13 @@ export let createDefaultTaskRunner = (): TaskRunner => {
 
       return {
         result,
-        kill: () => {
+        kill() {
           kill(task.pid!);
         },
       };
     },
   };
-};
+}
 
 export let createWindowsTaskRunner = (): TaskRunner => {
   let delegate = createDefaultTaskRunner();
