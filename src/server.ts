@@ -16,18 +16,18 @@ let indexHtml = fs.readFileSync(`${__dirname}/../public/index.html`, {
   encoding: "utf-8",
 });
 
-export let createServer = (deps: {
+export function createServer(deps: {
   bus: Bus;
   logger: Logger;
   linter: Linter;
   formatter: Formatter;
-}): Server => {
-  let { logger, bus, linter, formatter } = deps;
+}): Server {
+  const { logger, bus, linter, formatter } = deps;
 
   let lastReports: { [tool: string]: Report } = {};
 
   return {
-    start: (port) => {
+    start(port) {
       let processReport = (report: Report) => {
         lastReports[report.tool] = report;
         let data = JSON.stringify(report, undefined, 2);
@@ -56,7 +56,7 @@ export let createServer = (deps: {
       server.listen(port);
 
       wss.on("connection", function connection(ws) {
-        ws.on("message", function incoming(message) {
+        ws.on("message", function incoming(message: string) {
           logger.log("server", `received: ${message}`);
           if (message === "lint-fix") {
             linter
@@ -79,4 +79,4 @@ export let createServer = (deps: {
       });
     },
   };
-};
+}

@@ -18,22 +18,24 @@ export interface Formatter {
   stopVerifying(): void;
 }
 
-export let createFormatter = (dependencies: {
+export function createFormatter(dependencies: {
   logger: Logger;
   git: Git;
   bus: Bus;
-}): Formatter => {
-  let { logger, bus, git } = dependencies;
+}): Formatter {
+  const { logger, bus, git } = dependencies;
 
   let runningFormatter: Promise<void> | undefined;
   let rescheduled = false;
 
-  let logError = (err: any) => logger.error("formatter", `error: ${err}`);
+  function logError(err: any) {
+    return logger.error("formatter", `error: ${err}`);
+  }
 
-  let runFormatterOn = async (
+  async function runFormatterOn(
     files: string[],
     write: boolean
-  ): Promise<boolean> => {
+  ): Promise<boolean> {
     logger.log("formatter", `checking ${files.length} files...`);
     let options = await resolveConfig(process.cwd());
     let checks = await Promise.all(files.map(runFile));
@@ -42,7 +44,7 @@ export let createFormatter = (dependencies: {
     async function runFile(file: string): Promise<boolean> {
       let text = await readFile(file, "utf8");
       if (write) {
-        let newText = format(text, options ?? undefined);
+        let newText = await format(text, options ?? undefined);
         if (text !== newText) {
           await writeFile(file, newText);
           logger.log("formatter", `Fixed ${absolutePath(file)}`);
@@ -50,23 +52,22 @@ export let createFormatter = (dependencies: {
         }
         return true;
       } else {
-        let result = check(text, options ?? undefined);
+        let result = await check(text, options ?? undefined);
         if (!result) {
           logger.log("formatter", `Not formatted ${absolutePath(file)}`);
         }
         return result;
       }
     }
-  };
+  }
 
-  let runFormatter = (write: boolean) => {
-    return git.findChangedFiles().then((files: string[]) => {
-      files = files.filter(isTypescriptFile);
-      return runFormatterOn(files, write);
-    });
-  };
+  async function runFormatter(write: boolean) {
+    let files = await git.findChangedFiles();
+    files = files.filter(isTypescriptFile);
+    return runFormatterOn(files, write);
+  }
 
-  let verifyFormat = () => {
+  function verifyFormat() {
     if (runningFormatter) {
       rescheduled = true;
     } else {
@@ -98,13 +99,13 @@ export let createFormatter = (dependencies: {
         })
         .catch(logError);
     }
-  };
+  }
 
   return {
-    verifyFiles: (files) => {
+    verifyFiles(files) {
       return runFormatterOn(files, false);
     },
-    formatFiles: async (files) => {
+    async formatFiles(files) {
       if (!files) {
         files = (await git.findChangedFiles()).filter(isTypescriptFile);
       }
@@ -112,12 +113,12 @@ export let createFormatter = (dependencies: {
       logger.log("formatter", "Done");
       return true;
     },
-    startVerifying: (triggers: EventType[]) => {
+    startVerifying(triggers: EventType[]) {
       bus.registerAll(triggers, verifyFormat);
       verifyFormat();
     },
-    stopVerifying: () => {
+    stopVerifying() {
       bus.unregister(verifyFormat);
     },
   };
-};
+}
