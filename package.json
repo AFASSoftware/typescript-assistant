@@ -85,7 +85,7 @@
     "async": "3.2.4",
     "chai": "4.3.8",
     "chokidar": "3.5.3",
-    "eslint": "8.49.0",
+    "eslint": "8.50.0",
     "eslint-config-prettier": "9.0.0",
     "eslint-plugin-es": "4.1.0",
     "eslint-plugin-unused-imports": "3.0.0",
@@ -110,11 +110,11 @@
     "yargs": "15.4.1"
   },
   "devDependencies": {
-    "@types/async": "3.2.20",
-    "@types/eslint": "8.44.2",
+    "@types/async": "3.2.21",
+    "@types/eslint": "8.44.3",
     "@types/glob": "7.2.0",
     "@types/inquirer": "6.5.0",
-    "@types/node": "20.6.3",
+    "@types/node": "20.6.5",
     "@types/semver": "7.5.2",
     "@types/sinon": "10.0.16",
     "@types/ws": "7.4.7",
