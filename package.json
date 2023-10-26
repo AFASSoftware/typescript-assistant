@@ -78,14 +78,14 @@
     }
   },
   "dependencies": {
-    "@types/chai": "4.3.7",
-    "@types/mocha": "10.0.2",
-    "@typescript-eslint/eslint-plugin": "6.7.5",
-    "@typescript-eslint/parser": "6.7.5",
+    "@types/chai": "4.3.9",
+    "@types/mocha": "10.0.3",
+    "@typescript-eslint/eslint-plugin": "6.9.0",
+    "@typescript-eslint/parser": "6.9.0",
     "async": "3.2.4",
     "chai": "4.3.10",
     "chokidar": "3.5.3",
-    "eslint": "8.51.0",
+    "eslint": "8.52.0",
     "eslint-config-prettier": "9.0.0",
     "eslint-plugin-es": "4.1.0",
     "eslint-plugin-unused-imports": "3.0.0",
@@ -110,15 +110,15 @@
     "yargs": "15.4.1"
   },
   "devDependencies": {
-    "@types/async": "3.2.21",
-    "@types/eslint": "8.44.3",
+    "@types/async": "3.2.22",
+    "@types/eslint": "8.44.6",
     "@types/glob": "7.2.0",
     "@types/inquirer": "6.5.0",
-    "@types/node": "20.8.4",
-    "@types/semver": "7.5.3",
-    "@types/sinon": "10.0.19",
+    "@types/node": "20.8.9",
+    "@types/semver": "7.5.4",
+    "@types/sinon": "10.0.20",
     "@types/ws": "7.4.7",
     "@types/yargs": "15.0.12",
-    "sinon": "16.1.0"
+    "sinon": "17.0.0"
   }
 }
