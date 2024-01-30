@@ -37,7 +37,10 @@ export function createFormatter(dependencies: {
     write: boolean
   ): Promise<boolean> {
     logger.log("formatter", `checking ${files.length} files...`);
-    let options = await resolveConfig(process.cwd());
+    let options =
+      (await resolveConfig(".prettierrc")) ??
+      (await resolveConfig("prettier.config.js"));
+    logger.log("formatter", `formatter options: ${JSON.stringify(options)}`);
     let checks = await Promise.all(files.map(runFile));
     return !checks.some((c) => !c);
 

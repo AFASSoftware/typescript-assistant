@@ -77,6 +77,13 @@
       ]
     }
   },
+  "prettier": {
+    "endOfLine": "lf",
+    "printWidth": 80,
+    "singleQuote": false,
+    "trailingComma": "es5",
+    "parser": "typescript"
+  },
   "dependencies": {
     "@types/chai": "4.3.11",
     "@types/mocha": "10.0.6",

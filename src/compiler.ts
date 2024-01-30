@@ -100,14 +100,17 @@ export function createCompiler(dependencies: {
                 return 0;
               });
 
-            let groupedConfigs = tsConfigFiles.reduce((result, file) => {
-              let key = file.replace("/test", "");
+            let groupedConfigs = tsConfigFiles.reduce(
+              (result, file) => {
+                let key = file.replace("/test", "");
 
-              result[key] ??= [];
-              result[key].push(file);
+                result[key] ??= [];
+                result[key].push(file);
 
-              return result;
-            }, <Record<string, string[]>>{});
+                return result;
+              },
+              <Record<string, string[]>>{}
+            );
 
             Object.values(groupedConfigs).forEach((files) => {
               let args = ["--build", ...files];
