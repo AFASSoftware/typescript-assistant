@@ -36,10 +36,22 @@ jobs:
       with:
         token: ${{ secrets.NPM_TOKEN }}
         provenance: true
+    - name: Create tag
+      if: steps.publish.outputs.type
+      uses: actions/github-script@v6
+      with:
+        script: |
+            github.rest.git.createRef({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: 'refs/tags/v${{ steps.publish.outputs.version }}',
+              sha: context.sha
+            })
     - name: Create a Github Release when a version was published
       if: steps.publish.outputs.type
       uses: ncipollo/release-action@v1
       with:
+        tag: v${{ steps.publish.outputs.version }}
         name: v${{ steps.publish.outputs.version }}
         makeLatest: true
 
