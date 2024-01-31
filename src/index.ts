@@ -14,7 +14,6 @@ import { createPostCheckoutCommand } from "./commands/post-checkout";
 import { createPostMergeCommand } from "./commands/post-merge";
 import { createPreCommitCommand } from "./commands/pre-commit";
 import { createPrePushCommand } from "./commands/pre-push";
-import { createReleaseCommand } from "./commands/release";
 import { createDependencyInjector } from "./dependency-injector";
 
 /* eslint-disable no-console */
@@ -120,23 +119,6 @@ yargsModule.command(
   {},
   (yargs) => {
     void inject(createCleanCommand).execute();
-  }
-);
-
-yargsModule.command(
-  ["release"],
-  "Interactively makes a new version number, tags, pushes and publishes to npm",
-  {
-    otp: {
-      describe: "one time password for the release",
-      string: true,
-      optional: true,
-    },
-  },
-  (yargs) => {
-    inject(createReleaseCommand)
-      .execute({ otp: yargs.otp })
-      .then(onSuccess, onFailure);
   }
 );
 

@@ -1,6 +1,6 @@
 {
   "name": "typescript-assistant",
-  "version": "0.65.7",
+  "version": "0.66.7",
   "description": "Combines and integrates professional Typescript tools into your project",
   "main": "dist/index.js",
   "bin": {
@@ -14,8 +14,7 @@
     "prepare": "npm run fix:hooks",
     "prepublishOnly": "tsc -b ./src/tsconfig.json",
     "assist": "ts-node --transpile-only src/index.ts",
-    "prerelease": "ts-node --transpile-only src/index ci --no-format",
-    "release": "ts-node --transpile-only src/index.ts release",
+    "release": "echo 'You can release by updating the version in package.json and pushing'",
     "fix": "ts-node --transpile-only src/index fix",
     "fixall": "ts-node --transpile-only src/index fixall",
     "clean": "ts-node --transpile-only src/index clean",
