@@ -82,10 +82,10 @@
     "parser": "typescript"
   },
   "dependencies": {
-    "@types/chai": "4.3.12",
+    "@types/chai": "4.3.13",
     "@types/mocha": "10.0.6",
-    "@typescript-eslint/eslint-plugin": "7.1.0",
-    "@typescript-eslint/parser": "7.1.0",
+    "@typescript-eslint/eslint-plugin": "7.3.1",
+    "@typescript-eslint/parser": "7.3.1",
     "async": "3.2.5",
     "chai": "4.4.1",
     "chokidar": "3.6.0",
@@ -109,16 +109,16 @@
     "ts-node": "7.0.1",
     "tslib": "2.6.2",
     "tsutils": "3.21.0",
-    "typescript": "5.3.3",
+    "typescript": "5.4.2",
     "ws": "7.5.2",
     "yargs": "15.4.1"
   },
   "devDependencies": {
     "@types/async": "3.2.24",
-    "@types/eslint": "8.56.4",
+    "@types/eslint": "8.56.6",
     "@types/glob": "7.2.0",
     "@types/inquirer": "6.5.0",
-    "@types/node": "20.11.21",
+    "@types/node": "20.11.30",
     "@types/semver": "7.5.8",
     "@types/sinon": "17.0.3",
     "@types/ws": "7.4.7",
