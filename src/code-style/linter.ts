@@ -110,7 +110,7 @@ export function createLinter(dependencies: {
         running = false;
         logger.log(
           "linter",
-          response.finished.success
+          response.finished.success && errors === 0
             ? "All files are ok"
             : `${errors} Linting problems found, ${fixable} ${
                 fix ? "fixed" : "fixable"

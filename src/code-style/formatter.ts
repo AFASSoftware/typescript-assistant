@@ -40,7 +40,7 @@ export function createFormatter(dependencies: {
     let options =
       (await resolveConfig(".prettierrc")) ??
       (await resolveConfig("prettier.config.js"));
-    logger.log("formatter", `formatter options: ${JSON.stringify(options)}`);
+    // logger.log("formatter", `formatter options: ${JSON.stringify(options)}`);
     let checks = await Promise.all(files.map(runFile));
     return !checks.some((c) => !c);
 
