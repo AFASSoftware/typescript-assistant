@@ -105,6 +105,19 @@ export function createLinter(dependencies: {
         }
         errors = errorCount + warningCount;
         fixable = fixableCount;
+
+        let ignorePatternCount = (
+          message.match(
+            /File ignored because of a matching ignore pattern./g
+          ) || []
+        ).length;
+        if (ignorePatternCount > 0) {
+          errors -= ignorePatternCount;
+          logger.log(
+            "linter",
+            `${ignorePatternCount} files ignored because of a matching ignore pattern. These are not counted towards the number of warnings.`
+          );
+        }
       }
       if (response.finished) {
         running = false;
