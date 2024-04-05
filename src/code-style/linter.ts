@@ -116,7 +116,11 @@ export function createLinter(dependencies: {
                 fix ? "fixed" : "fixable"
               }`
         );
-        bus.signal(response.finished.success ? "lint-linted" : "lint-errored");
+        bus.signal(
+          response.finished.success && errors === 0
+            ? "lint-linted"
+            : "lint-errored"
+        );
         bus.report({
           tool: "lint",
           status: "ready",
