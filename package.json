@@ -1,6 +1,6 @@
 {
   "name": "typescript-assistant",
-  "version": "0.66.16",
+  "version": "0.66.17",
   "description": "Combines and integrates professional Typescript tools into your project",
   "main": "dist/index.js",
   "bin": {
@@ -84,7 +84,7 @@
   "dependencies": {
     "@types/chai": "4.3.16",
     "@types/mocha": "10.0.6",
-    "@typescript-eslint/eslint-plugin": "7.8.0",
+    "@typescript-eslint/eslint-plugin": "7.6.0",
     "@typescript-eslint/parser": "7.8.0",
     "async": "3.2.5",
     "chai": "4.4.1",
