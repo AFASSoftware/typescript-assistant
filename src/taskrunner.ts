@@ -44,7 +44,7 @@ export function createDefaultTaskRunner(): TaskRunner {
         loggerCategory,
         `running command ${readableCommand} ${args.join(" ")}`
       );
-      let task = spawn(command, args);
+      let task = spawn(command, args, { shell: true });
 
       let stdout = createInterface({ input: task.stdout });
       stdout.on("line", (line) => {
