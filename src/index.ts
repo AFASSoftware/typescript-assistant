@@ -145,6 +145,11 @@ yargsModule.command(
       string: true,
       type: "array",
     },
+    compileLimit: {
+      describe: "Limit the number of concurrent compilations",
+      number: true,
+      default: 2
+    }
   },
   (yargs) => {
     inject(createCICommand)
@@ -153,6 +158,7 @@ yargsModule.command(
         format: yargs.format,
         coverage: yargs.coverage,
         disabledProjects: yargs.disable,
+        compileLimit: yargs.compileLimit
       })
       .then(failIfUnsuccessful, onFailure);
   }

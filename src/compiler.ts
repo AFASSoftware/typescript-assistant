@@ -9,9 +9,9 @@ import { Task, TaskRunner } from "./taskrunner";
 import { absolutePath } from "./util";
 
 export interface Compiler {
-  start(configs?: string[]): void;
+  start(configs?: string[], options?: { compileLimit: number }): void;
   stop(): void;
-  runOnce(tscArgs: string[], disabledProjects?: string[]): Promise<boolean>;
+  runOnce(tscArgs: string[], disabledProjects?: string[], options?: { compileLimit: number }): Promise<boolean>;
 }
 
 type TaskFunctionCallback = () => void;
@@ -55,8 +55,7 @@ export function createCompiler(dependencies: {
         errors.push(matches[0]);
         logger.log(
           "compiler",
-          `${absolutePath(matches[1])}:${matches[2]}:${matches[3]} ${
-            matches[5]
+          `${absolutePath(matches[1])}:${matches[2]}:${matches[3]} ${matches[5]
           }`
         );
       } else {
@@ -76,7 +75,7 @@ export function createCompiler(dependencies: {
   let taskFunctions: TaskFunction[] = [];
 
   return {
-    runOnce(tscArgs, disabledProjects = []) {
+    runOnce(tscArgs, disabledProjects = [], options = {compileLimit: 2}) {
       return new Promise((resolve, reject) => {
         glob(
           "**/tsconfig.json",
@@ -100,40 +99,56 @@ export function createCompiler(dependencies: {
                 return 0;
               });
 
-            let groupedConfigs = tsConfigFiles.reduce(
-              (result, file) => {
-                let key = file.replace("/test", "");
+            if (options.compileLimit === 1) {
+              // single command
+              let args = ["--build", ...tsConfigFiles];
+              let task = taskRunner.runTask("./node_modules/.bin/tsc", args, {
+                name: `tsc --build ${tsConfigFiles.join(" ")}`,
+                logger,
+                handleOutput,
+              });
+              runningTasks.push(task);
+              task.result
+                .then(() => {
+                  runningTasks.splice(runningTasks.indexOf(task), 1);
+                })
+                .then(() => resolve(true))
+                .catch(reject);
+            } else {
+              let groupedConfigs = tsConfigFiles.reduce(
+                (result, file) => {
+                  let key = file.replace("/test", "");
 
-                result[key] ??= [];
-                result[key].push(file);
+                  result[key] ??= [];
+                  result[key].push(file);
 
-                return result;
-              },
-              <Record<string, string[]>>{}
-            );
+                  return result;
+                },
+                <Record<string, string[]>>{}
+              );
 
-            Object.values(groupedConfigs).forEach((files) => {
-              let args = ["--build", ...files];
-              let taskFunction = (callback: TaskFunctionCallback) => {
-                let task = taskRunner.runTask("./node_modules/.bin/tsc", args, {
-                  name: `tsc --build ${files.join(" ")}`,
-                  logger,
-                  handleOutput,
-                });
-                runningTasks.push(task);
-                task.result
-                  .then(() => {
-                    runningTasks.splice(runningTasks.indexOf(task), 1);
-                  })
-                  .then(callback)
-                  .catch(reject);
-              };
+              Object.values(groupedConfigs).forEach((files) => {
+                let args = ["--build", ...files];
+                let taskFunction = (callback: TaskFunctionCallback) => {
+                  let task = taskRunner.runTask("./node_modules/.bin/tsc", args, {
+                    name: `tsc --build ${files.join(" ")}`,
+                    logger,
+                    handleOutput,
+                  });
+                  runningTasks.push(task);
+                  task.result
+                    .then(() => {
+                      runningTasks.splice(runningTasks.indexOf(task), 1);
+                    })
+                    .then(callback)
+                    .catch(reject);
+                };
 
-              taskFunctions.push(taskFunction);
-            });
+                taskFunctions.push(taskFunction);
+              });
 
-            let limit = 2;
-            parallelLimit(taskFunctions, limit, resolve);
+              parallelLimit(taskFunctions, options.compileLimit, resolve);
+            }
           }
         );
       });

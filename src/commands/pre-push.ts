@@ -31,7 +31,7 @@ export function createPrePushCommand(
         return false;
       }
       let results = await Promise.all([
-        compiler.runOnce([], disabledProjects),
+        compiler.runOnce([], disabledProjects, { compileLimit: 1 }),
         nyc.run(true, testConfig, testsGlob),
       ]);
       let toolErrors = results.filter((result) => result === false).length;

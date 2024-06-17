@@ -5,6 +5,7 @@ export interface CIOptions {
   tests?: boolean;
   format?: boolean;
   coverage?: boolean;
+  compileLimit: number;
 
   disabledProjects?: string[];
 }
@@ -13,18 +14,19 @@ export function createCICommand(deps: Dependencies): Command<CIOptions> {
   const { formatter, linter, compiler, nyc, git, logger } = deps;
 
   return {
-    async execute(options: CIOptions = {}): Promise<boolean> {
+    async execute(options: CIOptions = { compileLimit: 2 }): Promise<boolean> {
       let {
         tests = true,
         format = true,
         coverage = true,
         disabledProjects,
+        compileLimit
       } = options;
 
       let timestamp = new Date().getTime();
       let allTypescriptFiles = await git.findAllTypescriptFiles();
       let results = await Promise.all([
-        compiler.runOnce([], disabledProjects),
+        compiler.runOnce([], disabledProjects, { compileLimit }),
         format
           ? formatter.verifyFiles(allTypescriptFiles)
           : Promise.resolve(true),
