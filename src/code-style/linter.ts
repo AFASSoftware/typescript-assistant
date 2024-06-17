@@ -85,7 +85,7 @@ export function createLinter(dependencies: {
   }
 
   function startProcess() {
-    let env = Object.assign({ "NODE_OPTIONS" : "--max-old-space-size=8192" }, process.env );
+    let env = Object.assign({ "NODE_OPTIONS" : "--max-old-space-size=16384" }, process.env );
     lintProcess = fork(`${__dirname}/linter-process-eslint`, [], {
       execArgv: process.execArgv.filter((arg) => !arg.includes("inspect")),
       env
