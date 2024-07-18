@@ -84,8 +84,8 @@
   "dependencies": {
     "@types/chai": "4.3.16",
     "@types/mocha": "10.0.7",
-    "@typescript-eslint/eslint-plugin": "7.14.1",
-    "@typescript-eslint/parser": "7.14.1",
+    "@typescript-eslint/eslint-plugin": "7.16.1",
+    "@typescript-eslint/parser": "7.16.1",
     "async": "3.2.5",
     "chai": "4.4.1",
     "chokidar": "3.6.0",
@@ -95,21 +95,21 @@
     "eslint-plugin-unused-imports": "3.2.0",
     "glob": "8.1.0",
     "handlebars": "4.7.8",
-    "husky": "9.0.11",
+    "husky": "9.1.1",
     "import-sort-style-module": "6.0.0",
     "inquirer": "7.3.3",
-    "mocha": "10.5.2",
-    "nyc": "15.1.0",
+    "mocha": "10.6.0",
+    "nyc": "17.0.0",
     "open-cli": "8.0.0",
-    "prettier": "3.3.2",
+    "prettier": "3.3.3",
     "prettier-plugin-import-sort": "0.0.7",
-    "semver": "7.6.2",
+    "semver": "7.6.3",
     "source-map-support": "0.5.21",
     "tree-kill": "1.2.2",
     "ts-node": "7.0.1",
     "tslib": "2.6.3",
     "tsutils": "3.21.0",
-    "typescript": "5.5.2",
+    "typescript": "5.5.3",
     "ws": "7.5.2",
     "yargs": "15.4.1"
   },
@@ -118,7 +118,7 @@
     "@types/eslint": "8.56.10",
     "@types/glob": "7.2.0",
     "@types/inquirer": "6.5.0",
-    "@types/node": "20.14.9",
+    "@types/node": "20.14.11",
     "@types/semver": "7.5.8",
     "@types/sinon": "17.0.3",
     "@types/ws": "7.4.7",
@@ -129,5 +129,6 @@
     "overrides": {
       "@babel/traverse@<7.23.2": "^7.23.2"
     }
-  }
+  },
+  "packageManager": "pnpm@9.5.0+sha512.140036830124618d624a2187b50d04289d5a087f326c9edfc0ccd733d76c4f52c3a313d4fc148794a2a9d81553016004e6742e8cf850670268a7387fc220c903"
 }
