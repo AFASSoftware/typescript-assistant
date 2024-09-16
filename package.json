@@ -83,7 +83,7 @@
   },
   "dependencies": {
     "@types/chai": "4.3.19",
-    "@types/mocha": "10.0.7",
+    "@types/mocha": "10.0.8",
     "@typescript-eslint/eslint-plugin": "7.16.1",
     "@typescript-eslint/parser": "7.16.1",
     "async": "3.2.6",
@@ -95,7 +95,7 @@
     "eslint-plugin-unused-imports": "3.2.0",
     "glob": "8.1.0",
     "handlebars": "4.7.8",
-    "husky": "9.1.5",
+    "husky": "9.1.6",
     "import-sort-style-module": "6.0.0",
     "inquirer": "7.3.3",
     "mocha": "10.7.3",
@@ -109,7 +109,7 @@
     "ts-node": "7.0.1",
     "tslib": "2.7.0",
     "tsutils": "3.21.0",
-    "typescript": "5.5.4",
+    "typescript": "5.6.2",
     "ws": "7.5.2",
     "yargs": "15.4.1"
   },
@@ -118,12 +118,12 @@
     "@types/eslint": "8.56.10",
     "@types/glob": "7.2.0",
     "@types/inquirer": "6.5.0",
-    "@types/node": "22.5.3",
+    "@types/node": "22.5.5",
     "@types/semver": "7.5.8",
     "@types/sinon": "17.0.3",
     "@types/ws": "7.4.7",
     "@types/yargs": "15.0.12",
-    "sinon": "18.0.0"
+    "sinon": "19.0.2"
   },
   "pnpm": {
     "overrides": {
