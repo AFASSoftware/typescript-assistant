@@ -90,6 +90,7 @@ export function createDefaultTaskRunner(): TaskRunner {
           if (code === 0 || code === null) {
             resolve();
           } else {
+            // eslint-disable-next-line @typescript-eslint/prefer-promise-reject-errors
             reject(`Process exited with code ${code}`);
           }
         });

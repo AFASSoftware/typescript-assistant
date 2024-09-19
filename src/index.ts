@@ -148,8 +148,8 @@ yargsModule.command(
     compileLimit: {
       describe: "Limit the number of concurrent compilations",
       number: true,
-      default: 2
-    }
+      default: 2,
+    },
   },
   (yargs) => {
     inject(createCICommand)
@@ -158,7 +158,7 @@ yargsModule.command(
         format: yargs.format,
         coverage: yargs.coverage,
         disabledProjects: yargs.disable,
-        compileLimit: yargs.compileLimit
+        compileLimit: yargs.compileLimit,
       })
       .then(failIfUnsuccessful, onFailure);
   }
@@ -254,4 +254,5 @@ yargsModule.command(
   }
 );
 
+// eslint-disable-next-line @typescript-eslint/no-unused-expressions
 yargsModule.strict().argv;

@@ -115,7 +115,7 @@ insert_final_newline = true`,
 
       let templateData = {
         library,
-        // eslint-disable-next-line @typescript-eslint/no-var-requires
+        // eslint-disable-next-line @typescript-eslint/no-require-imports
         typescriptAssistantVersion: require("../../package.json").version,
       };
 

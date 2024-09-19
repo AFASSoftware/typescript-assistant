@@ -27,7 +27,7 @@ export interface Bus {
 }
 
 export let createBus = (): Bus => {
-  let allSubscribers: { [index: string]: Callback[] } = {};
+  let allSubscribers: Record<string, Callback[]> = {};
   let bus: Bus = {
     signal: (eventType) => {
       let subscribers = allSubscribers[eventType];
