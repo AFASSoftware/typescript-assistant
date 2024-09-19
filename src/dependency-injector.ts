@@ -42,7 +42,7 @@ export let createDependencyInjector = (): (<T>(
   Object.defineProperty(dependencies, "server", {
     get: () => {
       if (!server) {
-        // eslint-disable-next-line @typescript-eslint/no-var-requires
+        // eslint-disable-next-line @typescript-eslint/no-require-imports
         server = inject(require("./server").createServer);
       }
       return server;
