@@ -98,7 +98,7 @@
     "import-sort-style-module": "6.0.0",
     "inquirer": "7.3.3",
     "mocha": "10.7.3",
-    "nyc": "17.0.0",
+    "nyc": "17.1.0",
     "open-cli": "8.0.0",
     "prettier": "3.3.3",
     "prettier-plugin-import-sort": "0.0.7",
