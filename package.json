@@ -19,7 +19,8 @@
     "clean": "ts-node --transpile-only src/index clean",
     "coverage-show": "open-cli build/coverage/index.html",
     "ci": "ts-node --transpile-only src/index ci --no-format",
-    "lint": "eslint"
+    "lint": "eslint",
+    "postinstall": "husky"
   },
   "author": "johan@johangorter.com",
   "license": "MIT",
@@ -96,7 +97,7 @@
     "husky": "^9.1.7",
     "import-sort-style-module": "^6.0.0",
     "inquirer": "^7.3.3",
-    "mocha": "^10.8.2",
+    "mocha": "^11.1.0",
     "nyc": "^17.1.0",
     "open-cli": "^8.0.0",
     "prettier": "^3.5.3",
